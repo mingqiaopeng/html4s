@@ -183,6 +183,16 @@
       window.chrome.webview.addEventListener('message', function (e) {
         try {
           var m = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          if (m && m.h4sSaved !== undefined && pendingSave) {
+            var out = pendingSave; pendingSave = null;
+            if (m.h4sSaved) {
+              toast('已写回源文件 ✓ 建议运行 h4s-build --subset 重建以更新字体子集');
+            } else {
+              downloadEdited(out);
+              toast('写回失败（' + (m.reason || '未知') + '），已改为导出下载');
+            }
+            return;
+          }
           if (m && m.h4sShellHello && !shellReady) {
             shellReady = true;
             shellAction('theme', uiTheme);  /* 握手即同步当前主题（localStorage 恢复的场景） */
@@ -228,6 +238,14 @@
 
     /* 遮罩式转场覆盖层（curtain/blinds/checkerboard/pixelate） */
     '.h4s-tmask{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;}',
+
+    /* 文字微调（浏览模式编辑） */
+    'body.h4s-editing .h4s-clone [data-h4s-editable]{outline:1px dashed rgba(59,130,246,.55);outline-offset:2px;cursor:text;}',
+    'body.h4s-editing .h4s-clone [data-h4s-editable][contenteditable="true"]{outline:2px solid #3b82f6;background:rgba(59,130,246,.06);}',
+    '.h4s-editing-tip{position:fixed;left:14px;bottom:46px;z-index:66;background:#1e293b;color:#93c5fd;',
+    '  font-size:13px;padding:6px 12px;border-radius:6px;border:1px solid #334155;pointer-events:none;}',
+    'body[data-ui="light"] .h4s-editing-tip{background:#f1f5f9;color:#0369a1;border-color:#cbd5e1;}',
+    '.h4s-edit-lack{outline:2px solid #f59e0b !important;outline-offset:2px;}',
 
     /* 背景特效层（stars/snow/dust/confetti）——置于内容之下、deck 自带背景之上 */
     '.h4s-fx{position:absolute;inset:0;z-index:1;pointer-events:none;}',
@@ -1204,6 +1222,8 @@
       '<button data-bact="openurl" title="' + t('urlT') + '">' + t('url') + '</button>' +
       /* 文档标题由原生标题栏/浏览器标签页承载，浏览栏不重复 */
       '<button data-bact="theme" title="' + t('themeT') + '">' + (uiTheme === 'light' ? t('toDark') : t('toLight')) + '</button>' +
+      '<button data-bact="edit" title="文字微调模式：在预览中直接修改文字">' + (UILANG === 'zh' ? '✎ 编辑' : '✎ Edit') + '</button>' +
+      '<button data-bact="export" title="导出包含文字修改的 .html4s" style="display:none">' + (UILANG === 'zh' ? '⬇ 导出' : '⬇ Export') + '</button>' +
       /* 页码指示器：flex 双 auto margin 使其大致居中 */
       '<span class="h4s-pageinfo"></span>' +
       '<button data-bact="playcur" title="' + t('playcurT') + '">' + t('playcur') + '</button>' +
@@ -1222,6 +1242,8 @@
       var a = b.getAttribute('data-bact');
       if (a === 'play') startShow(0);
       else if (a === 'playcur') startShow(S.sel);
+      else if (a === 'edit') setEdit(!ED.on);
+      else if (a === 'export') exportEdited();
       else if (a === 'help') setOverlay(S.overlay === 'help' ? null : 'help');
       else if (a === 'theme') {
         applyUiTheme(uiTheme === 'light' ? 'dark' : 'light');
@@ -1255,6 +1277,7 @@
     buildSidebar();
     selectSlide(S.sel);
     refreshShellButtons();
+    bindEditing();
   }
 
   function refreshShellButtons() {
@@ -1319,11 +1342,177 @@
     var clone = makeClone(s, 'final', 0);
     clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
     mini.appendChild(clone);
+    if (ED.on) markEditable();
   }
 
   function layoutBrowse() {
     if (!document.body.classList.contains('h4s-browse')) return;
     renderMini();
+  }
+
+  /* ================================================================
+   * 文字微调（浏览模式直接编辑预览中的文字）
+   * 设计：编辑发生在预览克隆上（cloneNode 深拷贝与真 slide 结构同构），
+   * 提交时按 childIndex 路径同步回真实 slide；导出时把全部改动
+   * 回写到 boot 快照生成新 .html4s。缺字预警复用 fontSubsetChars 指纹。
+   * ================================================================ */
+  var ED = { on: false, edits: [] };
+
+  function elPathOf(el, root) {
+    var path = [], cur = el;
+    while (cur && cur !== root) {
+      var ps = cur.parentNode, i = 0, n;
+      for (n = ps.firstElementChild; n && n !== cur; n = n.nextElementSibling) i++;
+      path.unshift(i); cur = ps;
+    }
+    return cur === root ? path : null;
+  }
+  function elByPath(root, path) {
+    var cur = root;
+    for (var i = 0; i < path.length && cur; i++) cur = cur.children[path[i]];
+    return cur || null;
+  }
+  function editableLeaves(root) {
+    return $$('*', root).filter(function (n) {
+      return !n.children.length && n.textContent.trim() &&
+        !/^(SCRIPT|STYLE|CANVAS|SVG|VIDEO|AUDIO|BR|IFRAME|OBJECT|TEMPLATE)$/.test(n.tagName);
+    });
+  }
+  /* 内嵌子集缺字检测：返回文本中不被任何内嵌族子集覆盖的字符（无指纹/无内嵌字体返回 []） */
+  function findLack(text) {
+    var fp = (MANIFEST && MANIFEST.fontSubsetChars) || null;
+    if (!fp || !Object.keys(fp).length) return [];
+    var sets = {};
+    for (var fam in fp) sets[fam] = fp[fam];
+    var fams = Object.keys(sets);
+    var out = [], seen = {};
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i], cp = ch.codePointAt(0);
+      if (/\s/.test(ch) || seen[ch]) continue;
+      var covered = fams.some(function (f) { return sets[f].indexOf(cp) !== -1; });
+      if (!covered) { seen[ch] = 1; out.push(ch); }
+    }
+    return out;
+  }
+  function markEditable() {
+    $$('.h4s-clone', miniBox).forEach(function (c) {
+      editableLeaves(c).forEach(function (n) { n.setAttribute('data-h4s-editable', ''); });
+    });
+  }
+  function setEdit(on) {
+    ED.on = on;
+    document.body.classList.toggle('h4s-editing', on);
+    var btn = $('[data-bact="edit"]');
+    if (btn) btn.style.color = on ? '#3b82f6' : '';
+    if (on) markEditable();
+    else {
+      $$('[data-h4s-editable]', miniBox).forEach(function (n) {
+        n.removeAttribute('data-h4s-editable');
+        n.removeAttribute('contenteditable');
+        n.classList.remove('h4s-edit-lack');
+      });
+    }
+    toast(on ? '文字微调模式：单击预览中的文字直接修改，Esc 退出'
+             : '文字微调模式已关闭');
+  }
+  /* 克隆编辑提交：按路径同步回真实 slide，记入改动表，缺字预警 */
+  function commitEdit(cloneEl, newText) {
+    var cloneSlide = cloneEl.closest('.h4s-clone');
+    if (!cloneSlide) return;
+    /* 预览克隆始终来自当前选中页：si = S.sel */
+    var si = S.sel;
+    var path = elPathOf(cloneEl, cloneSlide);
+    if (!path) return;
+    var slide = S.slides[si];
+    var real = elByPath(slide.el, path);
+    if (!real) return;
+    var oldText = real.textContent;
+    if (oldText === newText) return;
+    /* 同步回真实 slide */
+    real.textContent = newText;
+    /* 缺字预警 */
+    var lack = findLack(newText);
+    if (lack.length) {
+      cloneEl.classList.add('h4s-edit-lack');
+      var realByP = elByPath(slide.el, path);
+      if (realByP) realByP.classList.add('h4s-edit-lack');
+    }
+    /* 改动表：同页同路径去重更新 */
+    for (var i = 0; i < ED.edits.length; i++) {
+      var e = ED.edits[i];
+      if (e.si === si && e.path.join() === path.join()) { e.now = newText; e.lack = lack; e.old = e.old || oldText; break; }
+    }
+    if (i === ED.edits.length) ED.edits.push({ si: si, path: path, old: oldText, now: newText, lack: lack, title: slide.title });
+    refreshExportBtn();
+    toast('✓ 已修改（第 ' + (si + 1) + ' 页）' + (lack.length ? ' · ⚠ 子集缺字: ' + lack.join('') + '（导出后该处回退系统字体）' : ''));
+  }
+  function refreshExportBtn() {
+    var b = $('[data-bact="export"]');
+    if (b) b.style.display = ED.edits.length ? '' : 'none';
+  }
+  /* 导出：改动回写 boot 快照 → 完整 .html4s。壳内走 save 写回源文件，否则下载 */
+  function exportEdited() {
+    if (!ED.snap) { toast('快照不可用（deck 过早修改？）'); return; }
+    var doc = new DOMParser().parseFromString(ED.snap, 'text/html');
+    /* section 定位规则与 collectSlides 一致（过滤非页面元素，防混排错位） */
+    var deck = doc.querySelector('h4s-deck');
+    var secs = deck ? Array.prototype.slice.call(deck.children).filter(function (n) {
+      return n.tagName === 'SECTION' || n.tagName === 'H4S-SLIDE' || n.classList.contains('slide');
+    }) : [];
+    ED.edits.forEach(function (e) {
+      var sec = secs[e.si];
+      var el = sec && elByPath(sec, e.path);
+      if (el) el.textContent = e.now;
+    });
+    var out = doc.documentElement.outerHTML;
+    if (shellReady) {
+      shellAction('save', { html: out, name: (MANIFEST.meta && MANIFEST.meta.title || 'deck') });
+      toast('已写回源文件 ✓ 建议运行 h4s-build --subset 重建以更新字体子集');
+      return;
+    }
+    var blob = new Blob([out], { type: 'text/html;charset=utf-8' });
+    var a = el('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (document.title.replace(/\.html4s$|\.html$/i, '') || 'deck') + '.edited.html4s';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 200);
+    toast('已导出包含文字修改的 .html4s');
+  }
+
+  /* 编辑交互（stagebox 委托：克隆会被 renderMini 重建，不能直接绑在克隆上）。
+     绑定时机：miniBox 在 buildBrowse 才创建 —— 由 buildBrowse 末尾调用 bindEditing() */
+  function bindEditing() {
+  on(miniBox, 'click', function (e) {
+    if (!ED.on) return;
+    var t = e.target.closest('[data-h4s-editable]');
+    if (!t) return;
+    e.preventDefault();
+    t.setAttribute('contenteditable', 'true');
+    try { t.focus(); } catch (err) {}
+  });
+  on(miniBox, 'focusout', function (e) {
+    var t = e.target;
+    if (!t.getAttribute || t.getAttribute('contenteditable') !== 'true') return;
+    t.removeAttribute('contenteditable');
+    commitEdit(t, t.textContent);
+  });
+  on(miniBox, 'keydown', function (e) {
+    var t = e.target;
+    if (!t.getAttribute || t.getAttribute('contenteditable') !== 'true') return;
+    if (e.key === 'Enter') { e.preventDefault(); t.blur(); }
+    else if (e.key === 'Escape') { e.preventDefault(); t.textContent = t.__editOld || t.textContent; t.blur(); }
+  });
+  on(miniBox, 'paste', function (e) {
+    if (!e.target.getAttribute || e.target.getAttribute('contenteditable') !== 'true') return;
+    e.preventDefault();
+    var txt = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s+/g, ' ');
+    document.execCommand('insertText', false, txt);
+  });
+  on(miniBox, 'input', function (e) {
+    /* 编辑开始时记录原文（Esc 恢复用） */
+    if (e.target.__editOld === undefined) e.target.__editOld = e.target.textContent;
+  });
   }
 
   /* 进入放映（i=起始页，fragHint>=0 时直接呈现到该碎片状态） */
@@ -1782,6 +1971,7 @@
       if (e.ctrlKey && (k === 'o' || k === 'O')) { e.preventDefault(); shellAction('openfile'); return; }
       if (e.ctrlKey && (k === 'w' || k === 'W')) { e.preventDefault(); shellAction('close'); return; }
       if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
+      if (e.ctrlKey && e.altKey && (k === 'q' || k === 'Q') && S.kiosk) { e.preventDefault(); endShow(); toast('kiosk 已解锁（Ctrl+Alt+Q 重新锁定）'); return; }
 
       /* 浏览模式键位（PowerPoint 式） */
       if (!S.presenting) {
@@ -1803,6 +1993,7 @@
           case '?': setOverlay(S.overlay === 'help' ? null : 'help'); return;
           case 'Escape':
             if (S.overlay) setOverlay(null);
+            else if (ED.on) setEdit(false);
             return;
           default:
             if (/^\d$/.test(k)) { e.preventDefault(); pushNum(k); }
@@ -1974,6 +2165,8 @@
       console.info('[h4s] 未发现幻灯片结构，保持文档模式');
       return;
     }
+    /* 文字微调快照：保存接管前的原始文档（导出/写回的基底） */
+    try { ED.snap = document.documentElement.outerHTML; } catch (err) {}
     initStage(hash);
   }
 
