@@ -3773,45 +3773,23 @@ if (window.lucide) lucide.createIcons();
     for (var i = 0; i < path.length && cur; i++) cur = cur.children[path[i]];
     return cur || null;
   }
-  /* 可编辑目标 = 任意非空文本节点（含混合内容元素内的文本，如带 <br/>/<span> 的标题） */
+  /* 可编辑目标 = 内联级文本容器：元素含直接文字，子元素全部内联。
+     混合内容如 <h1>工欲善其事，<br>必先利其器。</h1> 整体作为一个文本块编辑，
+     <br>/<span> 等内联结构由 contenteditable 原生保持。 */
   var ED_SKIP = /^(SCRIPT|STYLE|CANVAS|SVG|VIDEO|AUDIO|BR|IFRAME|OBJECT|TEMPLATE|H4S-NOTES)$/;
-  function textNodesOf(root, visibleOnly) {
-    var out = [];
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (n) {
-        var t = n.parentNode;
-        if (!t || ED_SKIP.test(t.tagName)) return NodeFilter.FILTER_REJECT;
-        if (!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-        if (visibleOnly) {
-          /* 结构性隐藏过滤：display:none / visibility:hidden 的元素不可编辑。
-             不检查 opacity——动画初始态（如 [data-anim]）在克隆中会被显式可见化，
-             误判会导致大面积漏标（实测）。 */
-          var el = t;
-          for (var d = 0; el && d < 12; d++, el = el.parentElement) {
-            var cs = getComputedStyle(el);
-            if (cs.display === 'none' || cs.visibility === 'hidden') return NodeFilter.FILTER_REJECT;
-          }
-        }
-        return NodeFilter.FILTER_ACCEPT;
-      }
-    });
-    while (w.nextNode()) {
-      var tn = w.currentNode, parent = tn.parentNode, idx = -1;
-      for (var k = 0; k < parent.childNodes.length; k++) if (parent.childNodes[k] === tn) { idx = k; break; }
-      out.push({ node: tn, parent: parent, tIdx: idx });
+  var ED_INLINE = /^(BR|SPAN|EM|STRONG|B|I|U|S|A|CODE|SMALL|SUB|SUP|MARK|ABBR|CITE|Q|TIME|BDO|BDI|WBR|FONT|BIG|DEL|INS|KBD|SAMP|VAR|RUBY|RT|RP)$/;
+  function isInlineTextContainer(el) {
+    if (ED_SKIP.test(el.tagName)) return false;
+    var hasText = false;
+    for (var k = 0; k < el.childNodes.length; k++) {
+      var n = el.childNodes[k];
+      if (n.nodeType === 3 && n.nodeValue.trim()) { hasText = true; break; }
     }
-    return out;
-  }
-  /* 点击位置精确定位：返回被点中的文本节点（及其容器），无命中回退第一个可见文本节点 */
-  function textNodeAt(x, y, root) {
-    var el = document.elementFromPoint(x, y);
-    if (el && (!root || root.contains(el))) {
-      var range = document.caretRangeFromPoint ? document.caretRangeFromPoint(x, y) : null;
-      if (range && range.startContainer.nodeType === 3 && root.contains(range.startContainer))
-        return { node: range.startContainer, parent: range.startContainer.parentElement };
+    if (!hasText) return false;
+    for (var k = 0; k < el.children.length; k++) {
+      if (!ED_INLINE.test(el.children[k].tagName)) return false;
     }
-    var list = textNodesOf(root, true);
-    return list.length ? list[0] : null;
+    return true;
   }
   /* 内嵌子集缺字检测：返回文本中不被任何内嵌族子集覆盖的字符（无指纹/无内嵌字体返回 []） */
   function findLack(text) {
@@ -3831,7 +3809,11 @@ if (window.lucide) lucide.createIcons();
   }
   function markEditable() {
     $$('.h4s-clone', miniBox).forEach(function (c) {
-      textNodesOf(c, true).forEach(function (tn) { tn.parent.setAttribute('data-h4s-editable', ''); });
+      $$('*', c).forEach(function (n) {
+        if (isInlineTextContainer(n) && getComputedStyle(n).display !== 'none') {
+          n.setAttribute('data-h4s-editable', '');
+        }
+      });
     });
   }
   function setEdit(on) {
@@ -3851,32 +3833,32 @@ if (window.lucide) lucide.createIcons();
              : '文字微调模式已关闭');
   }
   /* 克隆编辑提交：文本节点级同步（元素路径 + tIdx → 真树 nodeValue），记入改动表，缺字预警 */
-  function commitEdit(act, newText) {
+  function commitEdit(el) {
+    var cloneSlide = el.closest('.h4s-clone');
+    var path = elPathOf(el, cloneSlide);
+    if (!path) return;
     var si = S.sel;
     var slide = S.slides[si];
-    var real = elByPath(slide.el, act.path);
+    var real = elByPath(slide.el, path);
     if (!real) return;
-    var tnode = real.childNodes[act.tIdx];
-    if (!tnode || tnode.nodeType !== 3) return;
-    var oldText = tnode.nodeValue;
-    if (oldText.trim() === newText.trim()) { renderMini(); return; }
-    /* 同步回真实 slide（文本节点赋值，不改结构） */
-    tnode.nodeValue = newText;
+    var oldNow = real.innerHTML;
+    var nowHTML = el.innerHTML;
+    if (oldNow === nowHTML) { renderMini(); return; }
+    /* 同步回真实 slide：元素级 innerHTML 替换（<br>/<span> 等混合结构整体保持） */
+    real.innerHTML = nowHTML;
     /* 缺字预警 */
-    var lack = findLack(newText);
+    var lack = findLack(el.textContent);
     if (lack.length) {
       real.classList.add('h4s-edit-lack');
-      act.parent.classList.add('h4s-edit-lack');
+      el.classList.add('h4s-edit-lack');
     }
-    /* 改动表：同页同路径同文本节点去重更新 */
+    /* 改动表：同页同路径去重更新（now 存 innerHTML，导出按元素级替换） */
     var i;
     for (i = 0; i < ED.edits.length; i++) {
       var e = ED.edits[i];
-      if (e.si === si && e.path.join() === act.path.join() && e.tIdx === act.tIdx) {
-        e.now = newText; e.lack = lack; break;
-      }
+      if (e.si === si && e.path.join() === path.join()) { e.now = nowHTML; e.lack = lack; break; }
     }
-    if (i === ED.edits.length) ED.edits.push({ si: si, path: act.path, tIdx: act.tIdx, old: oldText, now: newText, lack: lack, title: slide.title });
+    if (i === ED.edits.length) ED.edits.push({ si: si, path: path, old: oldNow, now: nowHTML, lack: lack, title: slide.title });
     refreshExportBtn();
     renderMini();
     toast('✓ 已修改（第 ' + (si + 1) + ' 页）' + (lack.length ? ' · ⚠ 子集缺字: ' + lack.join('') + '（导出后该处回退系统字体）' : ''));
@@ -3897,8 +3879,7 @@ if (window.lucide) lucide.createIcons();
     ED.edits.forEach(function (e) {
       var sec = secs[e.si];
       var el = sec && elByPath(sec, e.path);
-      var tn = el && el.childNodes[e.tIdx];
-      if (tn && tn.nodeType === 3) tn.nodeValue = e.now;
+      if (el) el.innerHTML = e.now;
     });
     var out = doc.documentElement.outerHTML;
     if (shellReady) {
@@ -3921,42 +3902,29 @@ if (window.lucide) lucide.createIcons();
   function bindEditing() {
   on(miniBox, 'click', function (e) {
     if (!ED.on) return;
-    var parent = e.target.closest('[data-h4s-editable]');
-    if (!parent) return;
-    /* caret 精确定位：优先锁定被点中的那个文本节点（混合元素内多段文字可分别编辑） */
-    var hit = textNodeAt(e.clientX, e.clientY, parent);
-    if (!hit || !hit.node) return;
-    var tn = hit.node;
-    var cloneSlide = parent.closest('.h4s-clone');
-    var path = elPathOf(parent, cloneSlide);
+    var t = e.target.closest('[data-h4s-editable]');
+    if (!t || t.getAttribute('contenteditable') === 'true') return;
+    var cloneSlide = t.closest('.h4s-clone');
+    var path = elPathOf(t, cloneSlide);
     if (!path) return;
-    var tIdx = Array.prototype.indexOf.call(parent.childNodes, tn);
-    ED.active = { path: path, tIdx: tIdx, parent: parent, old: tn.nodeValue };
-    /* 克隆内包裹 span 承载编辑（caret 锁定、不破坏兄弟子元素）；提交后 renderMini 重建克隆 */
-    var span = document.createElement('span');
-    span.setAttribute('contenteditable', 'true');
-    span.style.outline = '2px solid #3b82f6';
-    span.style.outlineOffset = '2px';
-    span.textContent = tn.nodeValue;
-    parent.replaceChild(span, tn);
-    try { span.focus(); } catch (err) {}
+    ED.active = { si: S.sel, path: path, el: t, oldHTML: t.innerHTML };
+    t.setAttribute('contenteditable', 'true');
+    t.setAttribute('data-h4s-edit-active', '1');
+    t.classList.add('h4s-edit-focus');
+    try { t.focus(); } catch (err) {}
   });
   on(miniBox, 'focusout', function (e) {
     var t = e.target;
-    if (t.tagName !== 'SPAN' || !t.hasAttribute('contenteditable')) return;
-    var newText = t.textContent;
-    var act = ED.active;
-    ED.active = null;
-    if (act) commitEdit(act, newText); /* commitEdit 内 renderMini 重建克隆（消除包裹分叉） */
+    if (t.getAttribute && t.getAttribute('data-h4s-edit-active') === '1') commitEdit(t);
   });
   on(miniBox, 'keydown', function (e) {
     var t = e.target;
-    if (t.tagName !== 'SPAN' || !t.hasAttribute('contenteditable')) return;
+    if (!t.hasAttribute || t.getAttribute('data-h4s-edit-active') !== '1') return;
     if (e.key === 'Enter') { e.preventDefault(); t.blur(); }
-    else if (e.key === 'Escape') { e.preventDefault(); if (ED.active) t.textContent = ED.active.old; t.blur(); }
+    else if (e.key === 'Escape') { e.preventDefault(); t.innerHTML = t.__h4sOld || t.innerHTML; t.blur(); }
   });
   on(miniBox, 'paste', function (e) {
-    if (e.target.tagName !== 'SPAN' || !e.target.hasAttribute('contenteditable')) return;
+    if (!e.target.hasAttribute || e.target.getAttribute('data-h4s-edit-active') !== '1') return;
     e.preventDefault();
     var txt = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s+/g, ' ');
     document.execCommand('insertText', false, txt);
