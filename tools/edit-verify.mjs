@@ -2,7 +2,7 @@
 import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
 import fs from 'node:fs';
 
-fs.copyFileSync('D:/MyProjects/Html4s/examples/2027-dangjian.html4s', process.env.TEMP + '/ed.html');
+fs.copyFileSync('C:/Users/Mingqiao/AppData/Local/Html4s/Examples/2027-dangjian.html4s', process.env.TEMP + '/ed.html');
 await withPage('file:///' + process.env.TEMP.replace(/\\/g, '/') + '/ed.html', async ({ ev }) => {
   await ev(`window.__e=[];window.onerror=function(m){window.__e.push(String(m).slice(0,100));return false;};`);
   for (let i = 0; i < 40; i++) { if (await ev(`!!document.querySelector('.h4s-pageinfo')`)) break; await new Promise(r => setTimeout(r, 150)); }

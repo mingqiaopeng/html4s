@@ -1610,10 +1610,10 @@
    * 媒体管理
    * ================================================================ */
   function mediaLeave(root) {
-    $$$('video,audio', root).forEach(function (m) { try { m.pause(); } catch (e) {} });
+    $$('video,audio', root).forEach(function (m) { try { m.pause(); } catch (e) {} });
   }
   function mediaEnter(root) {
-    $$$('[data-h4s-media~="autoplay"]', root).forEach(function (w) {
+    $$('[data-h4s-media~="autoplay"]', root).forEach(function (w) {
       var ms = (w.tagName === 'VIDEO' || w.tagName === 'AUDIO') ? [w] : $$('video,audio', w);
       ms.forEach(function (m) { try { var p = m.play(); p && p.catch && p.catch(function () {}); } catch (e) {} });
     });
