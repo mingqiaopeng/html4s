@@ -1,0 +1,302 @@
+<!-- ============================================================
+     html4s · 项目自述 deck · 8 页 · Style B 瑞士国际主义（IKB 克莱因蓝）
+     版式: S01 Cover / S03 Statement / S08 Duo / P2 Timeline+KPI /
+           P6 KPI Tower / S14 Loop / P10 Dot Matrix / P9 Closing
+     每页: h4s-notes 备注 · data-h4s-transition 转场 · px 已按 1920×1080 换算
+     ============================================================ -->
+
+<!-- 01 · P1 Cover · IKB 满屏 + ASCII 呼吸场 -->
+<section class="slide accent" data-layout="S01" data-animate="hero" data-slide-id="cover" data-h4s-transition="zoom">
+  <div class="canvas-card">
+    <canvas class="ascii-bg" aria-hidden="true"></canvas>
+    <div class="chrome-min">
+      <div class="l">html4s · Issue 01 · Open Format Deck</div>
+      <div class="r">HS · 26.11.12 · 01 / 08</div>
+    </div>
+    <div style="flex:1;padding:0;display:grid;grid-template-rows:auto 1fr auto;gap:28.08px">
+      <div data-anim="kicker" class="t-meta" style="color:rgba(var(--accent-on-rgb),.78);letter-spacing:.22em">HYPERTEXT MARKUP FOR SLIDES · OPEN FORMAT</div>
+      <h1 data-anim="title" style="align-self:center;font-family:var(--sans),var(--sans-zh);font-weight:200;font-size:min(222.72px,205.2px);line-height:.94;letter-spacing:-.025em;color:var(--accent-on)">html4s<br/>把演示文稿<br/>还给一个<span style="font-weight:400">文件</span>。</h1>
+      <div data-anim="bottom" style="display:grid;grid-template-rows:auto auto;gap:17.28px;border-top:1px solid rgba(var(--accent-on-rgb),.22);padding-top:21.6px">
+        <div data-anim="lead" class="lead" style="max-width:52ch;color:rgba(var(--accent-on-rgb),.86);font-weight:300">AI 写得准，人演得稳，格式永远可版本化——这是对演示文稿的一次重做。</div>
+        <div style="display:flex;justify-content:space-between;align-items:end">
+          <div class="t-meta" style="color:rgba(var(--accent-on-rgb),.6)">Html4s Project · 2026.11</div>
+          <div class="t-meta" style="color:rgba(var(--accent-on-rgb),.6)">→ 方向键翻页 · F5 放映 · S 演讲者视图</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】30 秒定调：html4s = 合法 HTML 单文件 + 专职播放器，不是又一个网页幻灯片框架。</p>
+    <p>【要点】强调"文本格式 + 播放器"的分层：格式面向 AI 与版本控制，播放器面向现场。</p>
+    <p>【转场】下一页给出核心理念陈述。</p>
+  </h4s-notes>
+</section>
+
+<!-- 02 · P3 Statement · 极简陈述 -->
+<section class="slide" data-layout="S03" data-animate="statement-rise" data-slide-id="statement" data-h4s-transition="fade">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">html4s · Why</div>
+      <div class="r">HS · 26.11.12 · 02 / 08</div>
+    </header>
+    <h1 class="h-statement">
+      <span>让 AI 写得准，</span><br>
+      <span>让人演得稳。</span>
+    </h1>
+    <span class="stmt-anchor">— Statement 02 · Why html4s</span>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】一句话立论：两条旧路线各有一半，html4s 同时解决"生成"与"演播"。</p>
+    <p>【要点】停顿。让"准"和"稳"落地——准指溢出可控、版式确定；稳指备注/计时/黑屏/全屏齐全。</p>
+    <p>【转场】用双轨对照展开新旧两条路线的差异。</p>
+  </h4s-notes>
+</section>
+
+<!-- 03 · P8 Duo Compare · 双轨对照（两半为碎片，逐步显示） -->
+<section class="slide" data-layout="S08" data-animate="duo-mirror" data-slide-id="compare" data-h4s-transition="slide">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">html4s · Two Roads</div>
+      <div class="r">HS · 26.11.12 · 03 / 08</div>
+    </header>
+    <div class="duo-compare">
+      <div class="duo-half" data-h4s-frag="fade-up">
+        <span class="t-cat">BEFORE · 二进制路线</span>
+        <h2 style="font-size:64px">pptx</h2>
+        <ul class="meta-list" style="margin-top:32px;display:grid;gap:18px;font-size:18px;line-height:1.7;color:var(--text-secondary)">
+          <li>AI 经 MCP / 脚本"摸黑"生成，无法直接读改</li>
+          <li>布局引擎黑盒，autofit 结果不可预测</li>
+          <li>二进制入 git，diff 与版本控制不友好</li>
+        </ul>
+      </div>
+      <span class="vrule"></span>
+      <div class="duo-half" data-h4s-frag="fade-up">
+        <span class="t-cat">AFTER · 文本路线</span>
+        <h2 style="font-size:64px">html4s</h2>
+        <ul class="meta-list" style="margin-top:32px;display:grid;gap:18px;font-size:18px;line-height:1.7;color:var(--text-primary)">
+          <li>AI 直接写合法 HTML，写完即可校验</li>
+          <li>舞台固定 1920×1080，版式确定性等比缩放</li>
+          <li>纯文本即成品，git 每一行都可读</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】把两条路线的差异钉在同一个画面上。</p>
+    <p>【要点】左右两半是碎片：第一次点击只出现"Before"，第二次出现"After"——先讲痛点再给答案。</p>
+    <p>【转场】翻到时间线，讲项目如何走到今天。</p>
+  </h4s-notes>
+</section>
+
+<!-- 04 · P2 Vertical Timeline + KPI -->
+<section class="slide" data-layout="S02" data-animate="timeline-vertical" data-slide-id="timeline" data-h4s-transition="slide">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">html4s · Roadmap</div>
+      <div class="r">HS · 26.11.12 · 04 / 08</div>
+    </header>
+    <div style="padding-top:12px">
+      <span class="t-cat">ROADMAP · 四个阶段</span>
+      <h2 style="font-weight:200;font-size:42px;letter-spacing:-.02em;margin:8px 0 0">两周，从想法到可演</h2>
+    </div>
+    <div class="timeline-v" style="flex:1">
+      <div class="tl-node">
+        <span class="dot"></span>
+        <span class="yr">11.10</span>
+          <span class="multi">P0</span>
+          <p class="desc">播放器原型 + 桌面壳：双击 .html4s 即演</p>
+      </div>
+      <div class="tl-node">
+        <span class="dot"></span>
+        <span class="yr">11.12</span>
+          <span class="multi">P1</span>
+          <p class="desc">构建工具链 + 本 skill：字体子集 1116KB → 34KB</p>
+      </div>
+      <div class="tl-node">
+        <span class="dot"></span>
+        <span class="yr">12 月</span>
+          <span class="multi">P2</span>
+          <p class="desc">桌面壳完善：单实例激活、显示器枚举、排练写回</p>
+      </div>
+      <div class="tl-node">
+        <span class="dot"></span>
+        <span class="yr">2027</span>
+          <span class="multi">P3</span>
+          <p class="desc">生态：主题库、lint/shot/MCP、社区版式</p>
+      </div>
+      </div>
+    </div>
+    <div class="kpi-row-4">
+      <div class="kpi-cell"><span class="lbl">锁定版式</span><span class="nb">32</span></div>
+      <div class="kpi-cell"><span class="lbl">字体子集</span><span class="nb">34KB</span></div>
+      <div class="kpi-cell"><span class="lbl">单文件产物</span><span class="nb">694KB</span></div>
+      <div class="kpi-cell"><span class="lbl">CDN 依赖</span><span class="nb">0</span></div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】证明这不是 PPT 概念稿——两周内每个阶段都有可演示的产物。</p>
+    <p>【要点】P0/P1 已完成（今天讲的就是 P1 的产出）；KPI 四项全部是真实数值。</p>
+    <p>【转场】下一页拆开 694KB 单文件，看里面是什么。</p>
+  </h4s-notes>
+</section>
+
+<!-- 05 · P6 KPI Tower · 单文件构成 -->
+<section class="slide" data-layout="S06" data-animate="tower-grow" data-slide-id="kpi" data-h4s-transition="zoom">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">html4s · Anatomy</div>
+      <div class="r">HS · 26.11.12 · 05 / 08</div>
+    </header>
+    <div class="grid-2-9" style="align-items:end">
+      <div class="lead-col">
+        <span class="t-cat">ANATOMY · 单文件解剖</span>
+        <h2 class="h-xl" style="font-weight:200">694KB 里<br>都有什么</h2>
+      </div>
+      <p class="lead" style="font-weight:300;color:var(--text-secondary)">播放器、图标、字体、内容——四件东西打包成一个 .html4s，双击即演，零依赖。</p>
+    </div>
+    <div class="kpi-tower-row" style="align-items:end">
+      <div class="tower-col">
+        <i data-lucide="layers"></i>
+        <span class="num-mega">59KB</span>
+        <span class="lbl">播放器运行时</span>
+        <div class="bar-tower" style="--h:35px"></div>
+      </div>
+      <div class="tower-col">
+        <i data-lucide="shapes"></i>
+        <span class="num-mega">475KB</span>
+        <span class="lbl">图标库 lucide</span>
+        <div class="bar-tower" style="--h:280px"></div>
+      </div>
+      <div class="tower-col">
+        <i data-lucide="type"></i>
+        <span class="num-mega">41KB</span>
+        <span class="lbl">内嵌字体子集</span>
+        <div class="bar-tower" style="--h:24px"></div>
+      </div>
+      <div class="tower-col">
+        <i data-lucide="file-text"></i>
+        <span class="num-mega">119KB</span>
+        <span class="lbl">内容与版式</span>
+        <div class="bar-tower" style="--h:70px"></div>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】回答"单文件会不会很肥"——拆开看每一块的体积来源。</p>
+    <p>【要点】最大头是图标库；字体只占 41KB（子集化后），中文 deck 的关键突破。</p>
+    <p>【转场】这套体积效率支撑的正是下一页的 AI 创作闭环。</p>
+  </h4s-notes>
+</section>
+
+<!-- 06 · P14 Loop Diagram · AI 创作闭环 -->
+<section class="slide" data-layout="S14" data-animate="loop-form" data-slide-id="loop" data-h4s-title="AI 创作闭环" data-h4s-transition="fade">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">html4s · Agent Loop</div>
+      <div class="r">HS · 26.11.12 · 06 / 08</div>
+    </header>
+    <div class="loop-diagram">
+      <div class="loop-steps">
+        <div class="loop-step">
+          <span class="big-num">01</span>
+          <h4>生成 Generate</h4>
+          <p>Agent 按本 skill 写 deck 源文件</p>
+        </div>
+        <div class="loop-step">
+          <span class="big-num">02</span>
+          <h4>校验 Lint</h4>
+          <p>舞台溢出 / 缺字 / 最小字号 / 对比度</p>
+        </div>
+        <div class="loop-step">
+          <span class="big-num">03</span>
+          <h4>截图 Shot</h4>
+          <p>逐页渲染 PNG，AI 视觉自审</p>
+        </div>
+        <div class="loop-step">
+          <span class="big-num">04</span>
+          <h4>修复 Fix</h4>
+          <p>按报告修版式，回到 01 直到 P0 全过</p>
+        </div>
+      </div>
+      <div class="loop-svg" style="position:relative;display:grid;place-items:center">
+        <svg viewBox="0 0 400 400" style="width:100%;max-width:480px" aria-hidden="true">
+          <circle cx="200" cy="200" r="150" fill="none" stroke="var(--accent)" stroke-width="2"/>
+          <circle cx="200" cy="200" r="104" fill="none" stroke="var(--border-strong)" stroke-width="1" stroke-dasharray="4 6"/>
+          <rect x="192" y="42" width="16" height="16" fill="var(--accent)"/>
+          <rect x="342" y="192" width="16" height="16" fill="var(--ink)"/>
+          <rect x="192" y="342" width="16" height="16" fill="var(--accent)"/>
+          <rect x="42" y="192" width="16" height="16" fill="var(--ink)"/>
+          <path d="M 336 60 A 150 150 0 0 1 348 120" fill="none" stroke="var(--ink)" stroke-width="2" marker-end="url(#ah)"/>
+          <defs><marker id="ah" markerWidth="8" markerHeight="8" refX="4" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="var(--ink)"/></marker></defs>
+        </svg>
+        <span style="position:absolute;font-weight:200;font-size:64px;letter-spacing:-.02em;color:var(--ink)">LOOP</span>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】讲清 AI 路线为什么质量可控——不是运气，是闭环工程。</p>
+    <p>【要点】每一圈 1-2 分钟；lint 是硬门（溢出即失败），截图自审把视觉问题变成可修复项。</p>
+    <p>【转场】回到一句话总结。</p>
+  </h4s-notes>
+</section>
+
+<!-- 07 · P10 Dot Matrix Statement · 点阵宣言（自动播放 15s 演示） -->
+<section class="slide" data-layout="S10" data-animate="matrix-statement" data-slide-id="manifesto" data-h4s-transition="wipe" data-h4s-autoslide="15">
+  <div class="canvas-card">
+    <span class="ring-mat" style="left:96px;bottom:54px;width:345.6px;height:345.6px"></span>
+    <h1 class="h-statement">文本即成品。<br>播放器即舞台。<br>AI 即作者。</h1>
+    <span class="dot-mat" style="right:0;top:0;width:691.2px;height:691.2px"></span>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】三句话收束理念，视觉透气页。</p>
+    <p>【要点】本页声明了 data-h4s-autoslide="15"——巡展/kiosk 场景下 15 秒自动翻页，是"播放信息写入"能力的现场演示。</p>
+    <p>【转场】进入收束页。</p>
+  </h4s-notes>
+</section>
+
+<!-- 08 · P9 Closing Manifesto · 收束宣言 -->
+<section class="slide split" data-layout="S09" data-animate="split-statement" data-slide-id="closing" data-h4s-transition="fade">
+  <div class="canvas-card">
+    <div class="split-half">
+      <div class="half b-accent" style="padding:60.48px 69.12px 47.52px;justify-content:space-between;position:relative;overflow:hidden">
+        <canvas class="ascii-bg" aria-hidden="true"></canvas>
+        <div class="chrome-min" style="margin-bottom:0;position:relative;z-index:1">
+          <div class="l">08 / 08</div>
+          <div class="r">CLOSING</div>
+        </div>
+        <div data-anim="manifesto" style="display:flex;flex-direction:column;gap:21.6px;position:relative;z-index:1">
+          <div class="t-meta" style="color:rgba(var(--accent-on-rgb),.78);letter-spacing:.22em;margin-bottom:17.28px">MANIFESTO</div>
+          <h2 style="font-family:var(--sans),var(--sans-zh);font-size:min(99.84px,98.28px);line-height:.94;letter-spacing:-.025em;font-weight:200;color:var(--accent-on)">把演示文稿<br>还给一个<span style="font-weight:400">文件</span>。</h2>
+          <div style="font-family:var(--sans),var(--sans-zh);font-size:19.2px;line-height:1.6;color:rgba(var(--accent-on-rgb),.82);font-weight:300;max-width:36ch;margin-top:15.12px">html4s · AGPL 开源 · 与归藏视觉体系同行。</div>
+        </div>
+        <div data-anim="signature" style="display:flex;justify-content:space-between;align-items:end;border-top:1px solid rgba(var(--accent-on-rgb),.22);padding-top:21.6px;position:relative;z-index:1">
+          <div class="t-meta" style="color:rgba(var(--accent-on-rgb),.62)">Html4s Project</div>
+          <div class="t-meta" style="color:rgba(var(--accent-on-rgb),.62)">26.11.12</div>
+        </div>
+      </div>
+      <div class="half" style="padding:60.48px 69.12px 47.52px;justify-content:space-between">
+        <div class="chrome-min"><div class="l">TAKEAWAYS</div><div class="r">03 RULES</div></div>
+        <div data-anim="rules" style="display:grid;gap:40px">
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start">
+            <span class="num-mega" style="font-size:34px">01</span>
+            <div><h4 style="margin:0 0 8px;font-size:24px;font-weight:600">格式即 HTML</h4><p style="margin:0;font-size:16px;line-height:1.6;color:var(--text-secondary)">纯文本、可 diff、AI 直写——双击即演。</p></div>
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start">
+            <span class="num-mega" style="font-size:34px">02</span>
+            <div><h4 style="margin:0 0 8px;font-size:24px;font-weight:600">演播归播放器</h4><p style="margin:0;font-size:16px;line-height:1.6;color:var(--text-secondary)">备注、计时、缩略图、全屏、kiosk 一应俱全。</p></div>
+          </div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start">
+            <span class="num-mega" style="font-size:34px;color:var(--accent)">03</span>
+            <div><h4 style="margin:0 0 8px;font-size:24px;font-weight:600;color:var(--accent)">质量靠闭环</h4><p style="margin:0;font-size:16px;line-height:1.6;color:var(--text-secondary)">lint + 截图自审，把 AI 生成变成工程。</p></div>
+          </div>
+        </div>
+        <div class="t-meta" style="color:var(--text-helper);text-align:right">→ 完 · END OF DECK</div>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】收束 + 三条 takeaway 带走。</p>
+    <p>【要点】03 用 IKB 蓝强调完成色彩缝合；口令是"把演示文稿还给一个文件"。</p>
+    <p>【转场】Q&amp;A。备答：为什么不基于 reveal.js？——deck 不应绑定框架 API。</p>
+  </h4s-notes>
+</section>

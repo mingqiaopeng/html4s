@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>遗留 HTML 演示（零 h4s 标记）</title>
+<!--
+  L0 适配验收用例：不写任何 h4s 清单、不用任何 h4s 元素。
+  仅用业界惯例 —— 容器下的 <section> 子页、.fragment 碎片、aside.notes 备注。
+  引入播放器后即被接管；不引入则保持普通网页。
+-->
+<style>
+  body { background: #e8e8e8; font-family: system-ui, "Microsoft YaHei", sans-serif; }
+  section {
+    width: 1100px; height: 650px; margin: 20px auto; padding: 60px 72px;
+    box-sizing: border-box; background: #ffffff; color: #1a1a1a;
+  }
+  section h1 { font-size: 56px; margin: 0 0 24px; }
+  section li { font-size: 28px; line-height: 2; }
+  aside.notes { display: none; }
+</style>
+</head>
+<body>
+
+<section>
+  <h1>遗留 deck · 第 1 页</h1>
+  <p>没有 h4s 清单、没有 h4s 元素 —— 只有业界通用的 section 约定。</p>
+</section>
+
+<section>
+  <h1>第 2 页 · reveal 风格碎片</h1>
+  <ul>
+    <li class="fragment">碎片一（.fragment 惯例）</li>
+    <li class="fragment">碎片二</li>
+  </ul>
+  <aside class="notes">这条备注来自 aside.notes 惯例 —— 演讲者视图里应能看到。</aside>
+</section>
+
+<section>
+  <h1>完</h1>
+  <p>默认舞台 1280×720（无清单时播放器兜底值）。</p>
+</section>
+
+<script src="../player/h4s.player.js"></script>
+</body>
+</html>

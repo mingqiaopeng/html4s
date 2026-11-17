@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>媒体控制测试</title>
+<script type="application/h4s+json">
+{"h4s":"1.0","meta":{"title":"媒体控制测试"},"stage":{"width":1920,"height":1080,"fit":"contain"},"defaults":{},"fonts":[]}
+</script>
+<style>
+body{margin:0;background:#111}
+.slide{width:1920px;height:1080px;margin:0 auto;position:relative;display:flex;align-items:center;justify-content:center;color:#eee;font:48px sans-serif}
+</style></head>
+<body><h4s-deck>
+<section class="slide" data-slide-id="p1" data-h4s-title="自动播放页">
+  <div data-h4s-media="autoplay">
+    <audio src="loop.wav" loop muted></audio>
+  </div>
+  <h1>P1 · 带 autoplay 音频（data-h4s-media="autoplay"）</h1>
+</section>
+<section class="slide" data-slide-id="p2" data-h4s-title="无媒体页">
+  <h1>P2 · 无媒体</h1>
+</section>
+</h4s-deck>
+<script src="../../player/h4s.player.js"></script>
+</body></html>

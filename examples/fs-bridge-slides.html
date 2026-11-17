@@ -1,0 +1,57 @@
+<!-- frontend-slides-html4s 试点 · 3 页 · 深色科技风（STYLE_PRESETS 变体） -->
+<style>
+    /* PASTE viewport-base.css（含末尾 h4s 桥接段）— 见 skill */
+    html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: #000; }
+    .slide {
+        position: absolute; inset: 0; width: 1920px; height: 1080px;
+        overflow: hidden; display: block;
+        background: #0a0f1c; color: #fff;
+        font-family: 'Space Grotesk', 'Noto Sans SC', sans-serif;
+    }
+    .h4s-holder > .slide { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; position: absolute !important; inset: 0 !important; }
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+    .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+    .kicker { font-size: 20px; letter-spacing: .3em; color: #00ffcc; text-transform: uppercase; }
+    .slide-content { display: flex; flex-direction: column; justify-content: center; padding: 120px; height: 100%; box-sizing: border-box; }
+</style>
+
+<section class="slide" data-h4s-title="Frontend Slides × html4s">
+  <div class="slide-content">
+    <div class="kicker reveal">FRONTEND SLIDES × HTML4S · BRIDGE VERIFIED</div>
+    <h1 class="reveal" style="font-size:140px;font-weight:300;letter-spacing:-.03em;margin:24px 0">Frontend Slides,<br>now on <span style="color:#00ffcc">html4s</span>.</h1>
+    <p class="reveal" style="font-size:30px;color:#9ca3af;max-width:52ch">固定 1920×1080 舞台哲学原样保留——放映、演讲者视图、导出交给 html4s 播放器。</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】验证 frontend-slides 的舞台约定在 html4s 播放器里原样成立。</p>
+    <p>【要点】设计语言不变：深色科技 + 单色锚点 + 大字号层级。</p>
+    <p>【转场】进入内容页演示 .visible .reveal 动画链。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="密度模式与入场动画">
+  <div class="slide-content">
+    <div class="kicker reveal">DENSITY · SPEAKER-LED</div>
+    <h2 class="reveal" style="font-size:88px;font-weight:300;margin:24px 0 48px">一页一个想法</h2>
+    <div class="reveal" style="display:grid;grid-template-columns:1fr 1fr;gap:48px;font-size:26px;line-height:1.6;color:#c9d1d9">
+      <div style="border-left:4px solid #00ffcc;padding-left:28px">演讲主导型：每页 1-3 条要点，大字号，留白给讲述者。</div>
+      <div style="border-left:4px solid #333;padding-left:28px">阅读主导型：信息密度提升，字号收敛，结构承载细节。</div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】展示 .slide.visible .reveal 动画链在播放器翻页时正常触发。</p>
+    <p>【要点】密度模式决策沿用原版——本页为 speaker-led 示范。</p>
+    <p>【转场】收尾页。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="END OF BRIDGE TEST">
+  <div class="slide-content" style="align-items:center;text-align:center">
+    <div class="kicker reveal">BRIDGE VERIFIED</div>
+    <h2 class="reveal" style="font-size:120px;font-weight:200;margin:32px 0">零依赖，<span style="color:#00ffcc">单文件</span>。</h2>
+    <p class="reveal" style="font-size:26px;color:#9ca3af">h4s-build → .html4s → 双击放映</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】收束。</p>
+    <p>【要点】frontend-slides-html4s skill 桥接完成。</p>
+  </h4s-notes>
+</section>

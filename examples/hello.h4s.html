@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>html4s · Hello Deck</title>
+
+<!--
+  H4S 格式示例 v0.1（对应 ARCHITECTURE.md §3）
+  本文件字节上是一份合法 HTML5 文档：
+  - 无 JS 时：文档模式，纵向可滚动、可打印、可检索
+  - 有运行时（./h4s.player.js，P0 阶段交付）：进入播放器模式
+-->
+
+<!-- H4S 清单：机器元数据（L1 Core）。读方必须忽略未知字段 -->
+<script type="application/h4s+json">
+{
+  "h4s": "1.0",
+  "meta": {
+    "title": "html4s · Hello Deck",
+    "author": "Html4s Project",
+    "lang": "zh-CN"
+  },
+  "stage": {
+    "width": 1280,
+    "height": 720,
+    "fit": "contain",
+    "background": "#0b0f14"
+  },
+  "defaults": {
+    "transition": { "name": "fade", "duration": 300 },
+    "fragment": { "effect": "fade-up", "delay": 150 },
+    "progress": true,
+    "slideNumber": true
+  }
+}
+</script>
+
+<!-- 文档模式兜底样式：无 JS 时本文件仍是可读网页。
+     播放器激活后会注入等价样式并接管布局，作者无需手写以下内容 -->
+<style>
+  h4s-deck, h4s-slide, h4s-notes { display: block; }
+  h4s-slide {
+    width: 1280px; height: 720px;
+    margin: 24px auto; padding: 72px 96px;
+    box-sizing: border-box; position: relative; overflow: hidden;
+    background: #0b0f14; color: #e8edf2;
+    font-family: system-ui, "Microsoft YaHei", "PingFang SC", sans-serif;
+  }
+  h4s-notes { display: none; }
+  h4s-slide h1 { font-size: 88px; margin: 0 0 24px; letter-spacing: 1px; }
+  h4s-slide h2 { font-size: 56px; margin: 0 0 40px; color: #7dd3fc; }
+  h4s-slide p  { font-size: 30px; color: #94a3b8; }
+  h4s-slide ul { font-size: 34px; line-height: 1.9; padding-left: 1.2em; }
+  .accent { color: #fbbf24; }
+  @media print {
+    h4s-slide { margin: 0; page-break-after: always; }
+  }
+</style>
+</head>
+<body>
+
+<h4s-deck>
+
+  <h4s-slide id="cover" data-h4s-title="封面" data-h4s-transition="zoom" data-h4s-autoslide="15">
+    <h1>html4s</h1>
+    <p>HyperText Markup Language For Slides</p>
+    <p>用 <span class="accent">一个 HTML 文件</span> + <span class="accent">一个播放器</span>，<br>
+       让 AI 写得准、让人演得稳。</p>
+    <h4s-notes hidden>
+      <p>开场 30 秒：一句话定位 —— pptx 的操作习惯 × HTML 的表达力 × 纯文本的 AI 友好度。
+         提醒自己：不要念屏幕，直接讲"为什么现在的两条路线都不行"。</p>
+    </h4s-notes>
+  </h4s-slide>
+
+  <h4s-slide id="pain" data-h4s-title="三个痛点" data-h4s-layout="bullets">
+    <h2>为什么需要 html4s</h2>
+    <ul>
+      <li data-h4s-frag>pptx 对 AI 不友好：二进制 + 强布局引擎，难以精确控制</li>
+      <li data-h4s-frag>HTML 演示缺"播放器"：比例、备注、计时、总览、导出都不成体系</li>
+      <li data-h4s-frag>html4s = <span class="accent">文本格式</span> + <span class="accent">播放器</span>，双击即演</li>
+    </ul>
+    <h4s-notes hidden>
+      <p>逐条展开，每条给一个真实场景。第二条是本次提案的核心论据。</p>
+    </h4s-notes>
+  </h4s-slide>
+
+  <h4s-slide id="end" data-h4s-title="谢谢" data-h4s-transition="fade">
+    <h1>谢谢</h1>
+    <p>示例文件：examples/hello.h4s.html · 规范：ARCHITECTURE.md §3</p>
+    <h4s-notes hidden><p>留 Q&amp;A。常见问题备答：为什么不基于 reveal.js？—— deck 不应绑定框架 API。</p></h4s-notes>
+  </h4s-slide>
+
+</h4s-deck>
+
+<!-- 运行时：构建时内嵌为单文件分发；开发期可为相对路径。
+     运行时缺失时保持文档模式，不报错。 -->
+<script src="../player/h4s.player.js"></script>
+</body>
+</html>

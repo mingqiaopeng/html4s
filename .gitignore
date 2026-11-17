@@ -1,0 +1,23 @@
+# 依赖与上游克隆（AGPL 归属见 docs/NOTICE.md，vendor 不入仓库）
+vendor/
+
+# 构建输出与发布物（可由 tools/ 重建）
+shell/Html4sPlayer/bin/
+shell/Html4sPlayer/obj/
+release/
+
+# 运行时生成的镜像与临时文件
+*.h4srender.html
+*.h4s-lint.html
+*.h4s-shot.html
+.h4s-sub-*
+*-shots/
+
+# 可再生的导出产物
+examples/*.pdf
+
+# 系统文件
+Thumbs.db
+Desktop.ini
+.DS_Store
+lint-huashu.json

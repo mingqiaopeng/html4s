@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>html4s · 花叔 Design 版</title>
+<script type="application/h4s+json">
+{
+  "h4s": "1.0",
+  "meta": { "title": "html4s · 花叔 Design 版", "lang": "zh-CN", "author": "Html4s Project" },
+  "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "#111" },
+  "defaults": { "transition": { "name": "fade", "duration": 450 }, "autoslide": 0, "loop": false },
+  "fonts": [
+  {
+    "family": "Noto Serif SC",
+    "file": "fonts/noto-serif-sc-chinese-simplified-400-normal.woff2",
+    "weight": 400
+  },
+  {
+    "family": "Noto Serif SC",
+    "file": "fonts/noto-serif-sc-chinese-simplified-700-normal.woff2",
+    "weight": 700
+  },
+  {
+    "family": "Noto Sans SC",
+    "file": "fonts/noto-sans-sc-chinese-simplified-400-normal.woff2",
+    "weight": 400
+  }
+]
+}
+</script>
+</head>
+<body>
+<h4s-deck>
+
+<!-- huashu-html4s · 项目自述 deck · 5 页 · 反差编辑风（米纸 + 墨底 + 朱红） -->
+<style>
+    html, body { margin: 0; background: #f5f2ec; }
+    .slide {
+        width: 1920px; height: 1080px; position: relative; overflow: hidden;
+        background: #f5f2ec; color: #1a1a1a;
+        font-family: 'Noto Serif SC', 'Songti SC', serif;
+    }
+    .slide[data-variant="ink"] { background: #1a1a1a; color: #f5f2ec; }
+    .cat { font-size: 15px; letter-spacing: .28em; color: #a8391e; font-weight: 600; }
+    .slide[data-variant="ink"] .cat { color: #e8b04b; }
+    .mega { font-size: 130px; font-weight: 700; letter-spacing: -.02em; line-height: 1.18; }
+    .body-txt { font-size: 24px; line-height: 1.8; font-weight: 400; max-width: 46ch; }
+    .content { padding: 110px 130px; height: 100%; box-sizing: border-box; display: flex; flex-direction: column; }
+    .hairline { border-top: 1px solid #1a1a1a; margin: 36px 0; }
+    .slide[data-variant="ink"] .hairline { border-color: #f5f2ec; }
+    .foot { margin-top: auto; display: flex; justify-content: space-between; font-size: 14px; letter-spacing: .2em; opacity: .55; }
+</style>
+
+<section class="slide" data-variant="ink" data-h4s-title="cover · 把演示文稿还给一个文件">
+  <div class="content">
+    <div class="cat">HUASHU DESIGN × HTML4S · ISSUE 01</div>
+    <div class="hairline"></div>
+    <h1 class="mega" style="margin:56px 0">把演示文稿，<br>还给一个文件。</h1>
+    <p class="body-txt" style="opacity:.85">html4s——合法 HTML 单文件 + 专职播放器。<br>格式面向 AI 与版本控制，放映面向现场。</p>
+    <div class="foot"><span>HTML4S PROJECT</span><span>2026.11 · v0.2</span></div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】30 秒定调：这不是新的幻灯片框架，是对演示文稿的一次重做。</p>
+    <p>【要点】墨底反差开场，朱红小标点题。"还给一个文件"是全场唯一要记住的话。</p>
+    <p>【转场】进入方法论：为什么这套东西能做到。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="studio · 六个角色">
+  <div class="content">
+    <div class="cat">THE STUDIO · 一个标准：让人认不出是 AI 做的</div>
+    <div class="hairline"></div>
+    <h2 class="mega" style="font-size:88px;margin:36px 0">六个角色，<br>各司其职。</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:56px;margin-top:48px">
+      <div><div class="cat">01 · 艺术总监</div><p class="body-txt" style="margin-top:18px">定方向、判品味、砍掉不够好的。</p></div>
+      <div><div class="cat">02 · 品牌研究员</div><p class="body-txt" style="margin-top:18px">找真实资产，理解气质，不凭想象画品牌。</p></div>
+      <div><div class="cat">03 · 动效设计师</div><p class="body-txt" style="margin-top:18px">时间、缓动、节奏——而不是 PPT 式切换。</p></div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】方法论核心：HTML 只是媒介，交付标准才是身份。</p>
+    <p>【要点】三列展开三个关键角色；研究员/前端/文案口头带过（references 有全表）。</p>
+    <p>【转场】三稿流程页。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="three drafts · 三稿探索">
+  <div class="content">
+    <div class="cat">THREE DRAFTS · 100% 先出三稿</div>
+    <div class="hairline"></div>
+    <h2 class="mega" style="font-size:88px;margin:36px 0">候选要多，<br>交付要少。</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:56px;margin-top:48px">
+      <div><div class="cat">初稿 · 甲</div><p class="body-txt" style="margin-top:18px">同一题材，长出第一种完全不同的设计方向。</p></div>
+      <div><div class="cat">初稿 · 乙</div><p class="body-txt" style="margin-top:18px">第二种方向——不与甲共享配色与版式。</p></div>
+      <div><div class="cat">初稿 · 丙</div><p class="body-txt" style="margin-top:18px">第三种方向——用户选完才进入执行。</p></div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】展示 huashu 的核心流程——任何新设计 100% 先出三稿。</p>
+    <p>【要点】「One thousand no's for every yes」——探索广度决定交付质量。</p>
+    <p>【转场】交付格式页：三稿选定后，产物长什么样。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="delivery · 单文件解剖">
+  <div class="content">
+    <div class="cat">DELIVERY · 一个 .html4s</div>
+    <div class="hairline"></div>
+    <h2 class="mega" style="font-size:88px;margin:36px 0">891KB，<br>四样东西。</h2>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:48px;margin-top:48px">
+      <div><div class="cat">59KB</div><p class="body-txt" style="margin-top:14px">播放器运行时</p></div>
+      <div><div class="cat">475KB</div><p class="body-txt" style="margin-top:14px">图标库</p></div>
+      <div><div class="cat">41KB</div><p class="body-txt" style="margin-top:14px">内嵌字体子集</p></div>
+      <div><div class="cat">119KB</div><p class="body-txt" style="margin-top:14px">内容与版式</p></div>
+    </div>
+    <div class="foot"><span>双击即演 · 零依赖 · 零 CDN</span><span>构建工具链：h4s-build --subset</span></div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】回答"单文件会不会很肥"——四块拆开看。</p>
+    <p>【要点】字体 41KB 是子集化后的中文；零 CDN 指离线可演。</p>
+    <p>【转场】墨底收束页。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-variant="ink" data-h4s-title="closing · 让人认不出">
+  <div class="content">
+    <div class="cat">CLOSING · HTML4S v0.2</div>
+    <div class="hairline"></div>
+    <h1 class="mega" style="margin:56px 0">让人认不出，<br>是 AI 做的。</h1>
+    <p class="body-txt" style="opacity:.85">格式、播放器、技能、闭环——都已就位。<br>剩下的，是从题材里长出好设计。</p>
+    <div class="foot"><span>HTML4S PROJECT · AGPL 归属归藏/花叔</span><span>2026.11.12</span></div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】收束 + 致谢两个上游 skill。</p>
+    <p>【要点】最后一句回到身份认同：标准不是工具，是水准。</p>
+    <p>【转场】Q&amp;A。</p>
+  </h4s-notes>
+</section>
+
+</h4s-deck>
+<script src="../player/h4s.player.js"></script>
+</body>
+</html>

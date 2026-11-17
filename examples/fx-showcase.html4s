@@ -1,0 +1,2286 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-family="swiss" data-medium="slide" data-theme="brand">
+<head>
+<meta charset="utf-8">
+<title>转场特效演示 · html4s v0.3</title>
+<script type="application/h4s+json">
+{
+  "h4s": "1.0",
+  "meta": { "title": "转场特效演示 · html4s v0.3", "lang": "zh-CN" },
+  "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "transparent" },
+  "defaults": {
+    "transition": { "name": "fade", "duration": 700, "color": "#1f2937" },
+    "fx": "stars",
+    "autoslide": 0, "loop": false
+  },
+  "fonts": []
+}
+</script>
+<style>
+/* 兼容 guizang swiss 主题的最小基底（借用 html4s-intro 的 token 精简版） */
+:root{
+  --paper:#fafaf8;--paper-2:#f0f0ee;--ink:#0a0a0a;--muted:#737373;--grey-1:#f0f0ee;--grey-2:#d4d4d2;--grey-3:#737373;
+  --accent:#c8102e;--accent-on:#ffffff;--accent-ink:#c8102e;--accent-rgb:200,16,46;--accent-on-rgb:255,255,255;
+  --text-primary:#0a0a0a;--text-body:#252524;--text-secondary:#525252;--text-helper:#737373;
+  --line:#d4d4d2;--sans:'Noto Sans SC','Microsoft YaHei',sans-serif;--sans-zh:'Noto Sans SC','Microsoft YaHei',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;--serif-zh:'Noto Serif SC',serif;
+}
+html,body{margin:0;background:#101010;font-family:var(--sans)}
+.slide{position:relative;width:1920px;height:1080px;margin:0 auto;overflow:hidden;display:flex;flex-direction:column;background:var(--paper)}
+.slide.accent{background:var(--accent)}
+.slide.accent .h-xl,.slide.accent h1{color:var(--accent-on)}
+.canvas-card{display:flex;flex-direction:column;flex:1;padding:43.2px 61.44px 36px;position:relative}
+.chrome-min{display:flex;justify-content:space-between;font-family:var(--mono);font-size:18px;letter-spacing:.08em;color:var(--text-helper);margin-bottom:24px}
+.slide.accent .chrome-min,.slide.accent .chrome-min .l,.slide.accent .chrome-min .r{color:rgba(255,255,255,.88)}
+.slide.accent .t-cat{color:rgba(255,255,255,.8)}
+.slide.accent .lead{color:rgba(255,255,255,.92)}
+.t-cat{font-family:var(--mono);font-size:18px;letter-spacing:.18em;color:var(--text-helper);text-transform:uppercase}
+.slide.accent .t-cat{color:rgba(255,255,255,.85)}
+.lead{font-size:26px;line-height:1.6;font-weight:300}
+</style>
+</head>
+<body>
+<h4s-deck>
+
+<section class="slide accent" data-h4s-transition="zoomblur"  data-slide-id="cover" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 01 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">COVER · 缩放模糊</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--accent-on)">转场特效<br>演示</h1>
+      <p class="lead" style="max-width:60ch;color:rgba(255,255,255,.9)">html4s v0.3 播放器新增 12 种转场与 4 种背景特效——零依赖、纯 WAAPI、单文件。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:rgba(255,255,255,.75)">
+        <span style="color:#fff">data-h4s-transition="<b style="color:#fff">zoomblur</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】定调：本 deck 每翻一页换一种转场效果。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="zoomblur"  data-slide-id="t-zoomblur" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 02 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">01 · ZOOM-BLUR</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">缩放模糊</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">大字从模糊中聚焦而来——适合章节开场与金句。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">zoomblur</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】zoomblur：大字聚焦效果。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="cube"  data-slide-id="t-cube" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 03 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">02 · CUBE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">三维推转</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">带透视的三维推转——适合"翻到下一章"。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">cube</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】cube：3D 透视推转。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="iris"  data-slide-id="t-iris" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 04 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">03 · IRIS</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">圆形揭开</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">从中心圆形展开——聚焦单一大图或单一信息。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">iris</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】iris：圆形揭开，聚焦型转场。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="unfold"  data-slide-id="t-unfold" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 05 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">04 · UNFOLD</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">中线展开</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">从中线向上下展开，像展开一幅卷轴。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">unfold</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】unfold：卷轴式展开。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="rise"  data-slide-id="t-rise" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 06 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">05 · RISE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">托起</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">页面从下方托起并恢复饱和度——温和的章节递进。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">rise</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】rise：托起转场。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="dissolve"  data-slide-id="t-dissolve" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 07 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">06 · DISSOLVE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">溶解</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">步进式溶解——老胶片的味道。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">dissolve</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】dissolve：steps 溶解。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="curtain"  data-slide-id="t-curtain" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 08 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">07 · CURTAIN</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">幕布</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">红色幕布合拢再展开——舞台剧的仪式感。默认色可用清单 transition.color 配置。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">curtain</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】curtain：幕布合拢，PowerPoint 同款。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="blinds"  data-slide-id="t-blinds" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 09 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">08 · BLINDS</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">百叶窗</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">十条叶片交错闭合与打开。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">blinds</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】blinds：百叶窗。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="checkerboard"  data-slide-id="t-checkerboard" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 10 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">09 · CHECKERBOARD</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">棋盘</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">36 块方格交错盖下再揭开。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">checkerboard</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】checkerboard：棋盘遮罩。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="pixelate"  data-slide-id="t-pixelate" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 11 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">10 · PIXELATE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">像素溶解</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">100 块随机顺序像素化——数字世界的感觉。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">pixelate</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】pixelate：随机像素溶解。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="fade"  data-slide-id="fx-stars" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 12 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">FX · 背景特效</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">星空漂移</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">本页清单或全局 defaults.fx = "stars"——粒子层置于内容之下，放映时渲染、离开自动暂停。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">fade</b>"</span>
+        <span style="color:var(--text-secondary)"><span>manifest: "fx": "stars" | "snow" | "dust"</span></span>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】背景特效：stars。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="curtain" data-h4s-fx="confetti" data-slide-id="t-confetti" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 13 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">FX · 礼花</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">礼花时刻</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">本页标记 data-h4s-fx="confetti"——进入时金色礼花爆发一次，适合收束页与表彰时刻。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">curtain</b>"</span>
+        <span style="color:var(--text-secondary)">data-h4s-fx="confetti"</span>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】confetti：礼花爆发。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide accent" data-h4s-transition="zoomblur"  data-slide-id="closing" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 14 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">CLOSING</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--accent-on)">配合原有<br>slide/push/wipe/flip</h1>
+      <p class="lead" style="max-width:60ch;color:rgba(255,255,255,.9)">原 6 种转场全部保留。新转场写法与旧完全一致——清单 defaults 或每页 data-h4s-transition。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:rgba(255,255,255,.75)">
+        <span style="color:#fff">data-h4s-transition="<b style="color:#fff">zoomblur</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】收束。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+</h4s-deck>
+<script>
+/*!
+ * h4s-core — html4s 播放器运行时 v0.3.1（转场特效引擎 · 增量编辑配套）
+ * ------------------------------------------------
+ * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
+ * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
+ *
+ * 支持的页面约定（适配器）:
+ *   - 规范元素: <h4s-deck> / <h4s-slide> / <h4s-notes hidden>
+ *   - 通用约定: body/deck/.slides 容器下的直接 <section> 子元素或 .slide 元素
+ *   - 碎片: [data-h4s-frag] 或 reveal.js 兼容的 .fragment
+ *   - 清单: <script type="application/h4s+json">（可选，缺省用内置默认值）
+ *
+ * 规范: ../ARCHITECTURE.md §3
+ */
+(function () {
+  'use strict';
+  if (window.__H4S_LOADED__) return;
+  window.__H4S_LOADED__ = true;
+
+  var VERSION = '0.2.0';
+
+  /* ================================================================
+   * 工具
+   * ================================================================ */
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function fmt(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  function on(target, ev, fn, opt) { target.addEventListener(ev, fn, opt); }
+  /* 转发壳级快捷键给桌面壳（WebView2 宿主下有效；浏览器中无 chrome.webview，静默跳过） */
+  function shellAction(a, data) {
+    try {
+      if (window.chrome && window.chrome.webview) {
+        var msg = data ? { h4sShell: a, data: data } : { h4sShell: a };
+        window.chrome.webview.postMessage(JSON.stringify(msg));
+      }
+    } catch (e) {}
+  }
+
+  /* ---- UI 多语言（i18n）：清单 meta.lang 优先，回退浏览器语言 ---- */
+  var UI_STR = {
+    zh: { open: '打开', openT: '打开本地 .html4s 文件 (Ctrl+O)', url: '网址', urlT: '打开网址播放 (Ctrl+L)',
+      toLight: '☀ 浅色', toDark: '🌙 深色', themeT: '深色/浅色切换',
+      playcur: '从当前放映', playcurT: '从当前选中页放映 (Shift+F5)', play: '▶ 放映', playT: '从头放映 (F5)',
+      presenter: '演讲者视图', notes: '备注', thisPage: '本页', total: '总计', fragN: '碎片 ', noFrags: '无碎片',
+      nextFrag: '下一状态 · 碎片 ', nextSlide: '下一页 · 最终状态', lastPage: '已是最后一页', firstPage: '已是第一页',
+      noNotes: '（本页无备注）', nextCap: '下一状态' },
+    en: { open: 'Open', openT: 'Open local .html4s file (Ctrl+O)', url: 'URL', urlT: 'Play from URL (Ctrl+L)',
+      toLight: '☀ Light', toDark: '🌙 Dark', themeT: 'Toggle light/dark',
+      playcur: 'From current', playcurT: 'Present from selected slide (Shift+F5)', play: '▶ Present', playT: 'Present from start (F5)',
+      presenter: 'Presenter', notes: 'Notes', thisPage: 'Slide', total: 'Total', fragN: 'Frag ', noFrags: 'No fragments',
+      nextFrag: 'Next state · frag ', nextSlide: 'Next slide · final', lastPage: 'Last page', firstPage: 'First page',
+      noNotes: '(no notes)', nextCap: 'Next state' }
+  };
+  var UILANG = 'zh';
+  try {
+    var _mlang = ((JSON.parse(($('script[type="application/h4s+json"]') || { textContent: '{}' }).textContent) || {}).meta || {}).lang || '';
+    var _nav = (navigator.language || 'zh');
+    UILANG = /^zh/i.test(_mlang || _nav) ? 'zh' : 'en';
+  } catch (err) {}
+  function t(k) { return (UI_STR[UILANG] && UI_STR[UILANG][k]) || UI_STR.zh[k] || k; }
+
+  /* 浏览模式 UI 深浅色 */
+  var uiTheme = 'dark';
+  function applyUiTheme(t) {
+    uiTheme = t;
+    document.body.setAttribute('data-ui', t);
+    try { localStorage.setItem('h4s-ui-theme', t); } catch (err) {}
+    shellAction('theme', t);  /* 桌面壳同步标题栏深浅色 */
+  }
+  function updateThemeBtn() {
+    if (!browseBar) return;
+    var b = browseBar.querySelector('[data-bact="theme"]');
+    if (b) b.textContent = uiTheme === 'light' ? t('toDark') : t('toLight');
+  }
+  try { uiTheme = localStorage.getItem('h4s-ui-theme') || 'dark'; } catch (err) {}
+
+  /* 壳握手：postMessage 'hello' → 壳回 'hello' 才认定 shell 可用。
+     应用内浏览器等 WebView2 宿主虽存在 chrome.webview 但不处理 h4sShell —— 按钮保持隐藏。 */
+  var shellReady = false;
+  var fileInput = null;
+  try {
+    if (window.chrome && window.chrome.webview) {
+      window.chrome.webview.addEventListener('message', function (e) {
+        try {
+          var m = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          if (m && m.h4sShellHello && !shellReady) {
+            shellReady = true;
+            shellAction('theme', uiTheme);  /* 握手即同步当前主题（localStorage 恢复的场景） */
+            if (typeof refreshShellButtons === 'function') refreshShellButtons();
+          }
+        } catch (err) {}
+      });
+      window.chrome.webview.postMessage(JSON.stringify({ h4sShell: 'hello' }));
+    }
+  } catch (e) {}
+  function emit(type, detail) { document.dispatchEvent(new CustomEvent(type, { detail: detail })); }
+
+  /* ================================================================
+   * 样式（内嵌，注入一次）
+   * ================================================================ */
+  var CSS = [
+    '/* h4s-core injected */',
+    'body.h4s-live{overflow:hidden!important;}',
+    '.h4s-live h4s-deck,.h4s-live .slides{display:none!important;}',
+    /* 背景特效层：仅放映模式渲染 */
+    '.h4s-fx{display:none;}',
+    'body.h4s-live .h4s-fx{display:block;}',
+    '.h4s-live h4s-notes,.h4s-live .h4s-notes-el{display:none!important;}',
+
+    '.h4s-viewport{position:fixed;top:0;left:0;right:var(--h4s-reserve,0px);bottom:0;',
+    '  display:flex;align-items:center;justify-content:center;',
+    '  background:var(--h4s-letterbox,#000);}',
+    '.h4s-holder{position:relative;flex:none;transform-origin:center center;}',
+    '.h4s-holder > .h4s-in{position:absolute!important;top:0!important;left:0!important;',
+    '  width:100%!important;height:100%!important;margin:0!important;',
+    '  max-width:none!important;max-height:none!important;overflow:hidden;}',
+
+    /* 碎片：live 模式下未显示的碎片默认隐藏（文档模式/打印不受影响） */
+    '.h4s-live [data-h4s-frag]:not(.is-frag-visible),',
+    '.h4s-live .fragment:not(.is-frag-visible){opacity:0!important;',
+    '  transform:var(--h4s-frag-t,translateY(16px))!important;pointer-events:none!important;}',
+    '.h4s-live [data-h4s-frag],.h4s-live .fragment{transition:opacity .35s ease,transform .35s ease;}',
+    '.h4s-live .is-frag-visible{opacity:1!important;transform:none!important;}',
+
+    /* 进度条 / 自动播放倒计时条 */
+    '.h4s-progress{position:fixed;top:0;left:0;height:3px;width:0;background:#38bdf8;z-index:70;transition:width .25s;}',
+    '.h4s-autobar{position:fixed;bottom:0;left:0;height:3px;width:0;background:#fbbf24;z-index:71;pointer-events:none;}',
+
+    /* 遮罩式转场覆盖层（curtain/blinds/checkerboard/pixelate） */
+    '.h4s-tmask{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;}',
+
+    /* 背景特效层（stars/snow/dust/confetti）——置于内容之下、deck 自带背景之上 */
+    '.h4s-fx{position:absolute;inset:0;z-index:1;pointer-events:none;}',
+    'body.h4s-browse .h4s-fx{z-index:2;border-radius:6px;}',
+    '.h4s-fx canvas{width:100%;height:100%;}',
+
+    /* 底部工具条 */
+    '.h4s-chrome{position:fixed;left:0;right:var(--h4s-reserve,0px);bottom:0;z-index:70;',
+    '  display:flex;justify-content:space-between;align-items:center;padding:6px 14px;',
+    '  background:linear-gradient(to top,rgba(8,10,14,.88),rgba(8,10,14,0));',
+    '  color:#cbd5e1;font:13px/1 system-ui,-apple-system,sans-serif;transition:opacity .3s;}',
+    'body.h4s-idle .h4s-chrome,body.h4s-kiosk .h4s-chrome{opacity:0;pointer-events:none;}',
+    '.h4s-chrome button{all:unset;cursor:pointer;padding:6px 9px;border-radius:6px;font-size:14px;line-height:1;}',
+    '.h4s-chrome button:hover{background:rgba(148,163,184,.22);color:#fff;}',
+    '.h4s-counter{font-variant-numeric:tabular-nums;margin:0 6px;letter-spacing:1px;}',
+    '.h4s-timer{font-variant-numeric:tabular-nums;margin:0 6px;opacity:.85;}',
+
+    /* 黑屏 / 白屏 */
+    '.h4s-blackout{position:fixed;inset:0;z-index:80;background:#000;display:none;}',
+    '.h4s-blackout.is-white{background:#fff;}',
+    '.h4s-blackout.is-on{display:block;}',
+
+    /* 总览网格 */
+    '.h4s-overview{position:fixed;top:0;left:0;right:var(--h4s-reserve,0px);bottom:44px;z-index:50;',
+    '  overflow:auto;background:rgba(6,8,12,.97);',
+    '  display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:18px;',
+    '  padding:28px 40px;align-content:start;}',
+    '.h4s-overview[hidden]{display:none;}',
+    '.h4s-cell{cursor:pointer;border-radius:8px;outline:none;}',
+    '.h4s-cell .h4s-thumb{position:relative;overflow:hidden;background:#0b0f14;',
+    '  border:1px solid rgba(148,163,184,.25);border-radius:6px;margin:0 auto;}',
+    '.h4s-cell.is-cur .h4s-thumb{border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.4);}',
+    '.h4s-cell.is-focus .h4s-thumb{border-color:#fbbf24;}',
+    '.h4s-cell .h4s-meta{display:flex;gap:8px;margin-top:6px;color:#94a3b8;font:12px/1.4 system-ui;}',
+    '.h4s-cell .h4s-meta b{color:#e2e8f0;font-variant-numeric:tabular-nums;}',
+    '.h4s-cell .h4s-meta span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+
+    /* 演讲者抽屉（同屏练习模式） */
+    '.h4s-drawer{position:fixed;top:0;right:0;bottom:0;width:400px;z-index:60;background:#0d1117;',
+    '  border-left:1px solid #1f2937;color:#cbd5e1;font:14px/1.5 system-ui,sans-serif;',
+    '  display:flex;flex-direction:column;transform:translateX(100%);}',
+    'body.h4s-presenting{--h4s-reserve:400px;}',
+    'body.h4s-presenting .h4s-drawer{transform:none;}',
+    '.h4s-drawer h3{margin:0;padding:12px 16px;font-size:13px;color:#7dd3fc;display:flex;justify-content:space-between;font-weight:600;}',
+    '.h4s-drawer .h4s-draw-prev{padding:0 16px;}',
+    '.h4s-drawer .h4s-draw-box{position:relative;overflow:hidden;background:#0b0f14;',
+    '  border:1px solid #1f2937;border-radius:6px;}',
+    '.h4s-drawer .h4s-draw-cap{font-size:12px;color:#64748b;margin:8px 0 10px;}',
+    '.h4s-drawer .h4s-draw-notes{flex:1;overflow:auto;padding:4px 16px 8px;}',
+    '.h4s-drawer .h4s-draw-notes .body{color:#e2e8f0;}',
+    '.h4s-drawer .h4s-draw-notes .body img{max-width:100%;}',
+    '.h4s-drawer .h4s-draw-foot{display:flex;gap:14px;padding:10px 16px;border-top:1px solid #1f2937;',
+    '  font-variant-numeric:tabular-nums;font-size:13px;}',
+    '.h4s-drawer .h4s-draw-foot b{color:#7dd3fc;font-weight:600;}',
+
+    /* 帮助层 */
+    '.h4s-help{position:fixed;inset:0;z-index:78;background:rgba(6,8,12,.96);color:#cbd5e1;',
+    '  display:none;place-items:center;font:14px/1.6 system-ui;}',
+    '.h4s-help.is-on{display:grid;}',
+    '.h4s-help h2{color:#7dd3fc;margin:0 0 12px;font-size:18px;}',
+    '.h4s-help table{border-collapse:collapse;}',
+    '.h4s-help td{padding:4px 14px;border-bottom:1px solid #1e293b;}',
+    '.h4s-help kbd{background:#1e293b;padding:2px 7px;border-radius:4px;',
+    '  font:12px ui-monospace,Consolas,monospace;color:#e2e8f0;}',
+
+    /* 提示条 */
+    '.h4s-toast{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);z-index:100;',
+    '  background:rgba(15,23,42,.92);color:#e2e8f0;padding:8px 16px;border-radius:8px;',
+    '  font:13px system-ui;opacity:0;transition:opacity .25s;pointer-events:none;}',
+    '.h4s-toast.is-on{opacity:1;}',
+
+    /* 激光笔 */
+    'body.h4s-laser,body.h4s-laser *{cursor:none!important;}',
+    '.h4s-laser-dot{position:fixed;z-index:120;width:16px;height:16px;margin:-8px 0 0 -8px;',
+    '  border-radius:50%;pointer-events:none;display:none;',
+    '  background:radial-gradient(circle,rgba(255,60,60,.95),rgba(255,0,0,.35) 55%,transparent 70%);',
+    '  box-shadow:0 0 14px rgba(255,30,30,.8);}',
+    'body.h4s-laser .h4s-laser-dot{display:block;}',
+
+    /* 浏览模式（PowerPoint 式开场：缩略图 + 当前页预览 + 放映按钮） */
+    'body.h4s-browse .h4s-viewport,body.h4s-browse .h4s-chrome{display:none;}',
+    '.h4s-browsebar{position:fixed;top:0;left:0;right:0;height:52px;z-index:65;display:none;',
+    '  align-items:center;gap:12px;padding:0 16px;background:#0d1117;border-bottom:1px solid #1f2937;',
+    '  color:#cbd5e1;font:14px/1 system-ui,-apple-system,sans-serif;}',
+    'body.h4s-browse .h4s-browsebar{display:flex;}',
+    '.h4s-browsebar button[data-bact="playcur"]{margin-left:auto;}',
+    '.h4s-pageinfo{margin-left:auto;align-self:center;font-size:13px;color:#94a3b8;',
+    'padding:0 12px;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:30%;}',
+    '.h4s-pageinfo b{color:#e2e8f0;font-weight:600;}',
+    '.h4s-browsebar button{all:unset;cursor:pointer;padding:8px 14px;border-radius:6px;font-size:13px;}',
+    '.h4s-browsebar button:hover{background:#1e293b;}',
+    '.h4s-browsebar .h4s-play{background:#2563eb;color:#fff;font-weight:600;}',
+    '.h4s-browsebar .h4s-play:hover{background:#1d4ed8;}',
+    '.h4s-sidebar{position:fixed;top:52px;left:0;bottom:0;width:232px;z-index:64;display:none;',
+    '  overflow:auto;background:#111827;border-right:1px solid #1f2937;padding:12px;}',
+    'body.h4s-browse .h4s-sidebar{display:block;}',
+    '.h4s-sidecell{cursor:pointer;border-radius:8px;padding:6px;margin-bottom:10px;outline:none;',
+    '  transition:background .15s ease;}',
+    '.h4s-sidecell:hover{background:rgba(148,163,184,.08);}',
+    '.h4s-sidecell .h4s-thumb{position:relative;overflow:hidden;background:#0b0f14;',
+    '  border:1px solid rgba(148,163,184,.25);border-radius:4px;margin:0 auto;',
+    '  transition:border-color .15s ease,box-shadow .15s ease;}',
+    '.h4s-sidecell.is-sel .h4s-thumb{border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.35);}',
+    '.h4s-sidecell .h4s-meta{color:#94a3b8;font:11px/1.4 system-ui;margin-top:5px;display:flex;gap:6px;}',
+    '.h4s-sidecell .h4s-meta b{color:#e2e8f0;}',
+    '.h4s-sidecell .h4s-meta span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+    '.h4s-stagebox{position:fixed;top:52px;left:232px;right:0;bottom:0;z-index:63;display:none;',
+    '  align-items:center;justify-content:center;background:var(--h4s-letterbox,#000);}',
+    'body.h4s-browse .h4s-stagebox{display:flex;}',
+    '.h4s-stagebox .h4s-mini{position:relative;flex:none;}',
+
+    /* 现代化滚动条（VS Code 风格：细圆角半透明，悬停加深） */
+    '.h4s-sidebar,.h4s-overview,.h4s-draw-notes,.h4s-help,.h4s-pres .notes{',
+    '  scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.3) transparent;}',
+    '.h4s-sidebar::-webkit-scrollbar,.h4s-overview::-webkit-scrollbar,',
+    '.h4s-draw-notes::-webkit-scrollbar,.h4s-help::-webkit-scrollbar,',
+    '.h4s-pres .notes::-webkit-scrollbar{width:9px;height:9px;}',
+    '.h4s-sidebar::-webkit-scrollbar-track,.h4s-overview::-webkit-scrollbar-track,',
+    '.h4s-draw-notes::-webkit-scrollbar-track,.h4s-help::-webkit-scrollbar-track,',
+    '.h4s-pres .notes::-webkit-scrollbar-track{background:transparent;}',
+    '.h4s-sidebar::-webkit-scrollbar-thumb,.h4s-overview::-webkit-scrollbar-thumb,',
+    '.h4s-draw-notes::-webkit-scrollbar-thumb,.h4s-help::-webkit-scrollbar-thumb,',
+    '.h4s-pres .notes::-webkit-scrollbar-thumb{background:rgba(148,163,184,.3);',
+    '  border-radius:8px;border:2px solid transparent;background-clip:content-box;}',
+    '.h4s-sidebar::-webkit-scrollbar-thumb:hover,.h4s-overview::-webkit-scrollbar-thumb:hover,',
+    '.h4s-draw-notes::-webkit-scrollbar-thumb:hover,.h4s-help::-webkit-scrollbar-thumb:hover,',
+    '.h4s-pres .notes::-webkit-scrollbar-thumb:hover{background-color:rgba(148,163,184,.6);}',
+
+    /* ---- 主题变量（浏览模式 UI） ---- */
+    'body{--ui-bg:#0d1117;--ui-bg2:#111827;--ui-bg3:#1e293b;--ui-border:#1f2937;',
+    '  --ui-text:#cbd5e1;--ui-hi:#e2e8f0;--ui-dim:#94a3b8;--ui-accent:#38bdf8;',
+    '  --ui-letterbox:#161b22;}',
+    'body[data-ui="light"]{--ui-bg:#f8fafc;--ui-bg2:#f1f5f9;--ui-bg3:#e2e8f0;--ui-border:#d4dce6;',
+    '  --ui-text:#334155;--ui-hi:#0f172a;--ui-dim:#64748b;--ui-accent:#0369a1;',
+    '  --ui-letterbox:#d4dce6;}',
+
+    /* 缩略图克隆 */
+    '.h4s-clone{position:absolute!important;top:0!important;left:0!important;margin:0!important;transform-origin:0 0!important;}',
+
+    /* ---- 深浅色切换：浅色覆盖（仅浏览模式 UI 表面） ---- */
+    'body[data-ui="light"] .h4s-browsebar{background:#f8fafc;border-bottom-color:#d4dce6;color:#334155;}',
+    'body[data-ui="light"] .h4s-browsebar .h4s-title{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-browsebar button{color:#334155;}',
+    'body[data-ui="light"] .h4s-browsebar button:hover{background:#dde5ee;}',
+    'body[data-ui="light"] .h4s-pageinfo{color:#64748b;}',
+    'body[data-ui="light"] .h4s-pageinfo b{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-browsebar .h4s-play{background:#2563eb;color:#fff;}',
+    'body[data-ui="light"] .h4s-browsebar .h4s-play:hover{background:#1d4ed8;}',
+    'body[data-ui="light"] .h4s-sidebar{background:#f1f5f9;border-right-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-sidecell .h4s-thumb{border-color:#c4cdd8;background:#fff;}',
+    'body[data-ui="light"] .h4s-sidecell.is-sel .h4s-thumb{border-color:#0369a1;box-shadow:0 0 0 2px rgba(3,105,161,.3);}',
+    'body[data-ui="light"] .h4s-sidecell .h4s-meta{color:#64748b;}',
+    'body[data-ui="light"] .h4s-sidecell .h4s-meta b{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-sidecell:hover{background:#e8edf3;}',
+    'body[data-ui="light"] .h4s-stagebox{background:var(--ui-letterbox);}',
+    'body[data-ui="light"] .h4s-drawer{background:#f8fafc;border-left-color:#d4dce6;color:#334155;}',
+    'body[data-ui="light"] .h4s-drawer h3{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-box{background:#fff;border-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-notes .body{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-foot{border-top-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-foot b{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-help{background:rgba(255,255,255,.97);color:#334155;}',
+    'body[data-ui="light"] .h4s-help h2{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-help td{border-bottom-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-help kbd{background:#e2e8f0;color:#0f172a;}',
+    'body[data-ui="light"] .h4s-pres{background:#f8fafc;}',
+    'body[data-ui="light"] .h4s-pres .box{background:#fff;border-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-pres .notes{background:#fff;border-color:#d4dce6;color:#0f172a;}',
+    'body[data-ui="light"] .h4s-pres .btns button{border-color:#d4dce6;color:#334155;}',
+    'body[data-ui="light"] .h4s-pres .btns button:hover{background:#e2e8f0;}',
+    'body[data-ui="light"] .h4s-pres .stats .big{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-pres .cap{color:#64748b;}',
+    'body[data-ui="light"] .h4s-pres .notes .body{color:#0f172a;}',
+
+    /* ---- 可拖拽分割条 ---- */
+    '.h4s-splitbar{position:fixed;top:52px;left:calc(var(--h4s-sbw,232px) - 3px);width:7px;bottom:0;',
+    '  z-index:66;cursor:col-resize;}',
+    '.h4s-splitbar:hover,.h4s-splitbar.is-drag{background:rgba(56,189,248,.25);}',
+    '.h4s-sidebar{width:var(--h4s-sbw,232px);}',
+    '.h4s-stagebox{left:var(--h4s-sbw,232px);}',
+    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}'
+  ].join('\n');
+
+  var PRESENTER_CSS = [
+    'body.h4s-presenter{margin:0;background:#0d1117;color:#cbd5e1;font:14px/1.5 system-ui,sans-serif;}',
+    'body.h4s-presenter > *:not(.h4s-pres){display:none!important;}',
+    '.h4s-pres{position:fixed;inset:0;display:flex;gap:12px;padding:12px;background:#0d1117;}',
+    '.h4s-pres .col-l{flex:1.5;display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;}',
+    '.h4s-pres .col-l .pv{flex:1;min-height:0;display:flex;flex-direction:column;}',
+    '.h4s-pres .col-l .pv .box{flex:1;min-height:0;}',
+    '.h4s-pres .col-r{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0;}',
+    '.h4s-pres .cap{font-size:12px;color:#64748b;margin:0 0 6px;}',
+    '.h4s-pres .box{position:relative;overflow:hidden;background:#0b0f14;border:1px solid #1f2937;border-radius:8px;}',
+    '.h4s-pres .notes{flex:1;overflow:auto;border:1px solid #1f2937;border-radius:8px;padding:12px 16px;color:#e2e8f0;}',
+    '.h4s-pres .notes img{max-width:100%;}',
+    '.h4s-pres .stats{display:flex;gap:18px;align-items:baseline;font-variant-numeric:tabular-nums;}',
+    '.h4s-pres .stats .big{font-size:34px;color:#7dd3fc;}',
+    '.h4s-pres .stats .dim{color:#64748b;font-size:13px;}',
+    '.h4s-pres .btns{display:flex;gap:8px;flex-wrap:wrap;}',
+    '.h4s-pres .btns button{all:unset;cursor:pointer;border:1px solid #1f2937;padding:8px 14px;border-radius:6px;font:13px system-ui;}',
+    '.h4s-pres .btns button:hover{background:#1e293b;}',
+    '.h4s-pres-shade{position:fixed;inset:0;background:#000;display:none;z-index:50;}',
+    '.h4s-pres-shade.is-on{display:block;}',
+    /* 演讲者窗内预览克隆的碎片状态（与舞台一致） */
+    '.h4s-presenter [data-h4s-frag]:not(.is-frag-visible),',
+    '.h4s-presenter .fragment:not(.is-frag-visible){opacity:0!important;',
+    '  transform:var(--h4s-frag-t,translateY(16px))!important;pointer-events:none!important;}',
+    '.h4s-presenter [data-h4s-frag],.h4s-presenter .fragment{transition:opacity .35s ease,transform .35s ease;}',
+    '.h4s-presenter .is-frag-visible{opacity:1!important;transform:none!important;}',
+    '.h4s-presenter .h4s-clone{position:absolute!important;top:0!important;left:0!important;',
+    '  margin:0!important;transform-origin:0 0!important;}',
+    '.h4s-presenter .h4s-pres .box{position:relative;overflow:hidden;}',
+    '.h4s-pres-warn{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);color:#fbbf24;font-size:12px;}'
+  ].join('\n');
+
+  /* ================================================================
+   * 清单与页面采集
+   * ================================================================ */
+  var MANIFEST = {};
+  var DEFAULTS = {};
+  var MSTAGE = { w: 1280, h: 720, fit: 'contain', background: '#000' };
+
+  function readManifest() {
+    var node = $('script[type="application/h4s+json"]');
+    var m = {};
+    if (node) {
+      try { m = JSON.parse(node.textContent) || {}; }
+      catch (e) { console.warn('[h4s] 清单解析失败，使用默认值', e); }
+    }
+    return m;
+  }
+
+  function parseStage(str) {
+    if (!str) return null;
+    var m = /^(\d+)\s*[x×]\s*(\d+)$/.exec(String(str).trim());
+    return m ? { w: +m[1], h: +m[2] } : null;
+  }
+
+  function stageFor(slide) { return (slide && slide.stage) || MSTAGE; }
+
+  function collectFrags(root) {
+    return $$('[data-h4s-frag], .fragment', root)
+      .map(function (n, i) {
+        var order = parseInt(n.getAttribute('data-h4s-frag-order') ||
+          n.getAttribute('data-fragment-index') || String(i), 10);
+        return { n: n, i: i, order: isNaN(order) ? i : order };
+      })
+      .sort(function (a, b) { return (a.order - b.order) || (a.i - b.i); })
+      .map(function (x) { return x.n; });
+  }
+
+  function collectSlides() {
+    var nodes = $$('h4s-slide');
+    if (!nodes.length) {
+      var root = $('h4s-deck') || $('.slides') || document.body;
+      nodes = Array.prototype.slice.call(root.children).filter(function (n) {
+        return n.tagName === 'SECTION' || n.classList.contains('slide');
+      });
+    }
+    return nodes.map(function (n, index) {
+      var notesEl = n.querySelector(':scope > h4s-notes, :scope > aside.notes, :scope > .notes, :scope > .h4s-notes');
+      if (notesEl) notesEl.classList.add('h4s-notes-el');
+      var title = (n.getAttribute('data-h4s-title') ||
+        (n.querySelector('h1,h2,.title') ? n.querySelector('h1,h2,.title').textContent : '') || '').trim();
+      return {
+        el: n,
+        index: index,
+        id: n.id || ('slide-' + (index + 1)),
+        title: title || ('第 ' + (index + 1) + ' 页'),
+        stage: parseStage(n.getAttribute('data-h4s-stage')),
+        transition: (n.getAttribute('data-h4s-transition') || '').trim().toLowerCase(),
+        autoslide: parseFloat(n.getAttribute('data-h4s-autoslide')) || 0,
+        notesEl: notesEl,
+        frags: collectFrags(n)
+      };
+    });
+  }
+
+  function deckId() {
+    if (MANIFEST.id) return String(MANIFEST.id);
+    var t = (MANIFEST.meta && MANIFEST.meta.title) || document.title;
+    var s = t + '|' + S.slides.length;
+    var h = 0;
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return 'd' + h.toString(36);
+  }
+
+  /* ================================================================
+   * 状态
+   * ================================================================ */
+  var S = {
+    i: 0, f: -1, n: 0, overlay: null, lock: false, queued: null,
+    kiosk: false, loop: false, slides: [], fragTimers: [],
+    presenting: false, sel: 0   /* presenting: 放映中；sel: 浏览模式选中页 */
+  };
+  var T = {
+    bootAt: Date.now(), slideAt: Date.now(),
+    paused: false, pausedAt: 0, pausedTotal: 0, ptAtSlide: 0,
+    autoPausedAcc: 0, autoPauseAt: 0
+  };
+  var RH = { on: false, log: [] };
+  var AUTO_PARAM = 0;      // #auto=N
+  var drawerOn = false;
+  var shownEl = null;      // 当前显示的 slide 元素
+  var bus = null;
+  var isStage = false;     // 本窗口是否为舞台（真值持有者）
+  var numBuf = '', numTimer = 0;
+
+  function totalSec() { return (Date.now() - T.bootAt - T.pausedTotal) / 1000; }
+  function dwell() { return (Date.now() - T.slideAt - (T.pausedTotal - T.ptAtSlide)) / 1000; }
+  function autoDur() {
+    var s = S.slides[S.i];
+    return (s && s.autoslide) || (DEFAULTS.autoslide || 0) || AUTO_PARAM || 0;
+  }
+
+  /* ================================================================
+   * DOM 构建
+   * ================================================================ */
+  var app, viewport, holder, chrome, progress, autoBar, blackout, overviewEl,
+      helpEl, toastEl, drawer, laserDot;
+
+  function buildApp() {
+    var style = el('style', null, CSS);
+    style.setAttribute('data-h4s-style', '');
+    document.head.appendChild(style);
+
+    app = el('div', 'h4s-app');
+    viewport = el('div', 'h4s-viewport');
+    holder = el('div', 'h4s-holder');
+    viewport.appendChild(holder);
+
+    progress = el('div', 'h4s-progress');
+    autoBar = el('div', 'h4s-autobar');
+
+    chrome = el('div', 'h4s-chrome');
+    chrome.innerHTML =
+      '<div class="h4s-chrome-left">' +
+        '<button data-act="prev" title="上一页 (← / PgUp)">‹</button>' +
+        '<button data-act="next" title="下一页 (→ / 空格)">›</button>' +
+        '<span class="h4s-counter"><b id="h4s-cur">1</b> / <span id="h4s-total">0</span>' +
+        '<span id="h4s-numbuf" style="color:#fbbf24"></span></span>' +
+      '</div>' +
+      '<div class="h4s-chrome-right">' +
+        '<span class="h4s-timer" id="h4s-timer" title="总时长 (T 暂停)">00:00</span>' +
+        '<button data-act="rehearse" title="排练录制 (R)">⏺</button>' +
+        '<button data-act="laser" title="激光笔 (L)">◎</button>' +
+        '<button data-act="black" title="黑屏 (B)">●</button>' +
+        '<button data-act="overview" title="总览 (G)">⊞</button>' +
+        '<button data-act="drawer" title="演讲者视图 (S)">☰</button>' +
+        '<button data-act="preswin" title="独立演讲者窗口（需 http 访问）">⧉</button>' +
+        '<button data-act="fullscreen" title="全屏 (F)">⛶</button>' +
+        '<button data-act="help" title="帮助 (?)">?</button>' +
+      '</div>';
+
+    blackout = el('div', 'h4s-blackout');
+    overviewEl = el('div', 'h4s-overview');
+    overviewEl.hidden = true;
+
+    helpEl = el('div', 'h4s-help');
+    helpEl.innerHTML =
+      '<div><h2>html4s 播放器 v' + VERSION + ' — 键盘帮助</h2><table>' +
+      '<tr><td><kbd>→ ↓ 空格 PgDn Enter</kbd></td><td>下一步（碎片内推进 → 翻页）</td></tr>' +
+      '<tr><td><kbd>← ↑ PgUp Backspace</kbd></td><td>上一步</td></tr>' +
+      '<tr><td><kbd>Home / End</kbd></td><td>首页 / 末页</td></tr>' +
+      '<tr><td><kbd>数字 + Enter</kbd></td><td>跳页（显示最终碎片状态）</td></tr>' +
+      '<tr><td><kbd>B</kbd> / <kbd>W</kbd></td><td>黑屏 / 白屏</td></tr>' +
+      '<tr><td><kbd>G</kbd> / <kbd>S</kbd></td><td>总览网格 / 演讲者抽屉</td></tr>' +
+      '<tr><td><kbd>T</kbd> / <kbd>R</kbd></td><td>计时暂停 / 排练录制</td></tr>' +
+      '<tr><td><kbd>L</kbd></td><td>激光笔</td></tr>' +
+      '<tr><td><kbd>F</kbd></td><td>全屏切换</td></tr>' +
+      '<tr><td><kbd>Esc</kbd></td><td>退出浮层 / 全屏</td></tr>' +
+      '</table></div>';
+
+    toastEl = el('div', 'h4s-toast');
+    laserDot = el('div', 'h4s-laser-dot');
+
+    drawer = el('aside', 'h4s-drawer');
+    drawer.innerHTML =
+      '<h3><span>' + t('presenter') + '</span><span>' +
+        '<button data-dact="afont-" title="备注字号减小" style="all:unset;cursor:pointer;padding:2px 7px;">A−</button>' +
+        '<button data-dact="afont+" title="备注字号增大" style="all:unset;cursor:pointer;padding:2px 7px;font-weight:700;">A＋</button>' +
+        '<span id="h4s-draw-clock"></span></span></h3>' +
+      '<div class="h4s-draw-prev">' +
+        '<div class="h4s-draw-box" id="h4s-draw-box"></div>' +
+        '<div class="h4s-draw-cap" id="h4s-draw-cap"></div>' +
+      '</div>' +
+      '<div class="h4s-draw-notes"><div class="cap" style="font-size:12px;color:#64748b;margin:0 0 4px;">' + t('notes') + '</div>' +
+        '<div class="body" id="h4s-draw-notes"></div></div>' +
+      '<div class="h4s-draw-foot">' +
+        '<span>' + t('thisPage') + ' <b id="h4s-t-slide">00:00</b></span>' +
+        '<span>' + t('total') + ' <b id="h4s-t-total">00:00</b></span>' +
+        '<span id="h4s-t-frag"></span>' +
+      '</div>';
+    /* Web 版分享场景：抽屉承担完整 speaker notes 体验——备注字号可调并记忆 */
+    var notesFs = 16;
+    try { notesFs = parseInt(localStorage.getItem('h4s-notes-fs'), 10) || 16; } catch (err) {}
+    function applyNotesFs() {
+      var b = $('#h4s-draw-notes', drawer);
+      if (b) b.style.fontSize = notesFs + 'px';
+      try { localStorage.setItem('h4s-notes-fs', String(notesFs)); } catch (err) {}
+    }
+    on(drawer, 'click', function (e) {
+      var b = e.target.closest('[data-dact]');
+      if (!b) return;
+      notesFs = Math.max(12, Math.min(40, notesFs + (b.getAttribute('data-dact') === 'afont+' ? 2 : -2)));
+      applyNotesFs();
+    });
+    applyNotesFs();
+
+    app.appendChild(viewport);
+    app.appendChild(progress);
+    app.appendChild(autoBar);
+    app.appendChild(chrome);
+    app.appendChild(blackout);
+    app.appendChild(overviewEl);
+    app.appendChild(helpEl);
+    app.appendChild(toastEl);
+    app.appendChild(laserDot);
+    app.appendChild(drawer);
+    document.body.appendChild(app);
+  }
+
+  /* ================================================================
+   * 布局：固定舞台 + 等比缩放
+   * ================================================================ */
+  function applyStageSize(slide) {
+    var st = stageFor(slide);
+    holder.style.width = st.w + 'px';
+    holder.style.height = st.h + 'px';
+  }
+
+  function layout() {
+    if (!S.n) return;
+    var st = stageFor(S.slides[S.i]);
+    holder.style.width = st.w + 'px';
+    holder.style.height = st.h + 'px';
+    var vw = viewport.clientWidth, vh = viewport.clientHeight;
+    if (vw < 10 || vh < 10) return;
+    var scale = (MSTAGE.fit === 'cover')
+      ? Math.max(vw / st.w, vh / st.h)
+      : Math.min(vw / st.w, vh / st.h);
+    holder.style.transform = 'scale(' + scale + ')';
+    document.documentElement.style.setProperty('--h4s-scale', scale);
+  }
+
+  /* ================================================================
+   * 转场（WAAPI）
+   * ================================================================ */
+  var TRANS = {
+    fade: { in: [{ opacity: 0 }, { opacity: 1 }], out: [{ opacity: 1 }, { opacity: 0 }] },
+    slide: { in: [{ transform: 'translateX(50%)', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }],
+             out: [{ transform: 'translateX(0)', opacity: 1 }, { transform: 'translateX(-35%)', opacity: 0 }] },
+    push: { in: [{ transform: 'translateX(100%)' }, { transform: 'translateX(0)' }],
+            out: [{ transform: 'translateX(0)' }, { transform: 'translateX(-100%)' }] },
+    zoom: { in: [{ transform: 'scale(.85)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }],
+            out: [{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.12)', opacity: 0 }] },
+    wipe: { in: [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }],
+            out: [{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(0 0 0 100%)' }] },
+    flip: { in: [{ transform: 'perspective(1400px) rotateY(28deg)', opacity: .2 }, { transform: 'rotateY(0)', opacity: 1 }],
+            out: [{ transform: 'rotateY(0)', opacity: 1 }, { transform: 'perspective(1400px) rotateY(-28deg)', opacity: 0 }] },
+    /* ---- v0.3 扩展：来自 reveal.js / PowerPoint / Motion.dev curtains 的常用效果 ---- */
+    zoomblur: { in: [{ transform: 'scale(1.6)', filter: 'blur(14px)', opacity: 0 }, { transform: 'scale(1)', filter: 'blur(0px)', opacity: 1 }],
+                out: [{ transform: 'scale(1)', filter: 'blur(0px)', opacity: 1 }, { transform: 'scale(.55)', filter: 'blur(10px)', opacity: 0 }] },
+    cube: { in: [{ transform: 'perspective(1200px) translateX(55%) rotateY(-65deg)', opacity: .3 }, { transform: 'perspective(1200px) translateX(0) rotateY(0)', opacity: 1 }],
+            out: [{ transform: 'perspective(1200px) translateX(0) rotateY(0)', opacity: 1 }, { transform: 'perspective(1200px) translateX(-55%) rotateY(65deg)', opacity: .3 }] },
+    iris: { in: [{ clipPath: 'circle(0% at 50% 50%)' }, { clipPath: 'circle(120% at 50% 50%)' }],
+            out: [{ clipPath: 'circle(120% at 50% 50%)' }, { clipPath: 'circle(0% at 50% 50%)' }] },
+    unfold: { in: [{ clipPath: 'inset(50% 0 50% 0)' }, { clipPath: 'inset(0 0 0 0)' }],
+              out: [{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(50% 0 50% 0)' }] },
+    rise: { in: [{ transform: 'translateY(9%)', opacity: 0, filter: 'saturate(.3)' }, { transform: 'translateY(0)', opacity: 1, filter: 'saturate(1)' }],
+            out: [{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-6%)', opacity: 0 }] },
+    dissolve: { in: [{ opacity: 0 }, { opacity: 1 }], out: [{ opacity: 1 }, { opacity: 0 }], easing: 'steps(14, end)' }
+  };
+  TRANS.none = null;
+
+  function anim(node, keyframes, dur, easing) {
+    if (!node.animate || !keyframes) return null;
+    try {
+      return node.animate(keyframes, { duration: dur, easing: easing || 'cubic-bezier(.4,0,.2,1)', fill: 'both' });
+    } catch (e) { return null; }
+  }
+
+  /* ---- 遮罩式转场（PowerPoint 幕布/百叶窗/棋盘/像素溶解 的实现方式）：
+     覆盖层先"盖住"视口 → 中点切换页面内容 → 覆盖层揭开。dur 平分两半。 ---- */
+  var MASK_TRANS = { curtain: 1, blinds: 1, checkerboard: 1, pixelate: 1 };
+
+  function buildMask(name, accent) {
+    var m = el('div', 'h4s-tmask');
+    if (name === 'curtain') {
+      /* 两片幕布从上下合拢再展开 */
+      for (var i = 0; i < 2; i++) {
+        var p = el('div');
+        p.style.cssText = 'position:absolute;left:0;width:100%;height:50.5%;background:' + accent +
+          ';transform-origin:' + (i ? 'bottom' : 'top') + ';top:' + (i ? '50%' : '0');
+        m.appendChild(p);
+      }
+    } else if (name === 'blinds') {
+      for (var j = 0; j < 10; j++) {
+        var b = el('div');
+        b.style.cssText = 'position:absolute;left:0;width:100%;height:10.5%;top:' + (j * 10) + '%;background:' + accent +
+          ';transform:scaleY(0);transform-origin:center;';
+        m.appendChild(b);
+      }
+    } else if (name === 'checkerboard' || name === 'pixelate') {
+      var n = name === 'pixelate' ? 10 : 6;
+      var cell = 100 / n;
+      for (var yy = 0; yy < n; yy++) for (var xx = 0; xx < n; xx++) {
+        var c = el('div');
+        c.style.cssText = 'position:absolute;width:' + (cell + .3) + '%;height:' + (cell + .3) + '%;left:' +
+          (xx * cell) + '%;top:' + (yy * cell) + '%;background:' + accent + ';opacity:0;';
+        m.appendChild(c);
+      }
+    }
+    return m;
+  }
+
+  function doMaskTransition(oldEl, newEl, name, dur) {
+    var half = Math.max(120, dur / 2);
+    var accent = (DEFAULTS.transition && DEFAULTS.transition.color) || 'var(--h4s-mask,#c8102e)';
+    var mask = buildMask(name, accent);
+    var stage = $('.h4s-holder') || app;
+    stage.appendChild(mask);
+    /* 新页先显示（在遮罩之下）；旧页的显隐切换延迟到中点——盖住前不能闪回初始态 */
+    newEl.style.display = '';
+    newEl.classList.add('visible', 'active');
+    var nodes = Array.prototype.slice.call(mask.children);
+    var ease = 'cubic-bezier(.65,0,.35,1)';
+    var animsIn = [], animsOut = [];
+    if (name === 'curtain') {
+      nodes.forEach(function (p, i) {
+        animsIn.push(p.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: half, easing: ease, fill: 'forwards', delay: 0 }));
+        animsOut.push(p.animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(0)' }], { duration: half, easing: ease, fill: 'forwards', delay: i ? half * .12 : 0 }));
+      });
+    } else if (name === 'blinds') {
+      nodes.forEach(function (b, i) {
+        animsIn.push(b.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: half * .8, easing: ease, fill: 'forwards', delay: i * half * .04 }));
+        animsOut.push(b.animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(0)' }], { duration: half * .8, easing: ease, fill: 'forwards', delay: i * half * .04 }));
+      });
+    } else { /* checkerboard / pixelate：交错淡入淡出；pixelate 用随机顺序 */
+      var order = nodes.map(function (c, k) { return k; });
+      if (name === 'pixelate') for (var k = order.length - 1; k > 0; k--) { var r = (Math.random() * (k + 1)) | 0; var t = order[k]; order[k] = order[r]; order[r] = t; }
+      order.forEach(function (k, seq) {
+        var c = nodes[k];
+        var stagger = seq * half * .6 / order.length;
+        animsIn.push(c.animate([{ opacity: 0 }, { opacity: 1 }], { duration: half * .45, fill: 'forwards', delay: stagger, easing: 'linear' }));
+        animsOut.push(c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: half * .45, fill: 'forwards', delay: stagger, easing: 'linear' }));
+      });
+    }
+    var closeAt = (name === 'blinds') ? half * .9 : half;
+    return sleep(closeAt + 60).then(function () {
+      /* 中点：页面内容切换 */
+      if (oldEl && oldEl !== newEl) {
+        oldEl.style.display = 'none';
+        oldEl.classList.remove('visible', 'active');
+      }
+      animsOut.forEach(function (a) { try { a.play(); } catch (e) {} });
+      return sleep(half + 200).then(function () {
+        try { mask.remove(); } catch (e) {}
+      });
+    });
+  }
+
+  function doTransition(oldEl, newEl, name, dur) {
+    if (newEl) newEl.style.display = '';
+    if (name in MASK_TRANS) {
+      return doMaskTransition(oldEl, newEl, name, dur).then(function () {
+        newEl.style.zIndex = '';
+        if (oldEl && oldEl !== newEl) oldEl.style.display = 'none';
+        confettiBurst({ el: newEl });
+      });
+    }
+    if (!oldEl || oldEl === newEl || !TRANS[name] || dur <= 1) {
+      if (oldEl && oldEl !== newEl) oldEl.style.display = 'none';
+      return Promise.resolve();
+    }
+    var t = TRANS[name];
+    newEl.style.zIndex = 2;
+    oldEl.style.zIndex = 1;
+    var a1 = anim(newEl, t.in, dur, t.easing), a2 = anim(oldEl, t.out, dur, t.easing);
+    return Promise.race([
+      Promise.allSettled([a1 && a1.finished, a2 && a2.finished].filter(Boolean)),
+      sleep(dur + 120)
+    ]).then(function () {
+      try { a1 && a1.cancel(); a2 && a2.cancel(); } catch (e) {}
+      oldEl.style.display = 'none';
+      newEl.style.zIndex = '';
+    });
+  }
+
+  /* ================================================================
+   * 背景特效层（零依赖 canvas）：manifest defaults.fx = "stars"|"snow"|"dust"
+   * 页面级礼花：slide data-h4s-fx="confetti" 进入放映时爆发一次
+   * 仅放映模式渲染；document.hidden 自动暂停
+   * ================================================================ */
+  var fx = { mode: 'none', canvas: null, ctx: null, parts: [], raf: 0 };
+
+  function fxResize() {
+    if (!fx.canvas) return;
+    /* live：舞台画布（deck 分辨率）；browse：预览箱内（按容器实际尺寸） */
+    if (fx.canvas.parentElement === holder) { fx.canvas.width = MSTAGE.w; fx.canvas.height = MSTAGE.h; }
+    else if (miniBox) {
+      var r = miniBox.getBoundingClientRect();
+      fx.canvas.width = Math.max(320, Math.round(r.width));
+      fx.canvas.height = Math.max(180, Math.round(r.height));
+    }
+  }
+
+  function fxMake(mode, w, h) {
+    var r = Math.random;
+    var p = { x: r() * w, y: mode === 'dust' ? h - r() * h : r() * h, s: 1 + r() * 2 };
+    if (mode === 'stars') { p.vx = (r() - .5) * .18; p.vy = (r() - .5) * .18; p.tw = r() * Math.PI * 2; }
+    else if (mode === 'snow') { p.vx = (r() - .5) * .5; p.vy = .35 + r() * .8; p.sw = r() * Math.PI * 2; }
+    else { p.vx = (r() - .5) * .22; p.vy = -(.15 + r() * .35); }
+    return p;
+  }
+
+  function fxTick() {
+    fx.raf = 0;
+    var ctx = fx.ctx, w = fx.canvas.width, h = fx.canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    var i, p;
+    for (i = 0; i < fx.parts.length; i++) {
+      p = fx.parts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (fx.mode === 'stars') { p.tw += .02; if (p.x < 0) p.x += w; if (p.x > w) p.x -= w; if (p.y < 0) p.y += h; if (p.y > h) p.y -= h; }
+      else if (fx.mode === 'snow') { p.sw += .015; p.x += Math.sin(p.sw) * .3; if (p.y > h + 6) { p.y = -6; p.x = Math.random() * w; } }
+      else { if (p.y < -6) { p.y = h + 6; p.x = Math.random() * w; } if (p.x < 0 || p.x > w) p.vx *= -1; }
+      var a = fx.mode === 'stars' ? (.35 + .65 * Math.abs(Math.sin(p.tw))) : fx.mode === 'snow' ? .8 : .45;
+      ctx.globalAlpha = a;
+      ctx.fillStyle = fx.mode === 'dust' ? 'rgba(255,214,140,1)' : '#ffffff';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.s * (fx.mode === 'snow' ? 1.4 : 1), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    fx.raf = requestAnimationFrame(fxTick);
+  }
+
+  function fxStart() {
+    if (fx.mode === 'none' || fx.raf || !fx.canvas) return;
+    fx.raf = requestAnimationFrame(fxTick);
+  }
+  function fxStop() { if (fx.raf) { cancelAnimationFrame(fx.raf); fx.raf = 0; } }
+
+  function initFx() {
+    fx.mode = String((DEFAULTS && DEFAULTS.fx) || 'none').toLowerCase();
+    if (fx.mode === 'none' || fx.mode === 'off') return;
+    if (!fx.canvas) {
+      fx.canvas = el('canvas', 'h4s-fx');
+      fx.ctx = fx.canvas.getContext('2d');
+      on(window, 'resize', fxResize);
+      on(document, 'visibilitychange', function () { document.hidden ? fxStop() : fxStart(); });
+    }
+    if (fx.canvas.parentElement !== holder) {
+      holder.insertBefore(fx.canvas, holder.firstChild);
+      fxResize();
+      fxStart();
+    }
+    var w = fx.canvas.width, h = fx.canvas.height;
+    var N = fx.mode === 'stars' ? 150 : fx.mode === 'snow' ? 120 : 90;
+    fx.parts = [];
+    for (var i = 0; i < N; i++) fx.parts.push(fxMake(fx.mode, w, h));
+    fxStart();
+  }
+
+  /* 礼花（页面级 data-h4s-fx="confetti"）：内容之上的独立画布，爆发一次 */
+  var confetti = { canvas: null, ctx: null, parts: [], raf: 0 };
+
+  function confettiBurst(slide) {
+    if ((slide.el.getAttribute('data-h4s-fx') || '').toLowerCase() !== 'confetti') return;
+    if (!confetti.canvas) {
+      confetti.canvas = el('canvas', 'h4s-fx');
+      confetti.canvas.style.zIndex = 60;
+      holder.appendChild(confetti.canvas);
+      confetti.ctx = confetti.canvas.getContext('2d');
+      var size = function () { confetti.canvas.width = MSTAGE.w; confetti.canvas.height = MSTAGE.h; };
+      size();
+      on(window, 'resize', size);
+    }
+    confetti.canvas.width = MSTAGE.w;
+    var w = confetti.canvas.width, h = confetti.canvas.height, r = Math.random;
+    var colors = ['#c8102e', '#fbbf24', '#2563eb', '#10b981', '#ffffff'];
+    for (var i = 0; i < 130; i++) {
+      confetti.parts.push({
+        x: w / 2 + (r() - .5) * w * .5, y: h * .35 + (r() - .5) * 80,
+        vx: (r() - .5) * 9, vy: -(4 + r() * 9),
+        w: 5 + r() * 7, hh: 3 + r() * 5, rot: r() * Math.PI, vr: (r() - .5) * .3,
+        color: colors[(r() * colors.length) | 0], life: 1
+      });
+    }
+    if (!confetti.raf) confettiRun();
+  }
+
+  function confettiRun() {
+    confetti.raf = requestAnimationFrame(function () {
+      var ctx = confetti.ctx, w = confetti.canvas.width, h = confetti.canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      var alive = 0;
+      confetti.parts = confetti.parts.filter(function (p) {
+        p.vy += .18; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= .008;
+        return p.life > 0 && p.y < h + 20;
+      });
+      confetti.parts.forEach(function (p) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 1.6));
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.hh / 2, p.w, p.hh);
+        ctx.restore();
+        alive++;
+      });
+      if (alive) confettiRun();
+      else { confetti.raf = 0; ctx.clearRect(0, 0, w, h); confetti.parts = []; }
+    });
+  }
+
+  /* ================================================================
+   * 碎片
+   * ================================================================ */
+  var FRAG_T = {
+    'fade-up': 'translateY(16px)', 'slide-left': 'translateX(32px)',
+    'slide-right': 'translateX(-32px)', 'zoom': 'scale(.9)',
+    'fade': 'none', 'none': 'none'
+  };
+
+  function applyFragEffect(n) {
+    var eff = n.getAttribute('data-h4s-frag') ||
+      (DEFAULTS.fragment && DEFAULTS.fragment.effect) || 'fade-up';
+    n.style.setProperty('--h4s-frag-t', FRAG_T[eff] || FRAG_T['fade-up']);
+    if (eff === 'none') n.style.transition = 'none';
+  }
+
+  function setFragClasses(slide, f) {
+    slide.frags.forEach(function (n, idx) {
+      n.classList.toggle('is-frag-visible', idx <= f);
+    });
+  }
+
+  function revealFrag(k) {
+    var s = S.slides[S.i];
+    if (!s || k < 0 || k >= s.frags.length) return;
+    applyFragEffect(s.frags[k]);
+    s.frags[k].classList.add('is-frag-visible');
+    S.f = k;
+    updateChrome(); updateDrawer(); sendState(); updateHash();
+    emit('h4s:fragchange', { index: S.i, frag: k, total: s.frags.length });
+  }
+
+  function hideFrag(k) {
+    var s = S.slides[S.i];
+    if (!s || k < 0 || k >= s.frags.length) return;
+    s.frags[k].classList.remove('is-frag-visible');
+    S.f = k - 1;
+    updateChrome(); updateDrawer(); sendState(); updateHash();
+    emit('h4s:fragchange', { index: S.i, frag: S.f, total: s.frags.length });
+  }
+
+  /* ================================================================
+   * 导航
+   * ================================================================ */
+  function go(i, mode) {
+    i = clamp(i, 0, S.n - 1);
+    if (i === S.i && mode !== 'jump' && shownEl) return;
+    if (S.lock) { S.queued = { i: i, mode: mode }; return; }
+
+    var prevSlide = S.slides[S.i];
+    var nextSlide = S.slides[i];
+    if (RH.on && T.slideAt) RH.log.push({ page: S.i + 1, seconds: +dwell().toFixed(1), frags: S.f + 1 });
+
+    S.i = i;
+    S.f = (mode !== 'fwd' && nextSlide.frags.length) ? nextSlide.frags.length - 1 : -1;
+    setFragClasses(nextSlide, S.f);
+
+    var name = nextSlide.transition || (DEFAULTS.transition && DEFAULTS.transition.name) || 'fade';
+    var dur = (DEFAULTS.transition && DEFAULTS.transition.duration != null) ? DEFAULTS.transition.duration : 300;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) dur = 60;
+
+    S.lock = true;
+    applyStageSize(nextSlide);
+    layout();
+
+    var oldEl = shownEl;
+    shownEl = nextSlide.el;
+    if (oldEl && oldEl !== shownEl) oldEl.classList.remove('visible', 'active');
+    shownEl.classList.add('visible', 'active');
+    doTransition(oldEl, shownEl, name, dur).then(function () {
+      if (prevSlide && prevSlide.el !== shownEl) mediaLeave(prevSlide.el);
+      mediaEnter(shownEl);
+      confettiBurst(nextSlide);
+      S.lock = false;
+      if (S.queued) { var q = S.queued; S.queued = null; go(q.i, q.mode); }
+    });
+
+    T.slideAt = Date.now();
+    T.ptAtSlide = T.pausedTotal;
+    T.autoPausedAcc = 0; T.autoPauseAt = 0;
+    scheduleAutoFrags(i);
+    updateChrome(); updateDrawer(); sendState(); updateHash();
+    emit('h4s:slidechange', { index: S.i, id: nextSlide.id, title: nextSlide.title, frags: nextSlide.frags.length, frag: S.f });
+  }
+
+  function next() {
+    var s = S.slides[S.i];
+    if (S.f < s.frags.length - 1) { revealFrag(S.f + 1); return; }
+    if (S.i < S.n - 1) go(S.i + 1, 'fwd');
+    else if (S.loop) go(0, 'jump');
+    else toast(t('lastPage'));
+  }
+
+  function prev() {
+    if (S.f >= 0) { hideFrag(S.f); return; }
+    if (S.i > 0) go(S.i - 1, 'back');
+    else if (S.loop) go(S.n - 1, 'jump');
+    else toast(t('firstPage'));
+  }
+
+  function scheduleAutoFrags(i) {
+    S.fragTimers.forEach(clearTimeout);
+    S.fragTimers = [];
+    if (autoDur() <= 0) return;
+    var acc = 600;
+    S.slides[i].frags.forEach(function (n, idx) {
+      if (idx <= S.f) return;
+      var d = parseInt(n.getAttribute('data-h4s-frag-delay') || '0', 10) ||
+        (DEFAULTS.fragment && DEFAULTS.fragment.delay) || 150;
+      acc += d;
+      S.fragTimers.push(setTimeout(function () {
+        if (S.i === i && S.f < idx) revealFrag(idx);
+      }, acc));
+    });
+  }
+
+  /* ================================================================
+   * 浮层：黑/白屏、总览、帮助
+   * ================================================================ */
+  function setOverlay(name) {
+    S.overlay = name;
+    blackout.classList.toggle('is-on', name === 'black' || name === 'white');
+    blackout.classList.toggle('is-white', name === 'white');
+    overviewEl.hidden = name !== 'overview';
+    helpEl.classList.toggle('is-on', name === 'help');
+    if (name === 'overview') OV.sync();
+    sendState();
+  }
+
+  var OV = {
+    built: false, cells: [], focus: 0,
+    build: function () {
+      if (this.built) return;
+      this.built = true;
+      var self = this;
+      S.slides.forEach(function (s, idx) {
+        var cell = el('div', 'h4s-cell');
+        cell.tabIndex = -1;
+        var st = stageFor(s);
+        var sc = Math.min(216 / st.w, 132 / st.h);
+        var thumb = el('div', 'h4s-thumb');
+        thumb.style.width = Math.round(st.w * sc) + 'px';
+        thumb.style.height = Math.round(st.h * sc) + 'px';
+        var clone = makeClone(s, 'final', 0);
+        clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+        thumb.appendChild(clone);
+        cell.appendChild(thumb);
+        cell.appendChild(el('div', 'h4s-meta',
+          '<b>' + (idx + 1) + '</b><span>' + esc(s.title) + '</span>'));
+        on(cell, 'click', function () { go(idx, 'jump'); setOverlay(null); });
+        overviewEl.appendChild(cell);
+        self.cells.push(cell);
+      });
+    },
+    sync: function () {
+      this.build();
+      this.focus = S.i;
+      this.mark();
+    },
+    mark: function () {
+      var self = this;
+      this.cells.forEach(function (c, idx) {
+        c.classList.toggle('is-cur', idx === S.i);
+        c.classList.toggle('is-focus', idx === self.focus);
+      });
+      var fc = this.cells[this.focus];
+      if (fc && fc.scrollIntoView) fc.scrollIntoView({ block: 'nearest' });
+    },
+    handleKey: function (e) {
+      var k = e.key;
+      if (k === 'Escape' || k === 'g' || k === 'G') { setOverlay(null); e.preventDefault(); return true; }
+      var perRow = Math.max(1, Math.round((overviewEl.clientWidth - 80) / 256));
+      if (k === 'ArrowRight') this.focus = clamp(this.focus + 1, 0, S.n - 1);
+      else if (k === 'ArrowLeft') this.focus = clamp(this.focus - 1, 0, S.n - 1);
+      else if (k === 'ArrowDown') this.focus = clamp(this.focus + perRow, 0, S.n - 1);
+      else if (k === 'ArrowUp') this.focus = clamp(this.focus - perRow, 0, S.n - 1);
+      else if (k === 'Enter') { go(this.focus, 'jump'); setOverlay(null); e.preventDefault(); return true; }
+      else return false;
+      this.mark();
+      e.preventDefault();
+      return true;
+    }
+  };
+
+  /* ================================================================
+   * 克隆（预览/缩略图）
+   * ================================================================ */
+  function makeClone(slide, mode, count) {
+    var c = slide.el.cloneNode(true);
+    c.removeAttribute('id');
+    $$('[id]', c).forEach(function (n) { n.removeAttribute('id'); });
+    c.classList.add('h4s-clone');
+    c.classList.remove('h4s-in');
+    c.classList.add('visible', 'active'); /* 克隆呈终态：触发 .slide.visible .reveal 等入场动画约定 */
+    var frags = collectFrags(c);
+    frags.forEach(function (n, idx) {
+      n.classList.toggle('is-frag-visible', mode === 'final' || idx < count);
+    });
+    $$('video,audio', c).forEach(function (m) {
+      try { m.pause(); } catch (e) {}
+      m.removeAttribute('autoplay');
+    });
+    return c;
+  }
+
+  /* ================================================================
+   * 演讲者抽屉
+   * ================================================================ */
+  function updateDrawer() {
+    if (!drawerOn) return;
+    var s = S.slides[S.i];
+    $('#h4s-draw-notes', drawer).innerHTML =
+      s.notesEl ? s.notesEl.innerHTML : '<span style="color:#475569">' + t('noNotes') + '</span>';
+    $('#h4s-t-frag', drawer).textContent =
+      s.frags.length ? (t('fragN') + (S.f + 1) + '/' + s.frags.length) : t('noFrags');
+
+    var box = $('#h4s-draw-box', drawer);
+    var cap = $('#h4s-draw-cap', drawer);
+    var idx = S.i, fc, label;
+    if (S.f < s.frags.length - 1) { fc = S.f + 2; label = t('nextFrag') + (S.f + 2) + '/' + s.frags.length; }
+    else if (S.i < S.n - 1) { idx = S.i + 1; fc = 'final'; label = t('nextSlide'); }
+    else { fc = null; label = t('lastPage'); }
+    cap.textContent = label;
+    if (fc != null) {
+      box.innerHTML = '';
+      var target = S.slides[idx];
+      var st = stageFor(target);
+      var bw = box.clientWidth || 356;
+      var sc = Math.min(bw / st.w, 320 / st.h); /* 高度上限，防混合比例页撑出抽屉 */
+      box.style.height = Math.round(st.h * sc) + 'px';
+      var clone = makeClone(target, fc === 'final' ? 'final' : 'at', fc === 'final' ? 0 : fc);
+      clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+      box.appendChild(clone);
+    } else {
+      box.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">— END —</div>';
+      box.style.height = '160px';
+    }
+  }
+
+  function toggleDrawer() {
+    drawerOn = !drawerOn;
+    document.body.classList.toggle('h4s-presenting', drawerOn);
+    layout();
+    updateDrawer();
+    toast(drawerOn ? '演讲者抽屉已开启（同屏练习模式）' : '演讲者抽屉已关闭');
+  }
+
+  /* ================================================================
+   * 浏览模式（PowerPoint 式开场）与放映切换
+   * ================================================================ */
+  var browseBar, sidebar, miniBox, sideCells = [];
+
+  function buildBrowse() {
+    browseBar = el('div', 'h4s-browsebar');
+    browseBar.innerHTML =
+      '<button data-bact="openfile" title="' + t('openT') + '">' + t('open') + '</button>' +
+      '<button data-bact="openurl" title="' + t('urlT') + '">' + t('url') + '</button>' +
+      /* 文档标题由原生标题栏/浏览器标签页承载，浏览栏不重复 */
+      '<button data-bact="theme" title="' + t('themeT') + '">' + (uiTheme === 'light' ? t('toDark') : t('toLight')) + '</button>' +
+      /* 页码指示器：flex 双 auto margin 使其大致居中 */
+      '<span class="h4s-pageinfo"></span>' +
+      '<button data-bact="playcur" title="' + t('playcurT') + '">' + t('playcur') + '</button>' +
+      '<button data-bact="play" class="h4s-play" title="' + t('playT') + '">' + t('play') + '</button>' +
+      '<button data-bact="help" title="帮助 (?)">?</button>';
+    sidebar = el('div', 'h4s-sidebar');
+    miniBox = el('div', 'h4s-stagebox');
+    miniBox.innerHTML = '<div class="h4s-mini"></div>';
+    app.appendChild(browseBar);
+    app.appendChild(sidebar);
+    app.appendChild(miniBox);
+    applyUiTheme(uiTheme);  /* 恢复上次的深浅色偏好（body 属性 + 壳标题栏同步） */
+    on(browseBar, 'click', function (e) {
+      var b = e.target.closest('[data-bact]');
+      if (!b) return;
+      var a = b.getAttribute('data-bact');
+      if (a === 'play') startShow(0);
+      else if (a === 'playcur') startShow(S.sel);
+      else if (a === 'help') setOverlay(S.overlay === 'help' ? null : 'help');
+      else if (a === 'theme') {
+        applyUiTheme(uiTheme === 'light' ? 'dark' : 'light');
+        updateThemeBtn();
+      }
+      else if (a === 'openfile') {
+        if (shellReady) { shellAction('openfile'); return; }
+        /* 浏览器模式：文件选择器 → object URL（自包含 deck 完整可用） */
+        if (!fileInput) {
+          fileInput = el('input', null, '');
+          fileInput.type = 'file';
+          fileInput.accept = '.html4s,.html,.htm';
+          fileInput.style.display = 'none';
+          document.body.appendChild(fileInput);
+          fileInput.addEventListener('change', function () {
+            var f = fileInput.files && fileInput.files[0];
+            if (!f) return;
+            try { location.href = URL.createObjectURL(f); } catch (e) {}
+            fileInput.value = '';
+          });
+          document.body.appendChild(fileInput);
+        }
+        fileInput.click();
+      }
+      else if (a === 'openurl') {
+        if (shellReady) { shellAction('openurl'); return; }
+        var u = window.prompt('输入演示网址（http / https）：', 'https://');
+        if (u && /^https?:\/\//.test(u.trim())) location.href = u.trim();
+      }
+    });
+    buildSidebar();
+    selectSlide(S.sel);
+    refreshShellButtons();
+  }
+
+  function refreshShellButtons() {
+    if (!browseBar) return;
+    var disp = shellReady ? '' : 'none';
+    ['shellfile', 'shellurl'].forEach(function (a) {
+      var b = browseBar.querySelector('[data-bact="' + a + '"]');
+      if (b) b.style.display = disp;
+    });
+  }
+
+  function buildSidebar() {
+    sideCells.forEach(function (c) { c.remove(); });
+    sideCells = [];
+    S.slides.forEach(function (s, idx) {
+      var cell = el('div', 'h4s-sidecell');
+      var st = stageFor(s);
+      var sc = Math.min(198 / st.w, 112 / st.h);
+      var thumb = el('div', 'h4s-thumb');
+      thumb.style.width = Math.round(st.w * sc) + 'px';
+      thumb.style.height = Math.round(st.h * sc) + 'px';
+      var clone = makeClone(s, 'final', 0);
+      clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+      thumb.appendChild(clone);
+      cell.appendChild(thumb);
+      cell.appendChild(el('div', 'h4s-meta', '<b>' + (idx + 1) + '</b><span>' + esc(s.title) + '</span>'));
+      on(cell, 'click', function () { selectSlide(idx); });
+      on(cell, 'dblclick', function () { startShow(idx); });  /* 双击缩略图直接放映该页 */
+      sidebar.appendChild(cell);
+      sideCells.push(cell);
+    });
+  }
+
+  function selectSlide(i) {
+    S.sel = clamp(i, 0, S.n - 1);
+    sideCells.forEach(function (c, idx) { c.classList.toggle('is-sel', idx === S.sel); });
+    var focus = sideCells[S.sel];
+    if (focus && focus.scrollIntoView) focus.scrollIntoView({ block: 'nearest' });
+    renderMini();
+    updatePageInfo();
+  }
+
+  /* 浏览栏页码指示器：当前页 / 总页数 · 页标题 */
+  function updatePageInfo() {
+    var elp = browseBar && browseBar.querySelector('.h4s-pageinfo');
+    if (!elp) return;
+    var s = S.slides[S.sel];
+    elp.innerHTML = '<b>' + (S.sel + 1) + '</b> / ' + S.n +
+      (s && s.title ? ' · ' + esc(s.title) : '');
+  }
+
+  function renderMini() {
+    if (!miniBox) return;
+    var mini = $('.h4s-mini', miniBox);
+    if (!mini) return;
+    mini.innerHTML = '';
+    var s = S.slides[S.sel];
+    var st = stageFor(s);
+    var sc = Math.min((miniBox.clientWidth - 64) / st.w, (miniBox.clientHeight - 64) / st.h);
+    mini.style.width = Math.round(st.w * sc) + 'px';
+    mini.style.height = Math.round(st.h * sc) + 'px';
+    var clone = makeClone(s, 'final', 0);
+    clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+    mini.appendChild(clone);
+  }
+
+  function layoutBrowse() {
+    if (!document.body.classList.contains('h4s-browse')) return;
+    renderMini();
+  }
+
+  /* 进入放映（i=起始页，fragHint>=0 时直接呈现到该碎片状态） */
+  function startShow(i, fragHint) {
+    S.presenting = true;
+    document.body.classList.remove('h4s-browse');
+    document.body.classList.add('h4s-live');
+    poke();
+    var s = S.slides[clamp(i, 0, S.n - 1)];
+    S.i = s.index;
+    S.f = fragHint >= 0 ? clamp(fragHint, 0, s.frags.length - 1) : -1;
+    setFragClasses(s, S.f);
+    applyStageSize(s);
+    layout();
+    if (shownEl !== s.el) {
+      if (shownEl) { shownEl.style.display = 'none'; shownEl.classList.remove('visible', 'active'); }
+      s.el.style.display = '';
+      s.el.classList.add('visible', 'active');
+      shownEl = s.el;
+    }
+    mediaLeave(shownEl); /* 重置再进入 */
+    mediaEnter(shownEl);
+    T.bootAt = Date.now(); T.slideAt = Date.now(); T.ptAtSlide = T.pausedTotal;
+    T.autoPausedAcc = 0; T.autoPauseAt = 0;
+    scheduleAutoFrags(S.i);
+    initFx();
+    confettiBurst(s);
+    updateChrome(); updateDrawer(); updateHash(); sendState();
+    emit('h4s:slidechange', { index: S.i, id: s.id, title: s.title, frags: s.frags.length, frag: S.f });
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen)
+        document.documentElement.requestFullscreen().catch(function () {});
+    } catch (err) {}
+  }
+
+  /* 退出放映，回到浏览模式 */
+  function endShow() {
+    S.presenting = false;
+    document.body.classList.remove('h4s-live');
+    document.body.classList.add('h4s-browse');
+    fxStop();
+    S.fragTimers.forEach(clearTimeout);
+    S.fragTimers = [];
+    if (shownEl) { mediaLeave(shownEl); shownEl.style.display = 'none'; }
+    /* 浏览模式 fx 预览：canvas 移入右侧预览箱，让讲者在 browse 也能看到氛围特效 */
+    if (fx.canvas && miniBox) {
+      fxStop();
+      miniBox.appendChild(fx.canvas);
+      fxResize();
+      fxStart();
+    }
+    if (S.overlay) setOverlay(null);
+    if (drawerOn) toggleDrawer();
+    selectSlide(S.i);
+    try { if (document.fullscreenElement) document.exitFullscreen(); } catch (err) {}
+    sendState();
+    emit('h4s:showend', { index: S.i });
+  }
+
+  /* ================================================================
+   * 工具条 / 提示 / 激光笔
+   * ================================================================ */
+  var toastTimer = 0;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-on'); }, 1800);
+  }
+
+  var laserOn = false;
+  function toggleLaser() {
+    laserOn = !laserOn;
+    document.body.classList.toggle('h4s-laser', laserOn);
+  }
+
+  /* 空闲时隐藏 UI（鼠标停止移动 2.6s） */
+  var idleT;
+  function poke() {
+    document.body.classList.remove('h4s-idle');
+    clearTimeout(idleT);
+    idleT = setTimeout(function () { document.body.classList.add('h4s-idle'); }, 2600);
+  }
+
+  function updateChrome() {
+    $('#h4s-cur').textContent = numBuf || String(S.i + 1);
+    $('#h4s-total').textContent = String(S.n);
+    $('#h4s-timer').textContent = fmt(totalSec());
+    progress.style.width = ((S.i + 1) / S.n * 100) + '%';
+  }
+
+  /* ================================================================
+   * 计时 / 自动播放
+   * ================================================================ */
+  setInterval(function () {
+    if (!S.n || !S.presenting) return; /* 文档模式 / 浏览模式下不运行计时与自动播放 */
+    /* 暂停累计（T 键） */
+    if (T.paused) { if (!T.pausedAt) T.pausedAt = Date.now(); }
+    else if (T.pausedAt) { T.pausedTotal += Date.now() - T.pausedAt; T.pausedAt = 0; }
+
+    /* 自动播放暂停累计（黑/白屏时暂停 autoslide，总时长继续走） */
+    if (T.paused || S.overlay === 'black' || S.overlay === 'white') {
+      if (!T.autoPauseAt) T.autoPauseAt = Date.now();
+    } else if (T.autoPauseAt) {
+      T.autoPausedAcc += Date.now() - T.autoPauseAt;
+      T.autoPauseAt = 0;
+    }
+
+    var ad = autoDur();
+    if (ad > 0) {
+      var used = (Date.now() - T.slideAt - T.autoPausedAcc) / 1000;
+      autoBar.style.width = (clamp(used / ad, 0, 1) * 100) + '%';
+      if (used >= ad && !S.lock && !S.overlay && !T.paused) next();
+    } else {
+      autoBar.style.width = '0';
+    }
+
+    $('#h4s-timer').textContent = fmt(totalSec());
+    if (drawerOn) {
+      $('#h4s-t-slide', drawer).textContent = fmt(dwell());
+      $('#h4s-t-total', drawer).textContent = fmt(totalSec());
+      $('#h4s-draw-clock', drawer).textContent =
+        new Date().toLocaleTimeString('zh-CN', { hour12: false });
+    }
+    if (RH.on) updateChrome();
+    sendState(); /* 持续广播：演讲者窗口随时加入都能拿到最新状态 */
+  }, 200);
+
+  function togglePause() {
+    T.paused = !T.paused;
+    toast(T.paused ? '计时已暂停' : '计时继续');
+  }
+
+  function toggleRehearse() {
+    RH.on = !RH.on;
+    if (RH.on) {
+      RH.log = [];
+      toast('排练开始（R 结束）');
+    } else {
+      if (T.slideAt) RH.log.push({ page: S.i + 1, seconds: +dwell().toFixed(1), frags: S.f + 1 });
+      shellAction('timings', { log: RH.log, total: Math.round(totalSec()) });
+      toast('排练结束：共 ' + fmt(totalSec()) + '，明细已写回 .timings.json');
+      console.table(RH.log);
+      emit('h4s:rehearse', { log: RH.log, total: totalSec() });
+    }
+  }
+
+  /* ================================================================
+   * 媒体管理
+   * ================================================================ */
+  function mediaLeave(root) {
+    $$('video,audio', root).forEach(function (m) { try { m.pause(); } catch (e) {} });
+  }
+  function mediaEnter(root) {
+    $$('[data-h4s-media~="autoplay"]', root).forEach(function (w) {
+      var ms = (w.tagName === 'VIDEO' || w.tagName === 'AUDIO') ? [w] : $$('video,audio', w);
+      ms.forEach(function (m) { try { var p = m.play(); p && p.catch && p.catch(function () {}); } catch (e) {} });
+    });
+  }
+
+  /* ================================================================
+   * 深链 hash
+   * ================================================================ */
+  function parseHash() {
+    var segs = location.hash.replace(/^#\/?/, '').split('/');
+    var r = { i: 0, f: -1, kiosk: false, auto: 0, presenter: false, seen: false };
+    segs.forEach(function (s) {
+      if (!s) return;
+      if (/^\d+$/.test(s)) {
+        if (!r.seen) { r.i = parseInt(s, 10) - 1; r.seen = true; }
+        else r.f = parseInt(s, 10) - 1;
+      } else if (s === 'kiosk') r.kiosk = true;
+      else if (s === 'presenter' || s === 'present') r.presenter = true;
+      else if (/^(auto|autoplay)=/.test(s)) r.auto = parseFloat(s.split('=')[1]) || 0;
+    });
+    return r;
+  }
+
+  function updateHash() {
+    var h = '#/' + (S.i + 1) + (S.f >= 0 ? '/' + (S.f + 1) : '');
+    try { history.replaceState(null, '', h); } catch (e) {}
+  }
+
+  /* ================================================================
+   * 状态总线（双窗口演讲者视图）
+   * ================================================================ */
+  function initBus() {
+    try { bus = new BroadcastChannel('h4s:' + deckId()); } catch (e) { bus = null; }
+    if (!bus) return;
+    bus.onmessage = function (e) {
+      var m = e.data || {};
+      if (m.role !== 'presenter') return;
+      if (m.type === 'hello') { sendState(); return; }
+      if (m.type === 'cmd') act(m.action, m.arg);
+    };
+  }
+
+  function sendState() {
+    if (!bus || !isStage) return;
+    try {
+      bus.postMessage({
+        v: 1, role: 'stage', type: 'state',
+        i: S.i, f: S.f, overlay: S.overlay,
+        total: Math.round(totalSec()), kiosk: S.kiosk
+      });
+    } catch (e) {}
+  }
+
+  /* ================================================================
+   * 动作分发
+   * ================================================================ */
+  function act(name, arg) {
+    switch (name) {
+      case 'next': if (S.presenting) next(); break;
+      case 'prev': if (S.presenting) prev(); break;
+      case 'jump': if (S.presenting) go((parseInt(arg, 10) || 1) - 1, 'jump'); break;
+      case 'play': startShow(parseInt(arg, 10) ? parseInt(arg, 10) - 1 : 0); break;
+      case 'stop': endShow(); break;
+      case 'black': setOverlay(S.overlay === 'black' ? null : 'black'); break;
+      case 'white': setOverlay(S.overlay === 'white' ? null : 'white'); break;
+      case 'overview': setOverlay(S.overlay === 'overview' ? null : 'overview'); break;
+      case 'help': setOverlay(S.overlay === 'help' ? null : 'help'); break;
+      case 'drawer': if (S.presenting) toggleDrawer(); break;
+      case 'fullscreen': toggleFullscreen(); break;
+      case 'laser': toggleLaser(); break;
+      case 'rehearse': toggleRehearse(); break;
+      case 'preswin': openPresenterWindow(); break;
+    }
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(function () {});
+  }
+
+  function openPresenterWindow() {
+    var u = new URL(location.href);
+    u.hash = '#presenter';
+    var w = window.open(u.href, 'h4s-presenter', 'width=1100,height=720');
+    if (!w) toast('弹窗被浏览器拦截，请允许弹窗后重试');
+    else toast('演讲者窗口已打开（双屏时拖到副屏）');
+  }
+
+  /* ================================================================
+   * 演讲者窗口模式（role=presenter）
+   * ================================================================ */
+  function presenterMode(hash) {
+    var style = el('style', null, CSS + '' + PRESENTER_CSS);
+    document.head.appendChild(style);
+    document.title = '[演讲者] ' + document.title;
+    document.body.classList.add('h4s-presenter');
+
+    MANIFEST = readManifest();
+    DEFAULTS = MANIFEST.defaults || {};
+    if (MANIFEST.stage) {
+      MSTAGE = {
+        w: MANIFEST.stage.width || 1280, h: MANIFEST.stage.height || 720,
+        fit: MANIFEST.stage.fit || 'contain',
+        background: MANIFEST.stage.background || '#000'
+      };
+    }
+    var slides = collectSlides();
+    var n = slides.length;
+    /* deckId() 依赖 S.slides —— 填充以保证与舞台窗口同频道 */
+    S.slides = slides; S.n = n;
+
+    var ui = el('div', 'h4s-pres');
+    ui.innerHTML =
+      '<div class="col-l">' +
+        '<div class="pv"><div class="cap">当前 · <span id="h4s-p-frag"></span></div><div class="box" id="h4s-p-cur"></div></div>' +
+        '<div class="pv"><div class="cap" id="h4s-p-nextcap">' + t('nextCap') + '</div><div class="box" id="h4s-p-next"></div></div>' +
+      '</div>' +
+      '<div class="col-r">' +
+        '<div class="stats">' +
+          '<span class="big" id="h4s-p-total">00:00</span>' +
+          '<span class="dim">' + t('thisPage') + ' <b id="h4s-p-slide">00:00</b></span>' +
+          '<span class="dim" id="h4s-p-clock"></span>' +
+          '<span class="dim" id="h4s-p-page"></span>' +
+        '</div>' +
+        '<div class="cap">' + t('notes') + '</div>' +
+        '<div class="notes" id="h4s-p-notes"></div>' +
+        '<div class="btns">' +
+          '<button data-act="prev">◀ 上一页</button>' +
+          '<button data-act="next">下一页 ▶</button>' +
+          '<button data-act="black">黑屏 B</button>' +
+          '<button data-act="white">白屏 W</button>' +
+          '<button data-act="overview">总览 G</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="h4s-pres-shade" id="h4s-p-shade"></div>' +
+      '<div class="h4s-pres-warn" id="h4s-p-warn"></div>';
+    document.body.appendChild(ui);
+    var mainEl = ui;
+
+    var P = { i: 0, f: -1, overlay: null, total: 0, slideAt: Date.now(), lastMsg: 0 };
+    var localMode = false;
+    var shade = $('#h4s-p-shade', ui);
+
+    function layoutPres() {
+      /* 左列宽度按 deck 长宽比计算：两个预览区平分列高，预览无 letterbox 浪费；
+         右列显式宽度 = 余下全部 → 右列上下左右边界与左列对齐 */
+      var colL = ui.querySelector('.col-l');
+      var colR = ui.querySelector('.col-r');
+      if (!colL || !colR) return;
+      var st = stageFor(slides[P.i] || slides[0]);
+      if (!st) return;
+      var totalH = mainEl.clientHeight - 24;
+      var pvH = (totalH - 12) / 2;
+      var boxH = Math.max(120, pvH - 22);
+      var targetW = Math.round(boxH * (st.w / st.h) + 16);
+      targetW = Math.max(300, Math.min(targetW, Math.round(totalH * 1.9)));
+      colL.style.flex = 'none';
+      colL.style.width = targetW + 'px';
+      colR.style.flex = 'none';
+      colR.style.width = Math.max(280, Math.round(mainEl.clientWidth - 24 - 12 - targetW)) + 'px';
+    }
+
+    function render() {
+      layoutPres();
+      var s = slides[P.i];
+      if (!s) return;
+      var curBox = $('#h4s-p-cur', ui), nextBox = $('#h4s-p-next', ui);
+      $('#h4s-p-frag', ui).textContent = s.frags.length
+        ? (t('fragN') + (P.f + 1) + '/' + s.frags.length) : t('noFrags');
+      $('#h4s-p-page', ui).textContent = (P.i + 1) + ' / ' + n;
+      $('#h4s-p-notes', ui).innerHTML =
+        s.notesEl ? s.notesEl.innerHTML : '<span style="color:#475569">' + t('noNotes') + '</span>';
+
+      fillBox(curBox, s, P.f < 0 ? 0 : P.f + 1);
+
+      var idx = P.i, fc = 0, cap = '下一状态';
+      if (P.f < s.frags.length - 1) { fc = P.f + 2; cap = '下一状态 · 碎片 ' + (P.f + 2) + '/' + s.frags.length; }
+      else if (P.i < n - 1) { idx = P.i + 1; fc = -2; cap = '下一页 · 最终状态'; }
+      else fc = -3;
+      $('#h4s-p-nextcap', ui).textContent = cap;
+      if (fc >= 0) fillBox(nextBox, slides[idx], fc);
+      else if (fc === -2) fillBox(nextBox, slides[idx], -2);
+      else nextBox.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">— END —</div>';
+
+      /* 黑屏/白屏只作用于舞台窗（观众屏）；演讲者窗保持正常显示 */
+    }
+
+    function fillBox(box, slide, fragCount) {
+      box.innerHTML = '';
+      var st = stageFor(slide);
+      var bw = box.clientWidth || 480;
+      var bh = box.clientHeight || Math.round(bw * st.h / st.w);
+      var sc = Math.min(bw / st.w, bh / st.h); /* 宽高双约束：任何比例的页面都完整可见 */
+      var clone = (fragCount === -2) ? makeClone(slide, 'final', 0) : makeClone(slide, 'at', fragCount);
+      var ox = Math.max(0, Math.round((bw - st.w * sc) / 2));
+      var oy = Math.max(0, Math.round((bh - st.h * sc) / 2));
+      clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');left:' + ox + 'px;top:' + oy + 'px;';
+      box.appendChild(clone);
+    }
+
+    function applyLocal(a, arg) {
+      if (a === 'next') { var s = slides[P.i]; if (P.f < s.frags.length - 1) P.f++; else if (P.i < n - 1) { P.i++; P.f = -1; P.slideAt = Date.now(); } }
+      else if (a === 'prev') { if (P.f >= 0) P.f--; else if (P.i > 0) { P.i--; P.f = -1; P.slideAt = Date.now(); } }
+      else if (a === 'black' || a === 'white') { /* 本地模式无舞台，黑屏无意义 */ }
+      render();
+    }
+
+    function sendCmd(a, arg) {
+      if (localMode || !bus) { applyLocal(a, arg); return; }
+      try { bus.postMessage({ v: 1, role: 'presenter', type: 'cmd', action: a, arg: arg }); }
+      catch (e) { applyLocal(a, arg); }
+    }
+
+    on(ui, 'click', function (e) {
+      var b = e.target.closest('[data-act]');
+      if (b) sendCmd(b.getAttribute('data-act'));
+    });
+
+    on(document, 'keydown', function (e) {
+      var k = e.key;
+      if (k === 'ArrowRight' || k === ' ' || k === 'PageDown') { e.preventDefault(); sendCmd('next'); }
+      else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); sendCmd('prev'); }
+      else if (k === 'b' || k === 'B') sendCmd('black');
+      else if (k === 'w' || k === 'W') sendCmd('white');
+    });
+
+    try { bus = new BroadcastChannel('h4s:' + deckId()); } catch (e) { bus = null; }
+    if (bus) {
+      bus.onmessage = function (e) {
+        var m = e.data || {};
+        if (m.role !== 'stage' || m.type !== 'state') return;
+        P.lastMsg = Date.now();
+        $('#h4s-p-warn', ui).textContent = '';
+        if (m.i !== P.i) P.slideAt = Date.now();
+        var changed = (m.i !== P.i || m.f !== P.f || m.overlay !== P.overlay);
+        P.i = m.i; P.f = m.f; P.overlay = m.overlay;
+        P.total = m.total || 0;
+        $('#h4s-p-total', ui).textContent = fmt(P.total);
+        if (changed) render();
+      };
+      try { bus.postMessage({ v: 1, role: 'presenter', type: 'hello' }); } catch (e) {}
+    } else {
+      localMode = true;
+      $('#h4s-p-warn', ui).textContent = '未检测到舞台窗口（BroadcastChannel 需 http:// 访问），已切换本地练习模式';
+    }
+    setTimeout(function () {
+      if (!localMode && Date.now() - P.lastMsg > 2500)
+        $('#h4s-p-warn', ui).textContent = '信号中断：请确认舞台窗口仍开着';
+    }, 3000);
+
+    on(window, 'resize', render);
+    setInterval(function () {
+      $('#h4s-p-slide', ui).textContent = fmt((Date.now() - P.slideAt) / 1000);
+      $('#h4s-p-clock', ui).textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+      if (localMode) $('#h4s-p-total', ui).textContent = fmt((Date.now() - T.bootAt) / 1000);
+    }, 500);
+
+    render();
+    setTimeout(render, 120); /* 布局稳定后按真实 box 尺寸重渲染 */
+    emit('h4s:presenter-ready', { slides: n });
+  }
+
+  /* ================================================================
+   * 输入：键盘 / 鼠标 / 触摸 / 滚轮
+   * ================================================================ */
+  function pushNum(d) {
+    numBuf = (numBuf + d).slice(-3);
+    clearTimeout(numTimer);
+    numTimer = setTimeout(clearNum, 1600);
+    updateChrome();
+  }
+  function clearNum() { numBuf = ''; updateChrome(); }
+  function commitNum() {
+    if (!numBuf) return;
+    var n = parseInt(numBuf, 10);
+    clearNum();
+    if (n >= 1 && n <= S.n) {
+      if (S.presenting) go(n - 1, 'jump');
+      else selectSlide(n - 1);
+    } else toast('页码超出范围 1-' + S.n);
+  }
+
+  function handleEscape() {
+    if (laserOn) { toggleLaser(); return; }
+    if (S.overlay) { setOverlay(null); return; }
+    if (document.fullscreenElement) { endShow(); return; } /* endShow 内含退全屏 */
+    if (drawerOn) toggleDrawer();
+    if (S.presenting && !S.kiosk) endShow();
+  }
+
+  function initInput() {
+    on(document, 'keydown', function (e) {
+      var tag = (e.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+      if (S.overlay === 'overview' && OV.handleKey(e)) return;
+      var k = e.key;
+
+      /* 壳级快捷键（两种模式通用） */
+      if (k === 'F11') { e.preventDefault(); shellAction('fullscreen'); return; }
+      if (e.ctrlKey && (k === 'l' || k === 'L')) { e.preventDefault(); shellAction('openurl'); return; }
+      if (e.ctrlKey && (k === 'o' || k === 'O')) { e.preventDefault(); shellAction('openfile'); return; }
+      if (e.ctrlKey && (k === 'w' || k === 'W')) { e.preventDefault(); shellAction('close'); return; }
+      if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
+
+      /* 浏览模式键位（PowerPoint 式） */
+      if (!S.presenting) {
+        switch (k) {
+          case 'F5':
+            e.preventDefault(); startShow(e.shiftKey ? S.sel : 0); return;
+          case ' ':
+            e.preventDefault(); startShow(S.sel); return;
+          case 'Enter':
+            e.preventDefault();
+            if (numBuf) commitNum(); else startShow(S.sel);
+            return;
+          case 'ArrowDown': case 'ArrowRight':
+            e.preventDefault(); clearNum(); selectSlide(S.sel + 1); return;
+          case 'ArrowUp': case 'ArrowLeft':
+            e.preventDefault(); clearNum(); selectSlide(S.sel - 1); return;
+          case 'Home': e.preventDefault(); selectSlide(0); return;
+          case 'End': e.preventDefault(); selectSlide(S.n - 1); return;
+          case '?': setOverlay(S.overlay === 'help' ? null : 'help'); return;
+          case 'Escape':
+            if (S.overlay) setOverlay(null);
+            return;
+          default:
+            if (/^\d$/.test(k)) { e.preventDefault(); pushNum(k); }
+        }
+        return;
+      }
+
+      switch (k) {
+        case 'F5':
+          e.preventDefault(); startShow(e.shiftKey ? S.i : 0); break;
+        case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown': case 'n': case 'N':
+          e.preventDefault(); clearNum(); next(); break;
+        case 'Enter':
+          e.preventDefault();
+          if (numBuf) commitNum(); else next();
+          break;
+        case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace': case 'p': case 'P':
+          e.preventDefault(); clearNum(); prev(); break;
+        case 'Home': e.preventDefault(); clearNum(); go(0, 'jump'); break;
+        case 'End': e.preventDefault(); clearNum(); go(S.n - 1, 'jump'); break;
+        case 'b': case 'B': case '.': setOverlay(S.overlay === 'black' ? null : 'black'); break;
+        case 'w': case 'W': case ',': setOverlay(S.overlay === 'white' ? null : 'white'); break;
+        case 'f': case 'F': toggleFullscreen(); break;
+        case 'g': case 'G': setOverlay(S.overlay === 'overview' ? null : 'overview'); break;
+        case 's': case 'S': toggleDrawer(); break;
+        case 't': case 'T': togglePause(); break;
+        case 'r': case 'R': toggleRehearse(); break;
+        case 'l': case 'L': toggleLaser(); break;
+        case '?': setOverlay(S.overlay === 'help' ? null : 'help'); break;
+        case 'Escape': handleEscape(); break;
+        default:
+          if (/^\d$/.test(k)) { e.preventDefault(); pushNum(k); }
+      }
+    });
+
+    on(viewport, 'click', function (e) {
+      if (e.target.closest('a,button,video,audio,input,select,textarea,label,[data-h4s-noclick]')) return;
+      next();
+    });
+
+    on(blackout, 'click', function () { setOverlay(null); });
+
+    on(chrome, 'click', function (e) {
+      var b = e.target.closest('[data-act]');
+      if (b) act(b.getAttribute('data-act'));
+    });
+
+    var wheelLock = 0;
+    on(viewport, 'wheel', function (e) {
+      if (S.overlay) return;
+      var now = Date.now();
+      if (now - wheelLock < 350) return;
+      if (Math.abs(e.deltaY) < 12 && Math.abs(e.deltaX) < 12) return;
+      wheelLock = now;
+      if (e.deltaY > 0 || e.deltaX > 0) next(); else prev();
+      e.preventDefault();
+    }, { passive: false });
+
+    var tSX = 0, tSY = 0, tT = 0;
+    on(viewport, 'pointerdown', function (e) {
+      if (e.pointerType === 'mouse') return;
+      tSX = e.clientX; tSY = e.clientY; tT = Date.now();
+    });
+    on(viewport, 'pointerup', function (e) {
+      if (e.pointerType === 'mouse') return;
+      var dx = e.clientX - tSX, dy = e.clientY - tSY;
+      if (Date.now() - tT < 600 && Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) next(); else prev();
+      }
+    });
+
+    on(document, 'pointermove', function (e) {
+      if (laserOn) {
+        laserDot.style.left = e.clientX + 'px';
+        laserDot.style.top = e.clientY + 'px';
+      }
+    });
+
+    /* 空闲隐藏 UI */
+    on(document, 'mousemove', poke);
+    poke();
+
+    on(window, 'resize', function () { layout(); layoutBrowse(); });
+    on(document, 'fullscreenchange', function () {
+      /* 放映中被退出全屏（Esc/系统）→ 回浏览界面（kiosk 除外） */
+      if (!document.fullscreenElement && S.presenting && !S.kiosk) endShow();
+      layout(); layoutBrowse();
+    });
+  }
+
+  /* ================================================================
+   * 启动
+   * ================================================================ */
+  function fontsReady() {
+    return Promise.race([
+      (document.fonts && document.fonts.ready) || Promise.resolve(),
+      sleep(3000)
+    ]);
+  }
+
+  function initStage(hash) {
+    isStage = true;
+    buildApp();
+    /* 把幻灯片搬进舞台（脱离原文档流，进入固定坐标系） */
+    S.slides.forEach(function (s) {
+      s.el.classList.add('h4s-in');
+      s.el.style.display = 'none';
+      holder.appendChild(s.el);
+    });
+    initInput();
+    initBus();
+
+    document.body.classList.add('h4s-live');
+    if (DEFAULTS.progress === false) progress.style.display = 'none';
+
+    viewport.style.setProperty('--h4s-letterbox', MSTAGE.background);
+    applyStageSize(S.slides[0]);
+    layout(); /* 初始缩放：确保舞台在任何启动路径下都有正确的 transform */
+
+    S.kiosk = hash.kiosk;
+    if (hash.kiosk) {
+      document.body.classList.add('h4s-kiosk');
+      S.loop = true;
+      document.body.classList.add('h4s-idle');
+    }
+    AUTO_PARAM = hash.auto || 0;
+    S.loop = S.loop || !!DEFAULTS.loop;
+
+    /* 不等字体就绪——字体异步加载后文字自动更新，
+       门控会导致 document.fonts.ready 在某些 WebView2 环境不 resolve 时整个初始化卡死 */
+    try {
+      buildBrowse();
+      if (hash.kiosk || hash.auto > 0) {
+        startShow(0, hash.f);
+      } else if (hash.i > 0 || hash.f >= 0) {
+        startShow(clamp(hash.i, 0, S.n - 1), hash.f);
+      } else {
+        endShow();
+      }
+      updateChrome();
+      emit('h4s:ready', { count: S.n, index: S.sel, presenting: S.presenting });
+      console.info('[h4s] player v' + VERSION + ' 就绪：' + S.n + ' 页' +
+        (S.presenting ? '（放映中）' : '（浏览模式）'));
+    } catch (e) {
+      var d = document.createElement('div');
+      d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;padding:12px 20px;z-index:99999;font:14px/1.5 monospace;white-space:pre-wrap;';
+      d.textContent = '[h4s] 初始化错误: ' + (e.stack || e.message || String(e));
+      document.body.appendChild(d);
+      console.error('[h4s] init error:', e.stack || e.message);
+    }
+  }
+
+  function boot() {
+    var hash = parseHash();
+    if (hash.presenter) { presenterMode(hash); return; }
+
+    MANIFEST = readManifest();
+    DEFAULTS = MANIFEST.defaults || {};
+    if (MANIFEST.stage) {
+      MSTAGE = {
+        w: MANIFEST.stage.width || 1280, h: MANIFEST.stage.height || 720,
+        fit: MANIFEST.stage.fit || 'contain',
+        background: MANIFEST.stage.background || '#000'
+      };
+    }
+    S.slides = collectSlides();
+    S.n = S.slides.length;
+    if (!S.n) {
+      console.info('[h4s] 未发现幻灯片结构，保持文档模式');
+      return;
+    }
+    initStage(hash);
+  }
+
+  try { boot(); } catch (e) { console.error('[h4s] 启动失败，保持文档模式', e); }
+
+  /* ================================================================
+   * 对外 API
+   * ================================================================ */
+  window.H4S = {
+    version: VERSION,
+    next: next, prev: prev,
+    go: function (n) { go((parseInt(n, 10) || 1) - 1, 'jump'); },
+    present: function (n) { startShow((parseInt(n, 10) || 1) - 1); },
+    stop: endShow,
+    state: function () { return { i: S.i, f: S.f, overlay: S.overlay, kiosk: S.kiosk, presenting: S.presenting, sel: S.sel }; },
+    toggleOverview: function () { setOverlay(S.overlay === 'overview' ? null : 'overview'); },
+    toggleDrawer: toggleDrawer,
+    toggleLaser: toggleLaser,
+    toggleFullscreen: toggleFullscreen,
+    timings: function () { return RH.log; }
+  };
+})();
+
+</script>
+</body>
+</html>

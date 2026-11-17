@@ -1,0 +1,212 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>html4s · 全特性参考 Deck</title>
+
+<!--
+  H4S 全特性参考模板 v0.1
+  逐条实现 ARCHITECTURE.md §3 的全部特殊标记与数据，
+  同时是播放器的验收用例与 AI 创作的样式参考。
+  用浏览器打开即进入播放器模式；深链示例：
+    #/4        → 跳第 4 页    #kiosk    → 自动循环播放
+    #/6        → 自动播放演示页
+-->
+
+<!-- H4S 清单：机器元数据（L1 Core） -->
+<script type="application/h4s+json">
+{
+  "h4s": "1.0",
+  "meta": {
+    "title": "html4s · 全特性参考 Deck",
+    "author": "Html4s Project",
+    "lang": "zh-CN"
+  },
+  "stage": {
+    "width": 1280,
+    "height": 720,
+    "fit": "contain",
+    "background": "#05070a"
+  },
+  "defaults": {
+    "transition": { "name": "fade", "duration": 300 },
+    "fragment": { "effect": "fade-up", "delay": 150 },
+    "autoslide": 0,
+    "loop": false,
+    "progress": true,
+    "slideNumber": true
+  }
+}
+</script>
+
+<style>
+  /* ===== 设计令牌 ===== */
+  :root {
+    --bg: #0b0f14; --panel: #111827; --ink: #e8edf2; --ink-dim: #94a3b8;
+    --accent: #7dd3fc; --warn: #fbbf24; --ok: #34d399; --line: #1f2937;
+  }
+
+  /* ===== 文档模式兜底（无 JS 时本文件仍是可读网页；播放器会接管布局） ===== */
+  h4s-deck, h4s-slide, h4s-notes { display: block; }
+  h4s-notes { display: none; }
+  h4s-slide {
+    width: 1280px; height: 720px; margin: 24px auto;
+    box-sizing: border-box; position: relative; overflow: hidden;
+    background: var(--bg); color: var(--ink);
+    font-family: system-ui, "Microsoft YaHei", "PingFang SC", sans-serif;
+    padding: 72px 96px;
+  }
+  @media print { h4s-slide { margin: 0; page-break-after: always; } }
+
+  /* ===== 通用排版 ===== */
+  h4s-slide h1 { font-size: 84px; margin: 0 0 20px; letter-spacing: 1px; }
+  h4s-slide h2 { font-size: 52px; margin: 0 0 36px; color: var(--accent); }
+  h4s-slide p  { font-size: 28px; color: var(--ink-dim); line-height: 1.6; }
+  h4s-slide ul { font-size: 30px; line-height: 2; padding-left: 1.2em; }
+  h4s-slide code {
+    font-family: Consolas, ui-monospace, monospace; font-size: .8em;
+    background: var(--panel); border: 1px solid var(--line);
+    padding: 2px 8px; border-radius: 6px; color: var(--warn);
+  }
+  .accent { color: var(--warn); } .ok { color: var(--ok); }
+  .kicker { font-size: 22px; letter-spacing: 4px; color: var(--accent); margin: 0 0 18px; }
+  .card {
+    background: var(--panel); border: 1px solid var(--line); border-radius: 12px;
+    padding: 28px 32px; font-size: 26px; line-height: 1.7; color: var(--ink);
+  }
+  .cols { display: flex; gap: 32px; margin-top: 40px; }
+  .cols > * { flex: 1; }
+  .badge {
+    display: inline-block; font-size: 20px; color: var(--bg); background: var(--accent);
+    border-radius: 999px; padding: 4px 18px; margin-bottom: 24px; font-weight: 600;
+  }
+  #ev-log {
+    list-style: none; margin: 16px 0 0; padding: 16px 20px; height: 300px; overflow: auto;
+    background: #05070a; border: 1px solid var(--line); border-radius: 10px;
+    font-family: Consolas, ui-monospace, monospace; font-size: 22px; color: var(--ok);
+  }
+</style>
+</head>
+<body>
+
+<h4s-deck>
+
+  <!-- 1 · 封面：per-slide 转场 zoom -->
+  <h4s-slide id="cover" data-h4s-title="封面" data-h4s-transition="zoom">
+    <p class="kicker">HYPERTEXT MARKUP LANGUAGE FOR SLIDES</p>
+    <h1>html4s</h1>
+    <p>全特性参考 Deck —— 一个文件演示<span class="accent">全部规范标记</span></p>
+    <h4s-notes hidden>
+      <p>这是播放器验收用例。演示路径：先按 G 看总览，再逐页走一遍。</p>
+    </h4s-notes>
+  </h4s-slide>
+
+  <!-- 2 · 碎片全览：效果 / 顺序覆盖 / 延迟 -->
+  <h4s-slide id="frag" data-h4s-title="碎片效果全览" data-h4s-layout="bullets">
+    <h2>碎片效果全览 <small style="font-size:24px;color:var(--ink-dim)">（按 → 逐步显示）</small></h2>
+    <ul>
+      <li data-h4s-frag>默认效果 <code>fade-up</code>（来自清单 defaults.fragment.effect）</li>
+      <li data-h4s-frag="slide-left">覆盖效果 <code>data-h4s-frag="slide-left"</code></li>
+      <li data-h4s-frag="zoom">覆盖效果 <code>zoom</code></li>
+      <li data-h4s-frag="fade" data-h4s-frag-delay="600">带 600ms 延迟的 <code>fade</code>（自动播放模式下生效）</li>
+    </ul>
+    <div class="card" style="margin-top:24px" data-h4s-frag="zoom" data-h4s-frag-order="2">
+      顺序覆盖：<code>data-h4s-frag-order="2"</code> —— 我排在第 2 位，但写在最后
+    </div>
+    <h4s-notes hidden>
+      <p>碎片在文档模式与打印时全部可见（无 JS 降级原则）。注意：order=2 的卡片在"zoom 列表项"之前出现。</p>
+    </h4s-notes>
+  </h4s-slide>
+
+  <!-- 3 · 转场演示：本页 push，下一页 wipe -->
+  <h4s-slide id="trans" data-h4s-title="转场演示" data-h4s-transition="push">
+    <h2>转场演示</h2>
+    <div class="cols">
+      <div class="card">进入本页用的是 <code>push</code><br><span style="color:var(--ink-dim)">data-h4s-transition="push"</span></div>
+      <div class="card">下一页是 <code>wipe</code><br><span style="color:var(--ink-dim)">观察翻页差异</span></div>
+    </div>
+    <p style="margin-top:32px">内置转场：fade / slide / push / wipe / zoom / flip / none · 尊重 <code>prefers-reduced-motion</code></p>
+    <h4s-notes hidden><p>强调：转场由播放器负责（WAAPI），作者只声明名字，保证确定性。</p></h4s-notes>
+  </h4s-slide>
+
+  <!-- 4 · 混合比例：1024×768 舞台覆盖 -->
+  <h4s-slide id="ratio" data-h4s-title="混合比例 · 1024×768" data-h4s-stage="1024x768" data-h4s-transition="wipe">
+    <span class="badge">1024 × 768（4:3）</span>
+    <h2>逐页舞台覆盖</h2>
+    <p>本页用 <code>data-h4s-stage="1024x768"</code> 声明了自己的比例，</p>
+    <p>播放器对它单独 Letterbox，其余页保持 16:9 —— 比 PowerPoint 的混合比例做得更好。</p>
+    <h4s-notes hidden><p>注意黑边宽度变化。转场进入本页为 wipe。</p></h4s-notes>
+  </h4s-slide>
+
+  <!-- 5 · 演讲者视图指引 -->
+  <h4s-slide id="presenter" data-h4s-title="演讲者视图" data-h4s-transition="fade">
+    <h2>演讲者视图</h2>
+    <div class="cols">
+      <div class="card">
+        <b>同屏抽屉</b><br>按 <code>S</code><br><span style="color:var(--ink-dim)">右侧出抽屉：下一状态预览 + 备注 + 计时器，舞台自动让位</span>
+      </div>
+      <div class="card">
+        <b>双窗口</b><br>点工具条 <code>⧉</code><br><span style="color:var(--ink-dim)">需 http:// 访问；双屏时把窗口拖到副屏</span>
+      </div>
+    </div>
+    <h4s-notes hidden>
+      <p>这条备注正显示在演讲者视图里。本页无碎片，试试第 2 页对比。</p>
+    </h4s-notes>
+  </h4s-slide>
+
+  <!-- 6 · 自动播放 / 排练 / 计时 -->
+  <h4s-slide id="auto" data-h4s-title="自动播放与计时" data-h4s-autoslide="8" data-h4s-transition="fade">
+    <h2>自动播放与计时</h2>
+    <ul>
+      <li data-h4s-frag class="ok">本页声明 <code>data-h4s-autoslide="8"</code>：8 秒后自动翻页（底部黄条倒计时）</li>
+      <li data-h4s-frag>工具条 <code>⏺</code> 或按 <code>R</code>：排练录制，结束后 console.table 输出明细</li>
+      <li data-h4s-frag>按 <code>T</code> 暂停计时；<code>B</code>/<code>W</code> 黑白屏时自动播放挂起</li>
+      <li data-h4s-frag class="accent">深链 <code>#kiosk</code> 进入无人值守循环模式</li>
+    </ul>
+    <h4s-notes hidden><p>黄条走完即翻页，演示 kiosk 场景。</p></h4s-notes>
+  </h4s-slide>
+
+  <!-- 7 · L4 事件演示：页内脚本 + h4s:* 事件 -->
+  <h4s-slide id="events" data-h4s-title="L4 · 事件与页内脚本" data-h4s-transition="slide">
+    <h2>L4 · 事件与页内脚本</h2>
+    <p>本页自带脚本，监听播放器的 <code>h4s:*</code> 事件并实时记录（翻页/按碎片后回到本页查看）：</p>
+    <ul id="ev-log"></ul>
+    <script>
+      (function () {
+        var list = document.getElementById('ev-log');
+        function row(t) {
+          var li = document.createElement('li');
+          li.textContent = '› ' + t;
+          list.appendChild(li);
+          list.scrollTop = list.scrollHeight;
+        }
+        row('h4s:ready 已监听');
+        document.addEventListener('h4s:slidechange', function (e) {
+          row('slidechange → 第 ' + (e.detail.index + 1) + ' 页「' + e.detail.title + '」');
+        });
+        document.addEventListener('h4s:fragchange', function (e) {
+          row('fragchange → 碎片 ' + (e.detail.frag + 1) + '/' + e.detail.total);
+        });
+        document.addEventListener('h4s:rehearse', function (e) {
+          row('rehearse → 共 ' + e.detail.pages + ' 页记录');
+        });
+      })();
+    </script>
+    <h4s-notes hidden><p>演示 deck 不绑框架 API：页内脚本只通过事件与播放器协作。</p></h4s-notes>
+  </h4s-slide>
+
+  <!-- 8 · 结束页 -->
+  <h4s-slide id="end" data-h4s-title="谢谢" data-h4s-transition="fade">
+    <h1>谢谢</h1>
+    <p>深链直达：<code>#/4</code> 混合比例 · <code>#/2</code> 碎片 · <code>#kiosk</code> 自动循环</p>
+    <p>规范 <code>ARCHITECTURE.md §3</code> · 运行时 <code>player/h4s.player.js</code></p>
+    <h4s-notes hidden><p>Q&amp;A。备答：为什么不基于 reveal.js？—— deck 不应绑定框架 API。</p></h4s-notes>
+  </h4s-slide>
+
+</h4s-deck>
+
+<!-- 运行时：构建期会内嵌为单文件；开发期相对路径引用 -->
+<script src="../player/h4s.player.js"></script>
+</body>
+</html>

@@ -1,0 +1,8 @@
+[
+  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-chinese-simplified-200-normal.woff2", "weight": 200 },
+  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-chinese-simplified-300-normal.woff2", "weight": 300 },
+  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-chinese-simplified-400-normal.woff2", "weight": 400 },
+  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-latin-200-normal.woff2", "weight": 200 },
+  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-latin-300-normal.woff2", "weight": 300 },
+  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-latin-400-normal.woff2", "weight": 400 }
+]

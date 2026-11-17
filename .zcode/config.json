@@ -1,0 +1,13 @@
+{
+  "mcp": {
+    "servers": {
+      "html4s": {
+        "command": "node",
+        "args": [
+          "D:/MyProjects/Html4s/tools/h4s-mcp.mjs"
+        ],
+        "env": {}
+      }
+    }
+  }
+}

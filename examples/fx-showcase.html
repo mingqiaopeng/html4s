@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-family="swiss" data-medium="slide" data-theme="brand">
+<head>
+<meta charset="utf-8">
+<title>转场特效演示 · html4s v0.3</title>
+<script type="application/h4s+json">
+{
+  "h4s": "1.0",
+  "meta": { "title": "转场特效演示 · html4s v0.3", "lang": "zh-CN" },
+  "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "transparent" },
+  "defaults": {
+    "transition": { "name": "fade", "duration": 700, "color": "#1f2937" },
+    "fx": "stars",
+    "autoslide": 0, "loop": false
+  },
+  "fonts": []
+}
+</script>
+<style>
+/* 兼容 guizang swiss 主题的最小基底（借用 html4s-intro 的 token 精简版） */
+:root{
+  --paper:#fafaf8;--paper-2:#f0f0ee;--ink:#0a0a0a;--muted:#737373;--grey-1:#f0f0ee;--grey-2:#d4d4d2;--grey-3:#737373;
+  --accent:#c8102e;--accent-on:#ffffff;--accent-ink:#c8102e;--accent-rgb:200,16,46;--accent-on-rgb:255,255,255;
+  --text-primary:#0a0a0a;--text-body:#252524;--text-secondary:#525252;--text-helper:#737373;
+  --line:#d4d4d2;--sans:'Noto Sans SC','Microsoft YaHei',sans-serif;--sans-zh:'Noto Sans SC','Microsoft YaHei',sans-serif;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;--serif-zh:'Noto Serif SC',serif;
+}
+html,body{margin:0;background:#101010;font-family:var(--sans)}
+.slide{position:relative;width:1920px;height:1080px;margin:0 auto;overflow:hidden;display:flex;flex-direction:column;background:var(--paper)}
+.slide.accent{background:var(--accent)}
+.slide.accent .h-xl,.slide.accent h1{color:var(--accent-on)}
+.canvas-card{display:flex;flex-direction:column;flex:1;padding:43.2px 61.44px 36px;position:relative}
+.chrome-min{display:flex;justify-content:space-between;font-family:var(--mono);font-size:18px;letter-spacing:.08em;color:var(--text-helper);margin-bottom:24px}
+.slide.accent .chrome-min,.slide.accent .chrome-min .l,.slide.accent .chrome-min .r{color:rgba(255,255,255,.88)}
+.slide.accent .t-cat{color:rgba(255,255,255,.8)}
+.slide.accent .lead{color:rgba(255,255,255,.92)}
+.t-cat{font-family:var(--mono);font-size:18px;letter-spacing:.18em;color:var(--text-helper);text-transform:uppercase}
+.slide.accent .t-cat{color:rgba(255,255,255,.85)}
+.lead{font-size:26px;line-height:1.6;font-weight:300}
+</style>
+</head>
+<body>
+<h4s-deck>
+
+<section class="slide accent" data-h4s-transition="zoomblur"  data-slide-id="cover" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 01 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">COVER · 缩放模糊</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--accent-on)">转场特效<br>演示</h1>
+      <p class="lead" style="max-width:60ch;color:rgba(255,255,255,.9)">html4s v0.3 播放器新增 12 种转场与 4 种背景特效——零依赖、纯 WAAPI、单文件。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:rgba(255,255,255,.75)">
+        <span style="color:#fff">data-h4s-transition="<b style="color:#fff">zoomblur</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】定调：本 deck 每翻一页换一种转场效果。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="zoomblur"  data-slide-id="t-zoomblur" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 02 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">01 · ZOOM-BLUR</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">缩放模糊</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">大字从模糊中聚焦而来——适合章节开场与金句。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">zoomblur</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】zoomblur：大字聚焦效果。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="cube"  data-slide-id="t-cube" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 03 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">02 · CUBE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">三维推转</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">带透视的三维推转——适合"翻到下一章"。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">cube</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】cube：3D 透视推转。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="iris"  data-slide-id="t-iris" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 04 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">03 · IRIS</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">圆形揭开</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">从中心圆形展开——聚焦单一大图或单一信息。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">iris</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】iris：圆形揭开，聚焦型转场。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="unfold"  data-slide-id="t-unfold" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 05 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">04 · UNFOLD</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">中线展开</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">从中线向上下展开，像展开一幅卷轴。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">unfold</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】unfold：卷轴式展开。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="rise"  data-slide-id="t-rise" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 06 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">05 · RISE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">托起</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">页面从下方托起并恢复饱和度——温和的章节递进。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">rise</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】rise：托起转场。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="dissolve"  data-slide-id="t-dissolve" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 07 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">06 · DISSOLVE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">溶解</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">步进式溶解——老胶片的味道。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">dissolve</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】dissolve：steps 溶解。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="curtain"  data-slide-id="t-curtain" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 08 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">07 · CURTAIN</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">幕布</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">红色幕布合拢再展开——舞台剧的仪式感。默认色可用清单 transition.color 配置。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">curtain</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】curtain：幕布合拢，PowerPoint 同款。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="blinds"  data-slide-id="t-blinds" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 09 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">08 · BLINDS</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">百叶窗</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">十条叶片交错闭合与打开。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">blinds</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】blinds：百叶窗。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="checkerboard"  data-slide-id="t-checkerboard" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 10 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">09 · CHECKERBOARD</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">棋盘</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">36 块方格交错盖下再揭开。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">checkerboard</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】checkerboard：棋盘遮罩。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="pixelate"  data-slide-id="t-pixelate" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 11 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">10 · PIXELATE</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">像素溶解</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">100 块随机顺序像素化——数字世界的感觉。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">pixelate</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】pixelate：随机像素溶解。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="fade"  data-slide-id="fx-stars" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 12 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">FX · 背景特效</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">星空漂移</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">本页清单或全局 defaults.fx = "stars"——粒子层置于内容之下，放映时渲染、离开自动暂停。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">fade</b>"</span>
+        <span style="color:var(--text-secondary)"><span>manifest: "fx": "stars" | "snow" | "dust"</span></span>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】背景特效：stars。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide light" data-h4s-transition="curtain" data-h4s-fx="confetti" data-slide-id="t-confetti" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 13 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">FX · 礼花</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--ink)">礼花时刻</h1>
+      <p class="lead" style="max-width:60ch;color:var(--text-secondary)">本页标记 data-h4s-fx="confetti"——进入时金色礼花爆发一次，适合收束页与表彰时刻。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:var(--text-helper)">
+        <span style="color:var(--text-secondary)">data-h4s-transition="<b style="color:var(--accent)">curtain</b>"</span>
+        <span style="color:var(--text-secondary)">data-h4s-fx="confetti"</span>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】confetti：礼花爆发。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide accent" data-h4s-transition="zoomblur"  data-slide-id="closing" data-h4s-title="undefined">
+  <div class="canvas-card">
+    <header class="chrome-min">
+      <div class="l">转场特效演示 · html4s v0.3</div>
+      <div class="r">FX · 14 / 14</div>
+    </header>
+    <div style="flex:1;display:grid;align-content:center;gap:28px">
+      <span class="t-cat">CLOSING</span>
+      <h1 style="font-weight:200;font-size:110px;letter-spacing:-.03em;margin:0;line-height:1.05;color:var(--accent-on)">配合原有<br>slide/push/wipe/flip</h1>
+      <p class="lead" style="max-width:60ch;color:rgba(255,255,255,.9)">原 6 种转场全部保留。新转场写法与旧完全一致——清单 defaults 或每页 data-h4s-transition。</p>
+      <div style="display:grid;gap:10px;font-size:22px;line-height:1.5;color:rgba(255,255,255,.75)">
+        <span style="color:#fff">data-h4s-transition="<b style="color:#fff">zoomblur</b>"</span>
+        
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】收束。</p>
+    <p>【要点】方向键进入本页即可看到转场效果。</p>
+    <p>【转场】继续下一页看更多效果。</p>
+  </h4s-notes>
+</section>
+</h4s-deck>
+<script src="../player/h4s.player.js"></script>
+</body>
+</html>
