@@ -692,6 +692,29 @@ internal class StageWindow : Form
             string diag = await core.ExecuteScriptAsync(
                 "JSON.stringify({hash:location.hash,live:document.body.classList.contains('h4s-live'),kiosk:document.body.classList.contains('h4s-kiosk')})");
             Program.Log("[A] kiosk diag: " + diag);
+            /* 普通 HTML 兼容：页面无播放器且无幻灯片结构 → 注入播放器（安装包 player/ 内嵌源），
+               播放器 boot 检测 S.n=0 → 启用"网页放映模式"（F5 全屏按屏翻页） */
+            if (!_playerOk && !_kiosk)
+            {
+                var noPlayer = await core.ExecuteScriptAsync(
+                    "(typeof window.H4S==='undefined' && !document.querySelector('h4s-deck,h4s-slide,.slides'))");
+                Program.Log("[A] noPlayer 查询: " + noPlayer + " · kiosk=" + _kiosk + " · playerOk=" + _playerOk);
+                if (noPlayer == "true")
+                {
+                    /* player 源定位：安装布局（{app}\Player → {app}\player）与源码树（bin 三层上）都尝试 */
+                    var playerSrc = new[] {
+                        Path.Combine(AppContext.BaseDirectory, "..", "player", "h4s.player.js"),
+                        Path.Combine(AppContext.BaseDirectory, "..", "..", "..", "..", "..", "player", "h4s.player.js"),
+                    }.FirstOrDefault(File.Exists);
+                    if (playerSrc != null)
+                    {
+                        var src = File.ReadAllText(playerSrc);
+                        await core.ExecuteScriptAsync(src);
+                        Program.Log("[A] 普通 HTML：已注入播放器（网页放映模式，源=" + playerSrc + "）");
+                    }
+                    else Program.Log("[A] 普通 HTML 未接管但未找到 player 源（跳过注入）");
+                }
+            }
         }
         catch { }
     }

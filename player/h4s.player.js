@@ -156,6 +156,16 @@
     /* 遮罩式转场覆盖层（curtain/blinds/checkerboard/pixelate） */
     '.h4s-tmask{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;}',
 
+    /* 网页放映：普通 HTML（无幻灯片结构）的兼容播放 */
+    '.h4s-webp .h4s-webhint{display:none!important;}',
+    '.h4s-webhint{position:fixed;left:14px;bottom:14px;z-index:66;background:#1e293b;color:#93c5fd;',
+    '  font-size:13px;padding:8px 14px;border-radius:6px;border:1px solid #334155;}',
+    'body[data-ui] .h4s-webhint{background:#1e293b;}',
+    '.h4s-webbadge{position:fixed;right:16px;bottom:14px;z-index:66;background:rgba(13,17,23,.85);color:#c9d1d9;',
+    '  font:13px system-ui;padding:6px 12px;border-radius:6px;pointer-events:none;}',
+    'body.h4s-webp .h4s-webbadge{display:block;}',
+    '.h4s-webbadge{display:none;}',
+
     /* 文字微调（浏览模式编辑） */
     'body.h4s-editing .h4s-clone [data-h4s-editable]{outline:1px dashed rgba(59,130,246,.55);outline-offset:2px;cursor:text;}',
     'body.h4s-editing .h4s-clone [data-h4s-editable][contenteditable="true"]{outline:2px solid #3b82f6;background:rgba(59,130,246,.06);}',
@@ -1291,13 +1301,24 @@
   }
   /* 可编辑目标 = 任意非空文本节点（含混合内容元素内的文本，如带 <br/>/<span> 的标题） */
   var ED_SKIP = /^(SCRIPT|STYLE|CANVAS|SVG|VIDEO|AUDIO|BR|IFRAME|OBJECT|TEMPLATE|H4S-NOTES)$/;
-  function textNodesOf(root) {
+  function textNodesOf(root, visibleOnly) {
     var out = [];
     var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
       acceptNode: function (n) {
         var t = n.parentNode;
         if (!t || ED_SKIP.test(t.tagName)) return NodeFilter.FILTER_REJECT;
-        return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        if (!n.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        if (visibleOnly) {
+          /* 结构性隐藏过滤：display:none / visibility:hidden 的元素不可编辑。
+             不检查 opacity——动画初始态（如 [data-anim]）在克隆中会被显式可见化，
+             误判会导致大面积漏标（实测）。 */
+          var el = t;
+          for (var d = 0; el && d < 12; d++, el = el.parentElement) {
+            var cs = getComputedStyle(el);
+            if (cs.display === 'none' || cs.visibility === 'hidden') return NodeFilter.FILTER_REJECT;
+          }
+        }
+        return NodeFilter.FILTER_ACCEPT;
       }
     });
     while (w.nextNode()) {
@@ -1306,6 +1327,17 @@
       out.push({ node: tn, parent: parent, tIdx: idx });
     }
     return out;
+  }
+  /* 点击位置精确定位：返回被点中的文本节点（及其容器），无命中回退第一个可见文本节点 */
+  function textNodeAt(x, y, root) {
+    var el = document.elementFromPoint(x, y);
+    if (el && (!root || root.contains(el))) {
+      var range = document.caretRangeFromPoint ? document.caretRangeFromPoint(x, y) : null;
+      if (range && range.startContainer.nodeType === 3 && root.contains(range.startContainer))
+        return { node: range.startContainer, parent: range.startContainer.parentElement };
+    }
+    var list = textNodesOf(root, true);
+    return list.length ? list[0] : null;
   }
   /* 内嵌子集缺字检测：返回文本中不被任何内嵌族子集覆盖的字符（无指纹/无内嵌字体返回 []） */
   function findLack(text) {
@@ -1325,7 +1357,7 @@
   }
   function markEditable() {
     $$('.h4s-clone', miniBox).forEach(function (c) {
-      textNodesOf(c).forEach(function (tn) { tn.parent.setAttribute('data-h4s-editable', ''); });
+      textNodesOf(c, true).forEach(function (tn) { tn.parent.setAttribute('data-h4s-editable', ''); });
     });
   }
   function setEdit(on) {
@@ -1417,13 +1449,10 @@
     if (!ED.on) return;
     var parent = e.target.closest('[data-h4s-editable]');
     if (!parent) return;
-    /* 定位父元素内第一个非空文本节点（混合元素如 <h1>文字<br/>文字 也支持） */
-    var tn = null;
-    for (var k = 0; k < parent.childNodes.length; k++) {
-      var n = parent.childNodes[k];
-      if (n.nodeType === 3 && n.nodeValue.trim()) { tn = n; break; }
-    }
-    if (!tn) return;
+    /* caret 精确定位：优先锁定被点中的那个文本节点（混合元素内多段文字可分别编辑） */
+    var hit = textNodeAt(e.clientX, e.clientY, parent);
+    if (!hit || !hit.node) return;
+    var tn = hit.node;
     var cloneSlide = parent.closest('.h4s-clone');
     var path = elPathOf(parent, cloneSlide);
     if (!path) return;
@@ -1459,6 +1488,66 @@
     document.execCommand('insertText', false, txt);
   });
 
+  }
+
+  /* ================================================================
+   * 网页放映：普通 HTML（无幻灯片结构）的兼容播放
+   * F5 全屏 → 方向键/空格按屏滚动翻页 → Esc 退出。内容零改动。
+   * ================================================================ */
+  var WP = { on: false };
+  function wpInfo() {
+    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    var step = window.innerHeight * 0.9;
+    var total = Math.max(1, Math.ceil(max / step) + 1);
+    var cur = Math.min(total, Math.max(1, Math.round(window.scrollY / step) + 1));
+    return { cur: cur, total: total };
+  }
+  function wpBadge() {
+    var b = document.querySelector('.h4s-webbadge');
+    if (b && WP.on) {
+      var w = wpInfo();
+      b.textContent = w.cur + ' / ' + w.total + ' 屏 · → 翻页 · Esc 退出';
+    }
+  }
+  function wpStep(dir) {
+    window.scrollBy({ top: dir * window.innerHeight * 0.9, behavior: 'smooth' });
+    setTimeout(wpBadge, 420);
+  }
+  function wpShow() {
+    if (WP.on) return;
+    WP.on = true;
+    document.body.classList.add('h4s-webp');
+    if (!document.querySelector('.h4s-webbadge')) {
+      var b = el('div', 'h4s-webbadge');
+      document.body.appendChild(b);
+    }
+    try { document.documentElement.requestFullscreen().catch(function () {}); } catch (e) {}
+    window.scrollTo(0, 0);
+    wpBadge();
+    toast('网页放映：方向键/空格按屏翻页，Esc 退出');
+  }
+  function wpHide() {
+    WP.on = false;
+    document.body.classList.remove('h4s-webp');
+    try { if (document.fullscreenElement) document.exitFullscreen().catch(function () {}); } catch (e) {}
+  }
+  function initWebPresent() {
+    /* 文档模式下的极简入口横幅（不与 deck 内容冲突） */
+    var hint = el('div', 'h4s-webhint');
+    hint.innerHTML = '未检测到幻灯片结构 · <b>F5</b> 网页放映（全屏按屏翻页） · Esc 退出';
+    document.body.appendChild(hint);
+    on(document, 'keydown', function (e) {
+      var k = e.key;
+      if (k === 'F5') { e.preventDefault(); WP.on ? wpHide() : wpShow(); return; }
+      if (!WP.on) return;
+      if (k === 'ArrowRight' || k === ' ' || k === 'PageDown' || k === 'ArrowDown') { e.preventDefault(); wpStep(1); }
+      else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'ArrowUp') { e.preventDefault(); wpStep(-1); }
+      else if (k === 'Home') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(wpBadge, 420); }
+      else if (k === 'End') { e.preventDefault(); window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }); setTimeout(wpBadge, 420); }
+      else if (k === 'Escape') { e.preventDefault(); wpHide(); }
+    });
+    on(window, 'scroll', function () { if (WP.on) wpBadge(); }, { passive: true });
+    on(window, 'resize', function () { if (WP.on) wpBadge(); });
   }
 
   /* 进入放映（i=起始页，fragHint>=0 时直接呈现到该碎片状态） */
@@ -2108,7 +2197,8 @@
     S.slides = collectSlides();
     S.n = S.slides.length;
     if (!S.n) {
-      console.info('[h4s] 未发现幻灯片结构，保持文档模式');
+      console.info('[h4s] 未发现幻灯片结构，启用网页放映模式');
+      initWebPresent();
       return;
     }
     /* 文字微调快照：保存接管前的原始文档（导出/写回的基底） */
