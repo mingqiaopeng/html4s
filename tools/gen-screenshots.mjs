@@ -11,8 +11,8 @@ async function shot(send, name) {
   console.log('✓', name);
 }
 
-/* ---- 图1：浏览界面（2027-dangjian 深色，1600×1000 视口） ---- */
-fs.copyFileSync('D:/MyProjects/Html4s/examples/2027-dangjian.html4s', process.env.TEMP + '/s1.html');
+/* ---- 图1：浏览界面（项目介绍 deck 深色科技风，1600×1000 视口） ---- */
+fs.copyFileSync('D:/MyProjects/Html4s/examples/html4s-intro-fs.html4s', process.env.TEMP + '/s1.html');
 await withPage('file:///' + process.env.TEMP.replace(/\\/g, '/') + '/s1.html', async ({ send, ev }) => {
   for (let i = 0; i < 40; i++) { if (await ev(`!!document.querySelector('.h4s-pageinfo')`)) break; await new Promise(r => setTimeout(r, 150)); }
   await ev(`document.querySelectorAll('.h4s-sidecell')[2].click()`);  /* 选中第 3 页让缩略图描边可见 */
