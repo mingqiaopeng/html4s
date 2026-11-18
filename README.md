@@ -113,6 +113,10 @@ MCP server 把 lint/shot/outline/build/pdf 暴露给 AI Agent，打开项目即�
 
 需要 WebView2 运行时（Windows 10/11 系统自带）。
 
+### 示例 deck
+
+**项目介绍 deck**（本 README 的演示版，frontend-slides-html4s 技能生成）：[examples/html4s-intro-fs.html4s](examples/html4s-intro-fs.html4s) —— 8 页含竞品对比表、主要优点、不适用场景与背景特效演示。双击或拖入播放器即可放映。
+
 ### 播放
 
 | 操作 | 按键 |
@@ -159,7 +163,7 @@ player/    播放器运行时（h4s.player.js ~91KB 零依赖单文件）
 shell/     Windows 桌面壳（.NET 10 + WebView2）
 tools/     工具链（lint/shot/pdf/build/slides/fonts/cdp/mcp/gz-theme）
 skills/    三个创作技能（guizang / frontend-slides / huashu）
-examples/  示例 deck（含转场特效演示 fx-showcase、党建示例）
+examples/  示例 deck（项目介绍 intro-fs / 转场特效演示 fx-showcase / 党建示例等）
 docs/      架构 / 发布说明 / 能力矩阵 / 许可 / MCP 注册
 ```
 

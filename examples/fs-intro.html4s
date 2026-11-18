@@ -305,6 +305,16 @@
     /* 遮罩式转场覆盖层（curtain/blinds/checkerboard/pixelate） */
     '.h4s-tmask{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;}',
 
+    /* 网页放映：普通 HTML（无幻灯片结构）的兼容播放 */
+    '.h4s-webp .h4s-webhint{display:none!important;}',
+    '.h4s-webhint{position:fixed;left:14px;bottom:14px;z-index:66;background:#1e293b;color:#93c5fd;',
+    '  font-size:13px;padding:8px 14px;border-radius:6px;border:1px solid #334155;}',
+    'body[data-ui] .h4s-webhint{background:#1e293b;}',
+    '.h4s-webbadge{position:fixed;right:16px;bottom:14px;z-index:66;background:rgba(13,17,23,.85);color:#c9d1d9;',
+    '  font:13px system-ui;padding:6px 12px;border-radius:6px;pointer-events:none;}',
+    'body.h4s-webp .h4s-webbadge{display:block;}',
+    '.h4s-webbadge{display:none;}',
+
     /* 文字微调（浏览模式编辑） */
     'body.h4s-editing .h4s-clone [data-h4s-editable]{outline:1px dashed rgba(59,130,246,.55);outline-offset:2px;cursor:text;}',
     'body.h4s-editing .h4s-clone [data-h4s-editable][contenteditable="true"]{outline:2px solid #3b82f6;background:rgba(59,130,246,.06);}',
@@ -1438,23 +1448,23 @@
     for (var i = 0; i < path.length && cur; i++) cur = cur.children[path[i]];
     return cur || null;
   }
-  /* 可编辑目标 = 任意非空文本节点（含混合内容元素内的文本，如带 <br/>/<span> 的标题） */
+  /* 可编辑目标 = 内联级文本容器：元素含直接文字，子元素全部内联。
+     混合内容如 <h1>工欲善其事，<br>必先利其器。</h1> 整体作为一个文本块编辑，
+     <br>/<span> 等内联结构由 contenteditable 原生保持。 */
   var ED_SKIP = /^(SCRIPT|STYLE|CANVAS|SVG|VIDEO|AUDIO|BR|IFRAME|OBJECT|TEMPLATE|H4S-NOTES)$/;
-  function textNodesOf(root) {
-    var out = [];
-    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
-      acceptNode: function (n) {
-        var t = n.parentNode;
-        if (!t || ED_SKIP.test(t.tagName)) return NodeFilter.FILTER_REJECT;
-        return n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
-      }
-    });
-    while (w.nextNode()) {
-      var tn = w.currentNode, parent = tn.parentNode, idx = -1;
-      for (var k = 0; k < parent.childNodes.length; k++) if (parent.childNodes[k] === tn) { idx = k; break; }
-      out.push({ node: tn, parent: parent, tIdx: idx });
+  var ED_INLINE = /^(BR|SPAN|EM|STRONG|B|I|U|S|A|CODE|SMALL|SUB|SUP|MARK|ABBR|CITE|Q|TIME|BDO|BDI|WBR|FONT|BIG|DEL|INS|KBD|SAMP|VAR|RUBY|RT|RP)$/;
+  function isInlineTextContainer(el) {
+    if (ED_SKIP.test(el.tagName)) return false;
+    var hasText = false;
+    for (var k = 0; k < el.childNodes.length; k++) {
+      var n = el.childNodes[k];
+      if (n.nodeType === 3 && n.nodeValue.trim()) { hasText = true; break; }
     }
-    return out;
+    if (!hasText) return false;
+    for (var k = 0; k < el.children.length; k++) {
+      if (!ED_INLINE.test(el.children[k].tagName)) return false;
+    }
+    return true;
   }
   /* 内嵌子集缺字检测：返回文本中不被任何内嵌族子集覆盖的字符（无指纹/无内嵌字体返回 []） */
   function findLack(text) {
@@ -1474,7 +1484,11 @@
   }
   function markEditable() {
     $$('.h4s-clone', miniBox).forEach(function (c) {
-      textNodesOf(c).forEach(function (tn) { tn.parent.setAttribute('data-h4s-editable', ''); });
+      $$('*', c).forEach(function (n) {
+        if (isInlineTextContainer(n) && getComputedStyle(n).display !== 'none') {
+          n.setAttribute('data-h4s-editable', '');
+        }
+      });
     });
   }
   function setEdit(on) {
@@ -1494,32 +1508,32 @@
              : '文字微调模式已关闭');
   }
   /* 克隆编辑提交：文本节点级同步（元素路径 + tIdx → 真树 nodeValue），记入改动表，缺字预警 */
-  function commitEdit(act, newText) {
+  function commitEdit(el) {
+    var cloneSlide = el.closest('.h4s-clone');
+    var path = elPathOf(el, cloneSlide);
+    if (!path) return;
     var si = S.sel;
     var slide = S.slides[si];
-    var real = elByPath(slide.el, act.path);
+    var real = elByPath(slide.el, path);
     if (!real) return;
-    var tnode = real.childNodes[act.tIdx];
-    if (!tnode || tnode.nodeType !== 3) return;
-    var oldText = tnode.nodeValue;
-    if (oldText.trim() === newText.trim()) { renderMini(); return; }
-    /* 同步回真实 slide（文本节点赋值，不改结构） */
-    tnode.nodeValue = newText;
+    var oldNow = real.innerHTML;
+    var nowHTML = el.innerHTML;
+    if (oldNow === nowHTML) { renderMini(); return; }
+    /* 同步回真实 slide：元素级 innerHTML 替换（<br>/<span> 等混合结构整体保持） */
+    real.innerHTML = nowHTML;
     /* 缺字预警 */
-    var lack = findLack(newText);
+    var lack = findLack(el.textContent);
     if (lack.length) {
       real.classList.add('h4s-edit-lack');
-      act.parent.classList.add('h4s-edit-lack');
+      el.classList.add('h4s-edit-lack');
     }
-    /* 改动表：同页同路径同文本节点去重更新 */
+    /* 改动表：同页同路径去重更新（now 存 innerHTML，导出按元素级替换） */
     var i;
     for (i = 0; i < ED.edits.length; i++) {
       var e = ED.edits[i];
-      if (e.si === si && e.path.join() === act.path.join() && e.tIdx === act.tIdx) {
-        e.now = newText; e.lack = lack; break;
-      }
+      if (e.si === si && e.path.join() === path.join()) { e.now = nowHTML; e.lack = lack; break; }
     }
-    if (i === ED.edits.length) ED.edits.push({ si: si, path: act.path, tIdx: act.tIdx, old: oldText, now: newText, lack: lack, title: slide.title });
+    if (i === ED.edits.length) ED.edits.push({ si: si, path: path, old: oldNow, now: nowHTML, lack: lack, title: slide.title });
     refreshExportBtn();
     renderMini();
     toast('✓ 已修改（第 ' + (si + 1) + ' 页）' + (lack.length ? ' · ⚠ 子集缺字: ' + lack.join('') + '（导出后该处回退系统字体）' : ''));
@@ -1540,8 +1554,7 @@
     ED.edits.forEach(function (e) {
       var sec = secs[e.si];
       var el = sec && elByPath(sec, e.path);
-      var tn = el && el.childNodes[e.tIdx];
-      if (tn && tn.nodeType === 3) tn.nodeValue = e.now;
+      if (el) el.innerHTML = e.now;
     });
     var out = doc.documentElement.outerHTML;
     if (shellReady) {
@@ -1564,50 +1577,94 @@
   function bindEditing() {
   on(miniBox, 'click', function (e) {
     if (!ED.on) return;
-    var parent = e.target.closest('[data-h4s-editable]');
-    if (!parent) return;
-    /* 定位父元素内第一个非空文本节点（混合元素如 <h1>文字<br/>文字 也支持） */
-    var tn = null;
-    for (var k = 0; k < parent.childNodes.length; k++) {
-      var n = parent.childNodes[k];
-      if (n.nodeType === 3 && n.nodeValue.trim()) { tn = n; break; }
-    }
-    if (!tn) return;
-    var cloneSlide = parent.closest('.h4s-clone');
-    var path = elPathOf(parent, cloneSlide);
+    var t = e.target.closest('[data-h4s-editable]');
+    if (!t || t.getAttribute('contenteditable') === 'true') return;
+    var cloneSlide = t.closest('.h4s-clone');
+    var path = elPathOf(t, cloneSlide);
     if (!path) return;
-    var tIdx = Array.prototype.indexOf.call(parent.childNodes, tn);
-    ED.active = { path: path, tIdx: tIdx, parent: parent, old: tn.nodeValue };
-    /* 克隆内包裹 span 承载编辑（caret 锁定、不破坏兄弟子元素）；提交后 renderMini 重建克隆 */
-    var span = document.createElement('span');
-    span.setAttribute('contenteditable', 'true');
-    span.style.outline = '2px solid #3b82f6';
-    span.style.outlineOffset = '2px';
-    span.textContent = tn.nodeValue;
-    parent.replaceChild(span, tn);
-    try { span.focus(); } catch (err) {}
+    ED.active = { si: S.sel, path: path, el: t, oldHTML: t.innerHTML };
+    t.setAttribute('contenteditable', 'true');
+    t.setAttribute('data-h4s-edit-active', '1');
+    t.classList.add('h4s-edit-focus');
+    try { t.focus(); } catch (err) {}
   });
   on(miniBox, 'focusout', function (e) {
     var t = e.target;
-    if (t.tagName !== 'SPAN' || !t.hasAttribute('contenteditable')) return;
-    var newText = t.textContent;
-    var act = ED.active;
-    ED.active = null;
-    if (act) commitEdit(act, newText); /* commitEdit 内 renderMini 重建克隆（消除包裹分叉） */
+    if (t.getAttribute && t.getAttribute('data-h4s-edit-active') === '1') commitEdit(t);
   });
   on(miniBox, 'keydown', function (e) {
     var t = e.target;
-    if (t.tagName !== 'SPAN' || !t.hasAttribute('contenteditable')) return;
+    if (!t.hasAttribute || t.getAttribute('data-h4s-edit-active') !== '1') return;
     if (e.key === 'Enter') { e.preventDefault(); t.blur(); }
-    else if (e.key === 'Escape') { e.preventDefault(); if (ED.active) t.textContent = ED.active.old; t.blur(); }
+    else if (e.key === 'Escape') { e.preventDefault(); t.innerHTML = t.__h4sOld || t.innerHTML; t.blur(); }
   });
   on(miniBox, 'paste', function (e) {
-    if (e.target.tagName !== 'SPAN' || !e.target.hasAttribute('contenteditable')) return;
+    if (!e.target.hasAttribute || e.target.getAttribute('data-h4s-edit-active') !== '1') return;
     e.preventDefault();
     var txt = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s+/g, ' ');
     document.execCommand('insertText', false, txt);
   });
 
+  }
+
+  /* ================================================================
+   * 网页放映：普通 HTML（无幻灯片结构）的兼容播放
+   * F5 全屏 → 方向键/空格按屏滚动翻页 → Esc 退出。内容零改动。
+   * ================================================================ */
+  var WP = { on: false };
+  function wpInfo() {
+    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    var step = window.innerHeight * 0.9;
+    var total = Math.max(1, Math.ceil(max / step) + 1);
+    var cur = Math.min(total, Math.max(1, Math.round(window.scrollY / step) + 1));
+    return { cur: cur, total: total };
+  }
+  function wpBadge() {
+    var b = document.querySelector('.h4s-webbadge');
+    if (b && WP.on) {
+      var w = wpInfo();
+      b.textContent = w.cur + ' / ' + w.total + ' 屏 · → 翻页 · Esc 退出';
+    }
+  }
+  function wpStep(dir) {
+    window.scrollBy({ top: dir * window.innerHeight * 0.9, behavior: 'smooth' });
+    setTimeout(wpBadge, 420);
+  }
+  function wpShow() {
+    if (WP.on) return;
+    WP.on = true;
+    document.body.classList.add('h4s-webp');
+    if (!document.querySelector('.h4s-webbadge')) {
+      var b = el('div', 'h4s-webbadge');
+      document.body.appendChild(b);
+    }
+    try { document.documentElement.requestFullscreen().catch(function () {}); } catch (e) {}
+    window.scrollTo(0, 0);
+    wpBadge();
+    toast('网页放映：方向键/空格按屏翻页，Esc 退出');
+  }
+  function wpHide() {
+    WP.on = false;
+    document.body.classList.remove('h4s-webp');
+    try { if (document.fullscreenElement) document.exitFullscreen().catch(function () {}); } catch (e) {}
+  }
+  function initWebPresent() {
+    /* 文档模式下的极简入口横幅（不与 deck 内容冲突） */
+    var hint = el('div', 'h4s-webhint');
+    hint.innerHTML = '未检测到幻灯片结构 · <b>F5</b> 网页放映（全屏按屏翻页） · Esc 退出';
+    document.body.appendChild(hint);
+    on(document, 'keydown', function (e) {
+      var k = e.key;
+      if (k === 'F5') { e.preventDefault(); WP.on ? wpHide() : wpShow(); return; }
+      if (!WP.on) return;
+      if (k === 'ArrowRight' || k === ' ' || k === 'PageDown' || k === 'ArrowDown') { e.preventDefault(); wpStep(1); }
+      else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'ArrowUp') { e.preventDefault(); wpStep(-1); }
+      else if (k === 'Home') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(wpBadge, 420); }
+      else if (k === 'End') { e.preventDefault(); window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }); setTimeout(wpBadge, 420); }
+      else if (k === 'Escape') { e.preventDefault(); wpHide(); }
+    });
+    on(window, 'scroll', function () { if (WP.on) wpBadge(); }, { passive: true });
+    on(window, 'resize', function () { if (WP.on) wpBadge(); });
   }
 
   /* 进入放映（i=起始页，fragHint>=0 时直接呈现到该碎片状态） */
@@ -2257,7 +2314,8 @@
     S.slides = collectSlides();
     S.n = S.slides.length;
     if (!S.n) {
-      console.info('[h4s] 未发现幻灯片结构，保持文档模式');
+      console.info('[h4s] 未发现幻灯片结构，启用网页放映模式');
+      initWebPresent();
       return;
     }
     /* 文字微调快照：保存接管前的原始文档（导出/写回的基底） */
