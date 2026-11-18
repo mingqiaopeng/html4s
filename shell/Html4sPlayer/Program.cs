@@ -76,6 +76,8 @@ internal static class Program
         ApplicationConfiguration.Initialize();
         Directory.CreateDirectory(AppDataDir);
 
+        if (args.Contains("--selftest-dpi")) return DpiSelfTest();
+
         bool kiosk = args.Contains("--kiosk");
         string? target = args.FirstOrDefault(a => !a.StartsWith("--"));
         if (string.IsNullOrWhiteSpace(target))
@@ -208,27 +210,95 @@ internal static class Program
         core.SetVirtualHostNameToFolderMapping(vh.Host, vh.Dir,
             CoreWebView2HostResourceAccessKind.Allow);
     }
+
+    /* ---- 高 DPI：对话框几何按宿主屏真实 DPI 手动缩放 ----
+       PMv2 进程里 WinForms 不会替运行时 new 出来的窗体做缩放：AutoScaleMode.Dpi
+       的基线在设置当场被捕获为当前 DPI，系数恒为 1（改了等于没改）。
+       与 StageWindow 标题栏同用手动缩放；基准取宿主窗口所在屏的 DPI
+       （GetDpiForWindow），无宿主时退回系统 DPI。 */
+    [DllImport("user32.dll")]
+    private static extern uint GetDpiForWindow(IntPtr hWnd);
+    [DllImport("user32.dll")]
+    private static extern uint GetDpiForSystem();
+
+    internal static float DpiScale(IWin32Window? owner)
+    {
+        try
+        {
+            if (owner != null && owner.Handle != IntPtr.Zero && GetDpiForWindow(owner.Handle) > 0)
+                return GetDpiForWindow(owner.Handle) / 96f;
+            return GetDpiForSystem() / 96f;
+        }
+        catch { return 1f; }
+    }
+
+    /* --selftest-dpi：不截屏（会误抓其他窗口），把"打开网址"对话框的真实几何
+       写入 debug.log 后自动关闭，用于高 DPI 屏验证缩放生效、控件不越界。 */
+    private static int DpiSelfTest()
+    {
+        Log("[selftest] systemDpi=" + GetDpiForSystem() + " screens=" + string.Join(" | ",
+            Screen.AllScreens.Select(s => s.DeviceName + " " + s.Bounds + (s.Primary ? " (主)" : ""))));
+        /* 探针：运行时 new 的窗体设 AutoScaleMode.Dpi 后基线是否仍是当前 DPI（=不缩放） */
+        using (var probe = new Form { AutoScaleMode = AutoScaleMode.Dpi })
+        {
+            _ = probe.Handle;
+            Log("[selftest] probe AutoScaleMode.Dpi：dims=" + probe.AutoScaleDimensions
+                + " current=" + probe.CurrentAutoScaleDimensions
+                + " deviceDpi=" + probe.DeviceDpi
+                + (probe.AutoScaleDimensions == probe.CurrentAutoScaleDimensions ? "（基线=当前 → 系数1，不缩放）" : ""));
+        }
+        var (form, _) = Prompt.Build("输入演示网址（http / https）：", "打开网址", DpiScale(null));
+        form.StartPosition = FormStartPosition.CenterScreen;
+        form.Shown += (_, _) =>
+        {
+            try
+            {
+                var cs = form.ClientSize;
+                Log("[selftest] prompt clientSize=" + cs.Width + "x" + cs.Height
+                    + " deviceDpi=" + form.DeviceDpi);
+                foreach (Control c in form.Controls)
+                    Log("[selftest]   " + c.GetType().Name + " " + c.Bounds
+                        + (c.Right <= cs.Width && c.Bottom <= cs.Height ? " fits" : " *** 越界 ***"));
+            }
+            finally { form.Close(); }
+        };
+        form.ShowDialog();
+        Log("[selftest] done");
+        return 0;
+    }
 }
 
 internal static class Prompt
 {
-    public static string? ShowDialog(string text, string title)
+    /* 输入对话框：96-DPI 设计值 → 按宿主屏真实 DPI 手动缩放（S()）。
+       字体用像素单位，几何完全确定（同 StageWindow 标题栏套路）。 */
+    internal static (Form Form, TextBox Box) Build(string text, string title, float sc)
     {
+        int S(int v) => (int)Math.Round(v * sc);
         var form = new Form
         {
-            Width = 480, Height = 160, Text = title,
+            Text = title,
+            AutoScaleMode = AutoScaleMode.None,
             FormBorderStyle = FormBorderStyle.FixedDialog,
-            StartPosition = FormStartPosition.CenterScreen,
-            MaximizeBox = false, MinimizeBox = false
+            MaximizeBox = false, MinimizeBox = false,
+            ClientSize = new Size(S(560), S(170)),
+            Font = new Font("Microsoft YaHei UI", S(13), GraphicsUnit.Pixel),
         };
-        var label = new Label { Left = 12, Top = 12, AutoSize = true, Text = text };
-        var box = new TextBox { Left = 12, Top = 40, Width = 440 };
-        var ok = new Button { Text = "确定", Left = 284, Top = 74, Width = 80, DialogResult = DialogResult.OK };
-        var cancel = new Button { Text = "取消", Left = 372, Top = 74, Width = 80, DialogResult = DialogResult.Cancel };
+        var label = new Label { Left = S(14), Top = S(16), AutoSize = true, Text = text };
+        var box = new TextBox { Left = S(14), Top = S(48), Width = S(530) };
+        var ok = new Button { Text = "确定", Left = S(324), Top = S(110), Width = S(110), Height = S(34), DialogResult = DialogResult.OK };
+        var cancel = new Button { Text = "取消", Left = S(442), Top = S(110), Width = S(104), Height = S(34), DialogResult = DialogResult.Cancel };
         form.Controls.AddRange(new Control[] { label, box, ok, cancel });
         form.AcceptButton = ok;
         form.CancelButton = cancel;
-        return form.ShowDialog() == DialogResult.OK ? box.Text.Trim() : null;
+        return (form, box);
+    }
+
+    public static string? ShowDialog(string text, string title, IWin32Window? owner = null)
+    {
+        var (form, box) = Build(text, title, Program.DpiScale(owner));
+        form.StartPosition = owner == null ? FormStartPosition.CenterScreen : FormStartPosition.CenterParent;
+        return form.ShowDialog(owner) == DialogResult.OK ? box.Text.Trim() : null;
     }
 }
 
@@ -460,7 +530,7 @@ internal class StageWindow : Form
 
     private void OpenUrlViaPrompt()
     {
-        string? s = Prompt.ShowDialog("输入演示网址（http / https）：", "打开网址");
+        string? s = Prompt.ShowDialog("输入演示网址（http / https）：", "打开网址", this);
         if (string.IsNullOrWhiteSpace(s)) return;
         s = s.Trim();
         if (Uri.TryCreate(s, UriKind.Absolute, out var u) && u.Scheme is "http" or "https")
@@ -497,16 +567,21 @@ internal class StageWindow : Form
                 MessageBoxButtons.OK, MessageBoxIcon.Information);
             return;
         }
+        /* 几何按宿主屏真实 DPI 手动缩放（同 Prompt / 标题栏套路） */
+        float sc = Program.DpiScale(this);
+        int S(int v) => (int)Math.Round(v * sc);
         using var form = new Form
         {
             Text = "最近打开",
-            Size = new Size(640, 400),
+            ClientSize = new Size(S(620), S(360)),
             StartPosition = FormStartPosition.CenterParent,
             FormBorderStyle = FormBorderStyle.FixedDialog,
             MinimizeBox = false,
-            MaximizeBox = false
+            MaximizeBox = false,
+            AutoScaleMode = AutoScaleMode.None,
+            Font = new Font("Microsoft YaHei UI", S(13), GraphicsUnit.Pixel)
         };
-        var lb = new ListBox { Dock = DockStyle.Fill, Font = new Font("Segoe UI", 10f), IntegralHeight = false };
+        var lb = new ListBox { Dock = DockStyle.Fill, IntegralHeight = false };
         foreach (var it in items) lb.Items.Add(it);
         void OpenSelected()
         {
@@ -517,10 +592,11 @@ internal class StageWindow : Form
         lb.DoubleClick += (_, _) => OpenSelected();
         var btns = new FlowLayoutPanel
         {
-            Dock = DockStyle.Bottom, FlowDirection = FlowDirection.RightToLeft, Height = 44, Padding = new Padding(8)
+            Dock = DockStyle.Bottom, FlowDirection = FlowDirection.RightToLeft,
+            Height = S(52), Padding = new Padding(S(8))
         };
-        var btnCancel = new Button { Text = "取消", Width = 90 };
-        var btnOpen = new Button { Text = "打开", Width = 90 };
+        var btnCancel = new Button { Text = "取消", Width = S(90), Height = S(36), Margin = Padding.Empty };
+        var btnOpen = new Button { Text = "打开", Width = S(90), Height = S(36), Margin = Padding.Empty };
         btnCancel.Click += (_, _) => form.Close();
         btnOpen.Click += (_, _) => OpenSelected();
         btns.Controls.Add(btnCancel);
@@ -606,6 +682,9 @@ internal class StageWindow : Form
                     ((CoreWebView2)sender).PostWebMessageAsString(System.Text.Json.JsonSerializer.Serialize(new { h4sShellHello = true }));
                     break;
                 case "fullscreen": ToggleFullscreen(); break;
+                case "exitfullscreen": /* 播放器 Esc 回浏览时同步退出壳 F11 无边框全屏（网页全屏事件不覆盖它） */
+                    if (_isFullScreen) ToggleFullscreen();
+                    break;
                 case "openurl": OpenUrlViaPrompt(); break;
                 case "openfile": OpenFileViaDialog(); break;
                 case "recent": ShowRecent(); break;
@@ -724,10 +803,11 @@ internal class StageWindow : Form
         // 演讲者双窗口：同进程第二个 WebView2，共享同一 Environment
         // （同用户数据目录 + 同虚拟主机 = 同源，BroadcastChannel 互通）
         e.Handled = true;
+        float sc = Program.DpiScale(this); /* 高 DPI 屏：窗口尺寸同步缩放（WebView 内容自适应，无需裁切风险） */
         var presenter = new StageWindow(e.Uri, kiosk: false)
         {
             Text = "演讲者视图",
-            Size = new Size(1100, 720),
+            Size = new Size((int)(1100 * sc), (int)(720 * sc)),
             WindowState = FormWindowState.Normal,
             StartPosition = FormStartPosition.Manual
         };

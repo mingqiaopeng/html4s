@@ -233,7 +233,7 @@
   if (window.__H4S_LOADED__) return;
   window.__H4S_LOADED__ = true;
 
-  var VERSION = '0.2.0';
+  var VERSION = '0.3.1';
 
   /* ================================================================
    * 工具
@@ -311,6 +311,8 @@
      应用内浏览器等 WebView2 宿主虽存在 chrome.webview 但不处理 h4sShell —— 按钮保持隐藏。 */
   var shellReady = false;
   var fileInput = null;
+  var pendingSave = null; /* 壳内导出写回：等待 h4sSaved 回执期间的导出 HTML
+    （此前从未声明赋值——回执分支是死代码，写回失败时用户无从得知） */
   try {
     if (window.chrome && window.chrome.webview) {
       window.chrome.webview.addEventListener('message', function (e) {
@@ -329,7 +331,6 @@
           if (m && m.h4sShellHello && !shellReady) {
             shellReady = true;
             shellAction('theme', uiTheme);  /* 握手即同步当前主题（localStorage 恢复的场景） */
-            if (typeof refreshShellButtons === 'function') refreshShellButtons();
           }
         } catch (err) {}
       });
@@ -1400,7 +1401,6 @@
           fileInput.type = 'file';
           fileInput.accept = '.html4s,.html,.htm';
           fileInput.style.display = 'none';
-          document.body.appendChild(fileInput);
           fileInput.addEventListener('change', function () {
             var f = fileInput.files && fileInput.files[0];
             if (!f) return;
@@ -1419,17 +1419,7 @@
     });
     buildSidebar();
     selectSlide(S.sel);
-    refreshShellButtons();
     bindEditing();
-  }
-
-  function refreshShellButtons() {
-    if (!browseBar) return;
-    var disp = shellReady ? '' : 'none';
-    ['shellfile', 'shellurl'].forEach(function (a) {
-      var b = browseBar.querySelector('[data-bact="' + a + '"]');
-      if (b) b.style.display = disp;
-    });
   }
 
   function buildSidebar() {
@@ -1609,27 +1599,22 @@
     var b = $('[data-bact="export"]');
     if (b) b.style.display = ED.edits.length ? '' : 'none';
   }
-  /* 导出：改动回写 boot 快照 → 完整 .html4s。壳内走 save 写回源文件，否则下载 */
-  function exportEdited() {
-    if (!ED.snap) { toast('快照不可用（deck 过早修改？）'); return; }
-    var doc = new DOMParser().parseFromString(ED.snap, 'text/html');
-    /* section 定位规则与 collectSlides 一致（过滤非页面元素，防混排错位） */
-    var deck = doc.querySelector('h4s-deck');
-    var secs = deck ? Array.prototype.slice.call(deck.children).filter(function (n) {
-      return n.tagName === 'SECTION' || n.tagName === 'H4S-SLIDE' || n.classList.contains('slide');
-    }) : [];
-    ED.edits.forEach(function (e) {
-      var sec = secs[e.si];
-      var el = sec && elByPath(sec, e.path);
-      if (el) el.innerHTML = e.now;
-    });
-    var out = doc.documentElement.outerHTML;
-    if (shellReady) {
-      shellAction('save', { html: out, name: (MANIFEST.meta && MANIFEST.meta.title || 'deck') });
-      toast('已写回源文件 ✓ 建议运行 h4s-build --subset 重建以更新字体子集');
-      return;
+  /* 快照里的页面元素定位：与 collectSlides 完全同规则（h4s-slide 优先，
+     否则 h4s-deck / .slides / body 容器的 section/.slide 子元素）——
+     此前只查 h4s-deck，.slides 类 deck 的导出定位整批失效 */
+  function snapSections(doc) {
+    var nodes = $$('h4s-slide', doc);
+    if (!nodes.length) {
+      var root = $('h4s-deck', doc) || $('.slides', doc) || doc.body;
+      nodes = Array.prototype.slice.call(root.children).filter(function (n) {
+        return n.tagName === 'SECTION' || n.classList.contains('slide');
+      });
     }
-    var blob = new Blob([out], { type: 'text/html;charset=utf-8' });
+    return nodes;
+  }
+  /* 浏览器（非壳）环境导出为下载文件；壳内写回失败时也回退到这里 */
+  function downloadEdited(html) {
+    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     var a = el('a');
     a.href = URL.createObjectURL(blob);
     a.download = (document.title.replace(/\.html4s$|\.html$/i, '') || 'deck') + '.edited.html4s';
@@ -1637,6 +1622,26 @@
     a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 200);
     toast('已导出包含文字修改的 .html4s');
+  }
+  /* 导出：改动回写 boot 快照 → 完整 .html4s。壳内走 save 写回源文件，否则下载 */
+  function exportEdited() {
+    if (!ED.snap) { toast('快照不可用（deck 过早修改？）'); return; }
+    var doc = new DOMParser().parseFromString(ED.snap, 'text/html');
+    var secs = snapSections(doc);
+    ED.edits.forEach(function (e) {
+      var sec = secs[e.si];
+      var el = sec && elByPath(sec, e.path);
+      if (el) el.innerHTML = e.now;
+    });
+    var out = doc.documentElement.outerHTML;
+    if (shellReady) {
+      /* 等壳回执：成功 → toast；失败/从网址打开 → 回退下载（downloadEdited） */
+      pendingSave = out;
+      shellAction('save', { html: out, name: (MANIFEST.meta && MANIFEST.meta.title || 'deck') });
+      toast('正在写回源文件…');
+      return;
+    }
+    downloadEdited(out);
   }
 
   /* 编辑交互（stagebox 委托：克隆会被 renderMini 重建，不能直接绑在克隆上）。
@@ -1650,6 +1655,7 @@
     var path = elPathOf(t, cloneSlide);
     if (!path) return;
     ED.active = { si: S.sel, path: path, el: t, oldHTML: t.innerHTML };
+    t.__h4sOld = t.innerHTML; /* Esc 撤销读取（此前从未赋值——Esc 实际会提交而非撤销） */
     t.setAttribute('contenteditable', 'true');
     t.setAttribute('data-h4s-edit-active', '1');
     t.classList.add('h4s-edit-focus');
@@ -1787,6 +1793,9 @@
     if (drawerOn) toggleDrawer();
     selectSlide(S.i);
     try { if (document.fullscreenElement) document.exitFullscreen(); } catch (err) {}
+    /* 壳 F11 无边框全屏 ≠ 网页全屏（不触发 fullscreenchange）——
+       Esc 回浏览时必须显式通知壳退出，否则标题栏卡在隐藏态 */
+    shellAction('exitfullscreen');
     sendState();
     emit('h4s:showend', { index: S.i });
   }
@@ -2173,7 +2182,7 @@
     if (laserOn) { toggleLaser(); return; }
     if (S.overlay) { setOverlay(null); return; }
     if (document.fullscreenElement) { endShow(); return; } /* endShow 内含退全屏 */
-    if (drawerOn) toggleDrawer();
+    if (drawerOn) { toggleDrawer(); return; } /* 先关抽屉，不连带结束放映 */
     if (S.presenting && !S.kiosk) endShow();
   }
 
@@ -2184,12 +2193,16 @@
       if (S.overlay === 'overview' && OV.handleKey(e)) return;
       var k = e.key;
 
-      /* 壳级快捷键（两种模式通用） */
-      if (k === 'F11') { e.preventDefault(); shellAction('fullscreen'); return; }
-      if (e.ctrlKey && (k === 'l' || k === 'L')) { e.preventDefault(); shellAction('openurl'); return; }
-      if (e.ctrlKey && (k === 'o' || k === 'O')) { e.preventDefault(); shellAction('openfile'); return; }
-      if (e.ctrlKey && (k === 'w' || k === 'W')) { e.preventDefault(); shellAction('close'); return; }
-      if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
+      /* 壳级快捷键：仅壳环境（握手确认）接管；纯浏览器放行原生行为
+         （F11 全屏 / Ctrl+L 地址栏 / Ctrl+O 打开 / Ctrl+R 刷新 / Ctrl+W 关闭）——
+         此前一律 preventDefault + 无处投递的 shellAction，浏览器里按了没反应 */
+      if (shellReady) {
+        if (k === 'F11') { e.preventDefault(); shellAction('fullscreen'); return; }
+        if (e.ctrlKey && (k === 'l' || k === 'L')) { e.preventDefault(); shellAction('openurl'); return; }
+        if (e.ctrlKey && (k === 'o' || k === 'O')) { e.preventDefault(); shellAction('openfile'); return; }
+        if (e.ctrlKey && (k === 'w' || k === 'W')) { e.preventDefault(); shellAction('close'); return; }
+        if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
+      }
       if (e.ctrlKey && e.altKey && (k === 'q' || k === 'Q') && S.kiosk) { e.preventDefault(); endShow(); toast('kiosk 已解锁（Ctrl+Alt+Q 重新锁定）'); return; }
 
       /* 浏览模式键位（PowerPoint 式） */
@@ -2378,6 +2391,10 @@
         background: MANIFEST.stage.background || '#000'
       };
     }
+    /* 文字微调快照：保存接管前的原始文档（导出/写回的基底）。
+       必须在 collectSlides 之前——后者会给 notes 元素加 h4s-notes-el 类，
+       快照晚于它就会把该类污染进导出文件 */
+    try { ED.snap = document.documentElement.outerHTML; } catch (err) {}
     S.slides = collectSlides();
     S.n = S.slides.length;
     if (!S.n) {
@@ -2385,8 +2402,6 @@
       initWebPresent();
       return;
     }
-    /* 文字微调快照：保存接管前的原始文档（导出/写回的基底） */
-    try { ED.snap = document.documentElement.outerHTML; } catch (err) {}
     initStage(hash);
   }
 

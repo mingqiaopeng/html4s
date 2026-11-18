@@ -7,7 +7,7 @@ const ok = (s.match(/\$\$\(/g) || []).length;
 const single = (s.match(/(?<!\$)\$\(/g) || []).length;
 
 console.log('$$$ 残留:', triple, triple === 0 ? '✓ 无' : '✗ 仍有');
-console.log('$$ 调用:', ok, '（预期 16）');
+console.log('$$ 调用:', ok, '（v0.3.1 修复后基线 12；单 $ 基线 37——增量需可解释，否则是塌陷）');
 console.log('单 $ 调用（正常，querySelector 等非集合）:', single);
 
 /* 精确定位任何剩余三$ */
