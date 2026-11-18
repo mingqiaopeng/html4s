@@ -220,6 +220,31 @@ internal static class Program
     private static extern uint GetDpiForWindow(IntPtr hWnd);
     [DllImport("user32.dll")]
     private static extern uint GetDpiForSystem();
+    [DllImport("user32.dll")]
+    private static extern bool GetWindowRect(IntPtr hWnd, out RECT lpRect);
+    [DllImport("user32.dll")]
+    private static extern bool PrintWindow(IntPtr hWnd, IntPtr hdcBlt, uint nFlags);
+    [StructLayout(LayoutKind.Sequential)]
+    private struct RECT { public int Left, Top, Right, Bottom; }
+
+    /* PrintWindow 直接渲染目标窗口自身到位图（与 z 序/遮挡无关，不会误抓其他窗口） */
+    internal static void SnapWindow(Control c, string path)
+    {
+        try
+        {
+            GetWindowRect(c.Handle, out var r);
+            int w = r.Right - r.Left, h = r.Bottom - r.Top;
+            if (w <= 0 || h <= 0) { Log("[selftest] 截图跳过（尺寸异常 " + w + "x" + h + "）"); return; }
+            using var bmp = new System.Drawing.Bitmap(w, h);
+            using var g = System.Drawing.Graphics.FromImage(bmp);
+            var hdc = g.GetHdc();
+            PrintWindow(c.Handle, hdc, 2 /*PW_RENDERFULLCONTENT*/);
+            g.ReleaseHdc(hdc);
+            bmp.Save(path, System.Drawing.Imaging.ImageFormat.Png);
+            Log("[selftest] 截图: " + path);
+        }
+        catch (Exception ex) { Log("[selftest] 截图失败: " + ex.Message); }
+    }
 
     internal static float DpiScale(IWin32Window? owner)
     {
@@ -233,10 +258,12 @@ internal static class Program
     }
 
     /* --selftest-dpi：不截屏（会误抓其他窗口），把"打开网址"对话框的真实几何
-       写入 debug.log 后自动关闭，用于高 DPI 屏验证缩放生效、控件不越界。 */
+       写入 debug.log 后自动关闭。覆盖两条路径：无宿主（启动选文件后的网址输入）
+       + 逐显示器有宿主（Ctrl+L 真实流程，宿主强制落在该屏）——验证缩放生效、
+       控件不越界、窗口不被框架二次改尺寸。 */
     private static int DpiSelfTest()
     {
-        Log("[selftest] systemDpi=" + GetDpiForSystem() + " screens=" + string.Join(" | ",
+        Log("[selftest] shell v" + Application.ProductVersion + " systemDpi=" + GetDpiForSystem() + " screens=" + string.Join(" | ",
             Screen.AllScreens.Select(s => s.DeviceName + " " + s.Bounds + (s.Primary ? " (主)" : ""))));
         /* 探针：运行时 new 的窗体设 AutoScaleMode.Dpi 后基线是否仍是当前 DPI（=不缩放） */
         using (var probe = new Form { AutoScaleMode = AutoScaleMode.Dpi })
@@ -247,24 +274,54 @@ internal static class Program
                 + " deviceDpi=" + probe.DeviceDpi
                 + (probe.AutoScaleDimensions == probe.CurrentAutoScaleDimensions ? "（基线=当前 → 系数1，不缩放）" : ""));
         }
-        var (form, _) = Prompt.Build("输入演示网址（http / https）：", "打开网址", DpiScale(null));
-        form.StartPosition = FormStartPosition.CenterScreen;
-        form.Shown += (_, _) =>
-        {
-            try
-            {
-                var cs = form.ClientSize;
-                Log("[selftest] prompt clientSize=" + cs.Width + "x" + cs.Height
-                    + " deviceDpi=" + form.DeviceDpi);
-                foreach (Control c in form.Controls)
-                    Log("[selftest]   " + c.GetType().Name + " " + c.Bounds
-                        + (c.Right <= cs.Width && c.Bottom <= cs.Height ? " fits" : " *** 越界 ***"));
-            }
-            finally { form.Close(); }
-        };
-        form.ShowDialog();
+        MeasurePrompt(null, "无宿主");
+        foreach (var screen in Screen.AllScreens)
+            MeasurePrompt(screen, "宿主@" + screen.DeviceName);
         Log("[selftest] done");
         return 0;
+    }
+
+    /* 复刻 OpenUrlViaPrompt 真实流程：Build(text,title,DpiScale(owner)) + CenterParent + ShowDialog(owner)，
+       Shown 时测量最终几何（窗口被框架调整后的真实状态） */
+    private static void MeasurePrompt(Screen? forceScreen, string tag)
+    {
+        Form? owner = null;
+        if (forceScreen != null)
+        {
+            owner = new Form
+            {
+                StartPosition = FormStartPosition.Manual,
+                FormBorderStyle = FormBorderStyle.None,
+                Bounds = new Rectangle(forceScreen.WorkingArea.X + 80,
+                    forceScreen.WorkingArea.Y + 80, 900, 620),
+            };
+            _ = owner.Handle; /* 句柄落在目标屏 */
+        }
+        try
+        {
+            float sc = DpiScale(owner);
+            var (form, _) = Prompt.Build("输入演示网址（http / https）：", "打开网址", sc);
+            form.StartPosition = owner == null ? FormStartPosition.CenterScreen : FormStartPosition.CenterParent;
+            form.Shown += async (_, _) =>
+            {
+                try
+                {
+                    var cs = form.ClientSize;
+                    Log("[selftest][" + tag + "] buildSc=" + sc.ToString("F2")
+                        + " ownerDpi=" + (owner != null ? GetDpiForWindow(owner.Handle).ToString() : GetDpiForSystem().ToString())
+                        + " → clientSize=" + cs.Width + "x" + cs.Height
+                        + " formBounds=" + form.Bounds + " deviceDpi=" + form.DeviceDpi);
+                    foreach (Control c in form.Controls)
+                        Log("[selftest][" + tag + "]   " + c.GetType().Name + " " + c.Bounds
+                            + (c.Right <= cs.Width && c.Bottom <= cs.Height ? " fits" : " *** 越界 ***"));
+                    await Task.Delay(400); /* 等首帧完全绘制后再拍，排除捕获时机伪影 */
+                    SnapWindow(form, Path.Combine(AppDataDir, "prompt-selftest-" + tag.Replace('@', '-').Replace('\\', '-').Replace('.', '-') + ".png"));
+                }
+                finally { form.Close(); }
+            };
+            form.ShowDialog(owner);
+        }
+        finally { owner?.Dispose(); }
     }
 }
 
