@@ -61,18 +61,18 @@ export async function withPage(url, fn, { width = 1920, height = 1080, extraArgs
   ], { stdio: ['ignore', 'ignore', 'pipe'] });
 
   try {
-    // 1. 等待 DevTools 端口就绪
-    const devtools = await (async () => {
-      for (let i = 0; i < 60; i++) {
-        try {
-          const r = await fetch(`http://127.0.0.1:${port}/json/list`);
-          const targets = await r.json();
-          const page = targets.find((t) => t.type === 'page');
-          if (page) return page;
-        } catch { /* 未就绪 */ }
-        await sleep(200);
-      }
-      throw new Error('Edge DevTools 连接超时');
+  // 1. 等待 DevTools 端口就绪（CI 冷启动首启较慢，给足 30s）
+  const devtools = await (async () => {
+    for (let i = 0; i < 100; i++) {
+      try {
+        const r = await fetch(`http://127.0.0.1:${port}/json/list`);
+        const targets = await r.json();
+        const page = targets.find((t) => t.type === 'page');
+        if (page) return page;
+      } catch { /* 未就绪 */ }
+      await sleep(300);
+    }
+    throw new Error('Edge DevTools 连接超时');
     })();
 
     // 2. WebSocket 会话（Node 22+ 内置 WebSocket）

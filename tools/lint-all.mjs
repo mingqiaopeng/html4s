@@ -11,6 +11,8 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const EXCLUDE = ['plain-legacy.html'];
+/* --structure：透传给 h4s-lint，仅结构检查（渲染检查依赖字体环境，CI 无 deck 字体） */
+const STRUCT = process.argv.includes('--structure');
 
 const decks = fs.readdirSync(path.join(ROOT, 'examples'))
   .filter((f) => /\.html$/i.test(f))
@@ -21,14 +23,15 @@ const decks = fs.readdirSync(path.join(ROOT, 'examples'))
 
 let fail = 0;
 for (const d of decks) {
-  const r = spawnSync(process.execPath, [path.join(HERE, 'h4s-lint.mjs'), path.join(ROOT, 'examples', d)],
-    { encoding: 'utf8', timeout: 180000 });
+  const r = spawnSync(process.execPath, [path.join(HERE, 'h4s-lint.mjs'), path.join(ROOT, 'examples', d),
+    ...(STRUCT ? ['--structure'] : [])],
+  { encoding: 'utf8', timeout: 180000 });
   const verdict = (r.stdout || '').split('\n').find((l) => l.startsWith('结论')) || '(无结论)';
   const pass = r.status === 0;
   console.log((pass ? '✓ ' : '✗ ') + d + ' → ' + verdict.trim());
   if (!pass) {
-    const err = (r.stderr || '').trim().split('\n').slice(0, 4).join('\n  ');
-    if (err) console.log('  stderr: ' + err);
+    const err = ((r.stderr || '') + '\n' + (r.stdout || '')).trim().split('\n').slice(0, 8).join('\n  ');
+    if (err) console.log('  ' + err);
   }
   if (!pass) fail++;
 }

@@ -31,8 +31,8 @@ jobs:
       - name: 播放器 $$ 完整性（防塌陷回归）
         run: node tools/check-dollar.mjs
 
-      - name: 全量 deck lint
-        run: node tools/lint-all.mjs
+      - name: 全量 deck lint（结构检查——渲染 lint 依赖字体环境，由 release 管线在真实环境执行）
+        run: node tools/lint-all.mjs --structure
 
       - name: 播放器回归（CDP 25 断言）
         run: node tools/verify-bugfix.mjs

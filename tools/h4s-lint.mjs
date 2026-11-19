@@ -21,6 +21,10 @@ const jsonOutIdx = process.argv.indexOf('--json');
 const jsonOut = jsonOutIdx > -1 ? process.argv[jsonOutIdx + 1] : null;
 const htmlOutIdx = process.argv.indexOf('--html');
 const htmlOut = htmlOutIdx > -1 ? process.argv[htmlOutIdx + 1] : null;
+/* --structure：仅结构检查（清单/枚举/指纹/静态扫描），跳过无头渲染——
+   渲染结果依赖字体环境，CI/Linux 无 deck 字体时会产生布局假阳性；
+   渲染 lint 留给 release.mjs 在真实字体环境执行 */
+const structureOnly = process.argv.includes('--structure');
 
 if (!inFile) { console.error('用法: node tools/h4s-lint.mjs <deck> [--json report.json] [--html report.html]'); process.exit(2); }
 const inPath = path.resolve(inFile);
@@ -235,14 +239,22 @@ const measurement = `
 
 try {
   const deckUrl = pathToFileURL(lintPath).href;
-  const result = await withPage(deckUrl, async ({ ev }) => await ev(measurement), { width: 1920, height: 1080 });
+  const result = structureOnly
+    ? { pages: [], bodyBg: '', count: (() => {
+        /* 结构模式：页数按静态标记计数（h4s-slide 或容器子 section/.slide） */
+        const open = (html.match(/<h4s-slide\b/g) || []).length;
+        if (open) return open;
+        const sec = (html.match(/<(?:h4s-deck|div[^>]*class="[^"]*slides[^"]*")[^>]*>([\s\S]*?)(<\/h4s-deck>|$)/i) || [])[1] || '';
+        return (sec.match(/<section\b/g) || []).length;
+      })() }
+    : await withPage(deckUrl, async ({ ev }) => await ev(measurement), { width: 1920, height: 1080 });
 
   /* ---------- tofu / 缺字检测：内嵌子集字符集指纹比对 ----------
      document.fonts.check 在 Chromium 对未覆盖字符仍返回 true（不可信），
      canvas 像素法受字体回退怪癖干扰 —— 改用构建时写入清单的
      fontSubsetChars 指纹：deck 文本字符 ∉ 子集 → 回退系统字体 → W-TOFU。
      栈内回退（拉丁族→中族混排）是设计意图，不算缺字。 */
-  if (manifest.fontSubsetChars && Object.keys(manifest.fontSubsetChars).length) {
+  if (!structureOnly && manifest.fontSubsetChars && Object.keys(manifest.fontSubsetChars).length) {
     const fams = Object.keys(manifest.fontSubsetChars);
     const subsetSets = {};
     for (const [fam, pts] of Object.entries(manifest.fontSubsetChars)) subsetSets[fam] = new Set(pts);
