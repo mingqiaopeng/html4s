@@ -8,7 +8,7 @@
  *     const title = await ev('document.title');
  *   }, { width: 1920, height: 1080 });
  */
-import { spawn } from 'node:child_process';
+import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -28,6 +28,13 @@ const EDGE_CANDIDATES = [
 
 export function findEdge() {
   for (const p of EDGE_CANDIDATES) if (fs.existsSync(p)) return p;
+  /* PATH 兜底（CI/精简镜像上浏览器不在常见固定路径） */
+  for (const name of ['google-chrome', 'google-chrome-stable', 'chromium', 'chromium-browser', 'msedge', 'chrome']) {
+    try {
+      const r = spawnSync('which', [name], { encoding: 'utf8' });
+      if (r.status === 0 && r.stdout.trim()) return r.stdout.trim().split('\n')[0];
+    } catch { }
+  }
   throw new Error('未找到 Edge/Chrome（可用环境变量 H4S_BROWSER 指定浏览器路径）。');
 }
 

@@ -9,6 +9,9 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      # 无头渲染浏览器：优先显式路径；h4s-cdp 亦有 PATH 兜底探测
+      H4S_BROWSER: /usr/bin/google-chrome
     steps:
       - uses: actions/checkout@v4
 
@@ -33,6 +36,3 @@ jobs:
 
       - name: 播放器回归（CDP 25 断言）
         run: node tools/verify-bugfix.mjs
-        env:
-          # GitHub ubuntu runner 预装 Google Chrome；本机开发环境自动探测 Edge 优先
-          H4S_BROWSER: /usr/bin/google-chrome

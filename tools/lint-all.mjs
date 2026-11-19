@@ -26,6 +26,10 @@ for (const d of decks) {
   const verdict = (r.stdout || '').split('\n').find((l) => l.startsWith('结论')) || '(无结论)';
   const pass = r.status === 0;
   console.log((pass ? '✓ ' : '✗ ') + d + ' → ' + verdict.trim());
+  if (!pass) {
+    const err = (r.stderr || '').trim().split('\n').slice(0, 4).join('\n  ');
+    if (err) console.log('  stderr: ' + err);
+  }
   if (!pass) fail++;
 }
 console.log(fail ? '\n' + fail + ' 个 deck 未通过 ✗' : '\n全部 ' + decks.length + ' 个 deck 通过 ✓');
