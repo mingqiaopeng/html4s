@@ -1,5 +1,5 @@
 /* 长时间闲置复现：F5 放映 → 等待 180s（每 30s 采样主线程延迟 + 堆内存）→ 测翻页响应 */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 const deck = process.argv[2] || 'D:/MyProjects/Html4s/examples/2027-dangjian.html4s';

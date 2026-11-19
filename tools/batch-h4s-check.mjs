@@ -1,5 +1,5 @@
 /* 批量验证新构建 deck 的播放器接管状态 */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 const decks = ['fx-showcase', '2027-dangjian', 'html4s-intro', 'fs-intro', 'huashu-intro', 'style-a-pilot', 'media-test/media-deck'];

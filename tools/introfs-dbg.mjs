@@ -1,5 +1,5 @@
 /* intro-fs 深查：全部 console 拦截 + DOM 结构 */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 fs.copyFileSync('D:/MyProjects/Html4s/examples/html4s-intro-fs.html4s', process.env.TEMP + '/s1.html');

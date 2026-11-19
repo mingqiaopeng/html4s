@@ -1,5 +1,5 @@
 /* 编辑（元素级）验证：混合内容元素（含 br/span）整体编辑 + 同步 + 导出 */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 fs.copyFileSync('D:/MyProjects/Html4s/examples/2027-dangjian.html4s', process.env.TEMP + '/ed.html');

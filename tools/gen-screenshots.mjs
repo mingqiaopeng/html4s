@@ -1,5 +1,5 @@
 /* README 界面截图：浏览界面 / 放映 / 编辑模式 / 背景特效（CDP 驱动，内容可控） */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 const OUT = 'D:/MyProjects/Html4s/docs/images';

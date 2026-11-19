@@ -1,7 +1,8 @@
 /* 权威检查：播放器源 $$ 完整性（不经 bash） */
 import fs from 'node:fs';
+import { fileURLToPath } from 'node:url';
 
-const s = fs.readFileSync('D:/MyProjects/Html4s/player/h4s.player.js', 'utf8');
+const s = fs.readFileSync(fileURLToPath(new URL('../player/h4s.player.js', import.meta.url)), 'utf8');
 const triple = (s.match(/\$\$\$/g) || []).length;
 const ok = (s.match(/\$\$\(/g) || []).length;
 const single = (s.match(/(?<!\$)\$\(/g) || []).length;

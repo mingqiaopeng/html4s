@@ -1,5 +1,5 @@
 /* 媒体控制验证（用构建产物 media-deck.html4s，播放器内嵌） */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 fs.copyFileSync('D:/MyProjects/Html4s/examples/media-test/media-deck.html4s', process.env.TEMP + '/md.html');

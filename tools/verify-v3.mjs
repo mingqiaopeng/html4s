@@ -1,5 +1,5 @@
 /* v3 验证：①caret 精确定位（点 span 编辑 span）②网页放映（普通 HTML） */
-import { withPage } from 'file:///D:/MyProjects/Html4s/tools/h4s-cdp.mjs';
+import { withPage } from './h4s-cdp.mjs';
 import fs from 'node:fs';
 
 /* ---- ① 编辑 v3：caret 精确 ---- */
