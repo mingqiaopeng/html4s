@@ -1,0 +1,38 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 播放器语法检查
+        run: node --check player/h4s.player.js
+
+      - name: 工具语法检查
+        run: |
+          for f in tools/*.mjs; do
+            node --check "$f" || exit 1
+          done
+
+      - name: 播放器 $$ 完整性（防塌陷回归）
+        run: node tools/check-dollar.mjs
+
+      - name: 全量 deck lint
+        run: node tools/lint-all.mjs
+
+      - name: 播放器回归（CDP 25 断言）
+        run: node tools/verify-bugfix.mjs
+        env:
+          # GitHub ubuntu runner 预装 Google Chrome；本机开发环境自动探测 Edge 优先
+          H4S_BROWSER: /usr/bin/google-chrome
