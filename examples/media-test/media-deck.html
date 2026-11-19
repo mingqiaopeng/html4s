@@ -13,9 +13,11 @@ body{margin:0;background:#111}
     <audio src="loop.wav" loop muted></audio>
   </div>
   <h1>P1 · 带 autoplay 音频（data-h4s-media="autoplay"）</h1>
+  <h4s-notes hidden>进入本页时音频自动循环播放（muted 规避自动播放策略），离开时自动暂停。用于验证 mediaEnter/mediaLeave 生命周期。</h4s-notes>
 </section>
 <section class="slide" data-slide-id="p2" data-h4s-title="无媒体页">
   <h1>P2 · 无媒体</h1>
+  <h4s-notes hidden>无媒体对照页：离开 P1 进入本页时，P1 的音频应已暂停。</h4s-notes>
 </section>
 </h4s-deck>
 <script src="../../player/h4s.player.js"></script>

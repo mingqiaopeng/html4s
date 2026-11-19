@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="zh-CN"><head><meta charset="utf-8"><title>html4s 一致性基准</title>
+<script type="application/h4s+json">
+{
+  "h4s": "1.0",
+  "meta": { "title": "html4s 一致性基准", "lang": "zh-CN", "author": "Html4s Project" },
+  "id": "conformance",
+  "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "#0d1117" },
+  "defaults": { "transition": { "name": "fade", "duration": 300 }, "fx": "stars" },
+  "fonts": []
+}
+</script>
+<style>
+  body{margin:0;background:#0d1117;color:#e6edf3;font-family:system-ui,'Microsoft YaHei',sans-serif;}
+  h4s-slide{display:block;width:1920px;height:1080px;box-sizing:border-box;padding:110px 150px;position:relative;background:#0d1117;}
+  .kicker{font-size:24px;letter-spacing:.35em;color:#38bdf8;margin:0 0 26px;}
+  h1{font-size:92px;margin:0 0 34px;line-height:1.15;}
+  .desc{font-size:36px;color:#9fb0c3;margin:0;max-width:1400px;line-height:1.6;}
+  .meta-foot{position:absolute;bottom:56px;left:150px;font-size:20px;color:#6e7d92;}
+  .fragbox{margin-top:26px;display:flex;flex-direction:column;gap:14px;}
+  .frag{font-size:30px;color:#e6edf3;}
+  .mixed{font-size:60px;line-height:1.5;}
+  .mixed .hl{color:#fbbf24;}
+  .chip{display:inline-block;font-size:26px;border:1px solid #30363d;border-radius:8px;padding:10px 22px;margin-right:18px;color:#9fb0c3;}
+</style></head>
+<body>
+<h4s-deck>
+  <h4s-slide data-h4s-title="html4s 一致性基准" data-h4s-transition="fade">
+    <p class="kicker">一致 · CONFORMANCE</p>
+    <h1>html4s 一致性基准</h1>
+    <p class="desc">本 deck 覆盖格式规范的全部可枚举能力：转场 20 种、碎片 6 效果、特效层、文字微调、混合比例。供 lint/verify/第三方实现对照。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>本 deck 覆盖格式规范的全部可枚举能力：转场 20 种、碎片 6 效果、特效层、文字微调、混合比例。供 lint/verify/第三方实现对照。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="淡入淡出" data-h4s-transition="fade">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>淡入淡出</h1>
+    <p class="desc">最朴素也最安全：观感轻、不抢戏，任何内容都适用。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>最朴素也最安全：观感轻、不抢戏，任何内容都适用。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="滑动" data-h4s-transition="slide">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>滑动</h1>
+    <p class="desc">上一页滑出、下一页滑入，方向感明确。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>上一页滑出、下一页滑入，方向感明确。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="推挤" data-h4s-transition="push">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>推挤</h1>
+    <p class="desc">两页同向位移，PowerPoint 经典推入的手感。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>两页同向位移，PowerPoint 经典推入的手感。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="缩放" data-h4s-transition="zoom">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>缩放</h1>
+    <p class="desc">缩小进场 + 放大离场，强调舞台纵深感。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>缩小进场 + 放大离场，强调舞台纵深感。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="擦除" data-h4s-transition="wipe">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>擦除</h1>
+    <p class="desc">clip-path 从左到右揭开，图表页常用。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>clip-path 从左到右揭开，图表页常用。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="翻转" data-h4s-transition="flip">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>翻转</h1>
+    <p class="desc">透视 rotateY 进出，带轻微透明过渡。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>透视 rotateY 进出，带轻微透明过渡。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="缩放模糊" data-h4s-transition="zoomblur">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>缩放模糊</h1>
+    <p class="desc">大模糊 + 缩放，科技感强的开场/收束。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>大模糊 + 缩放，科技感强的开场/收束。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="立方体" data-h4s-transition="cube">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>立方体</h1>
+    <p class="desc">1200px 透视的双面旋转，几何感强。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>1200px 透视的双面旋转，几何感强。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="圆形揭开" data-h4s-transition="iris">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>圆形揭开</h1>
+    <p class="desc">circle() clip-path 收放，聚光灯效果。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>circle() clip-path 收放，聚光灯效果。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="上下展开" data-h4s-transition="unfold">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>上下展开</h1>
+    <p class="desc">水平中缝向两侧展开。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>水平中缝向两侧展开。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="升起" data-h4s-transition="rise">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>升起</h1>
+    <p class="desc">自下而上浮起 + 饱和度恢复，叙事页友好。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>自下而上浮起 + 饱和度恢复，叙事页友好。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="颗粒溶解" data-h4s-transition="dissolve">
+    <p class="kicker">转场 · TRANSITION</p>
+    <h1>颗粒溶解</h1>
+    <p class="desc">steps() 硬切模拟颗粒溶解，复古质感。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>steps() 硬切模拟颗粒溶解，复古质感。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="幕布" data-h4s-transition="curtain">
+    <p class="kicker">遮罩转场 · MASK</p>
+    <h1>幕布</h1>
+    <p class="desc">两片幕布上下合拢再揭开（PowerPoint 幕布式）。 幕布色由清单 defaults.transition.color 配置。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>两片幕布上下合拢再揭开（PowerPoint 幕布式）。 幕布色由清单 defaults.transition.color 配置。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="百叶窗" data-h4s-transition="blinds">
+    <p class="kicker">遮罩转场 · MASK</p>
+    <h1>百叶窗</h1>
+    <p class="desc">10 条叶片交错收放。 幕布色由清单 defaults.transition.color 配置。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>10 条叶片交错收放。 幕布色由清单 defaults.transition.color 配置。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="棋盘" data-h4s-transition="checkerboard">
+    <p class="kicker">遮罩转场 · MASK</p>
+    <h1>棋盘</h1>
+    <p class="desc">6×6 方块交错淡入淡出。 幕布色由清单 defaults.transition.color 配置。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>6×6 方块交错淡入淡出。 幕布色由清单 defaults.transition.color 配置。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="像素溶解" data-h4s-transition="pixelate">
+    <p class="kicker">遮罩转场 · MASK</p>
+    <h1>像素溶解</h1>
+    <p class="desc">10×10 随机次序像素化溶解。 幕布色由清单 defaults.transition.color 配置。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>10×10 随机次序像素化溶解。 幕布色由清单 defaults.transition.color 配置。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="无转场" data-h4s-transition="none">
+    <p class="kicker">转场 · NONE</p>
+    <h1>无转场</h1>
+    <p class="desc">trans 硬切——教学场景与高速翻页用。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>trans 硬切——教学场景与高速翻页用。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="碎片效果集">
+    <p class="kicker">碎片 · FRAGMENTS</p>
+    <h1>碎片效果集</h1>
+    <p class="desc">本页含 6 个碎片，依次展示全部效果；J 键为实验性翻页笔，常规翻页键即可推进。</p>
+    
+    <div class="fragbox">
+      <p class="frag" data-h4s-frag="fade-up">① fade-up · 默认上浮（默认效果）</p>
+      <p class="frag" data-h4s-frag="slide-left" data-h4s-frag-delay="200">② slide-left · 左侧滑入</p>
+      <p class="frag" data-h4s-frag="slide-right">③ slide-right · 右侧滑入</p>
+      <p class="frag" data-h4s-frag="zoom">④ zoom · 缩放进入</p>
+      <p class="frag" data-h4s-frag="fade">⑤ fade · 纯淡入</p>
+      <p class="frag" data-h4s-frag="none">⑥ none · 直切</p>
+    </div>
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>六个碎片依次推进，覆盖全部碎片效果枚举与 frag-delay。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="背景特效层">
+    <p class="kicker">特效 · FX</p>
+    <h1>背景特效层</h1>
+    <p class="desc">本 deck 清单 defaults.fx="stars"：放映模式全页星空背景；浏览模式在右侧预览箱同步预览。特效画布仅放映渲染、后台自动暂停。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>背景特效层由清单 defaults.fx 声明，仅放映渲染。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-fx="confetti" data-h4s-title="页面级礼花 confetti">
+    <p class="kicker">特效 · 礼花</p>
+    <h1>页面级礼花 confetti</h1>
+    <p class="desc">进入本页爆发一次 130 片礼花——收束与表彰场景专用。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>data-h4s-fx="confetti" 页面礼花，进页爆发一次。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="混合内容可编辑">
+    <p class="kicker">编辑 · EDIT</p>
+    <h1>混合内容可编辑</h1>
+    <p class="desc">下方大标题含 <br> 与 <span> 混合结构——文字微调（元素级整体编辑）应能整体选中并保留内联结构。</p>
+    
+    <p class="mixed">工欲善其事，<br>必先<span class="hl">利其器</span>。</p>
+    <p><span class="chip">BR 保持</span><span class="chip">SPAN 保持</span><span class="chip">导出还原</span></p>
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>文字微调目标页：混合内容整元素编辑，提交后真树与导出均保持 br/span 结构。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-stage="1280x720" data-h4s-title="混合比例页">
+    <p class="kicker">比例 · STAGE</p>
+    <h1>混合比例页</h1>
+    <p class="desc">本页舞台覆盖为 1280×720（data-h4s-stage），其余页 1920×1080——逐页混合比例与 Letterbox 行为。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>data-h4s-stage="1280x720" 混合比例页。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="交互元素与点击翻页">
+    <p class="kicker">交互 · INTERACT</p>
+    <h1>交互元素与点击翻页</h1>
+    <p class="desc">放映中点击空白处翻页；按钮/链接等交互元素不受影响（data-h4s-noclick 阻断）。</p>
+    
+    <p><button style="font-size:30px;padding:14px 34px;border-radius:10px;border:1px solid #30363d;background:#161b22;color:#e6edf3">按钮（可聚焦，点击不翻页）</button>
+    <a href="https://github.com/mingqiaopeng/html4s" style="font-size:30px;color:#38bdf8">链接（不翻页）</a></p>
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>交互元素页：验证 data-h4s-noclick 与点击翻页的边界。</h4s-notes>
+  </h4s-slide>
+  <h4s-slide data-h4s-title="基准结束">
+    <p class="kicker">收束 · END</p>
+    <h1>基准结束</h1>
+    <p class="desc">一致性基准走完：转场/碎片/特效/编辑/比例/交互全部覆盖。回浏览模式检查侧栏与页码指示器。</p>
+    
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>收束页。</h4s-notes>
+  </h4s-slide>
+</h4s-deck>
+<script src="../player/h4s.player.js"></script>
+</body></html>

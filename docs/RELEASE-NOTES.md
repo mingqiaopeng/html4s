@@ -1,3 +1,45 @@
+# html4s 0.3.2 发布说明
+
+发布日期：2026-11-19 · 状态：发布工程 + 规范冻结候选 + 生态起点（阶段 1-4 落地）
+
+## 发布工程（把"重复踩坑"变成"机器把关"）
+
+| 项 | 说明 |
+|---|---|
+| `tools/release.mjs` 一键发布 | 全 deck 重建 → lint 门禁 → 回归双脚本 → staging **白名单**同步（杜绝 WebView2 缓存误打包）→ 体积阈值检查 → ISCC → zip → 静默安装 → 安装副本自检 |
+| 内嵌播放器版本指纹 | 构建注入 `manifest.playerVersion`；播放器浏览模式提示"旧版播放器"（⚠ 徽章 + toast）、lint 报 `W-STALE-PLAYER` —— "版本覆盖缺口"类事故自动检出 |
+| GitHub Actions CI | push 即跑：语法检查 / `$$` 完整性 / 全 deck lint / 播放器回归 25 断言（h4s-cdp 支持 Chrome/Chromium 兜底与 `H4S_BROWSER` 环境变量） |
+| `h4s-build --share` | 并行产出浏览器直开的 `.share.html` —— "拷一个文件到任何机器"承诺补全（取代 intro-built 手工形态） |
+
+## 规范与语料（v1.0 冻结准备）
+
+- **[docs/SPEC.md](SPEC.md) 规范 v0.9**：从架构文档独立成文，对齐 0.3.2 实现——清单 Schema（含 `playerVersion`/`fontSubsetChars`）、元素与属性注册表、转场 20 种/fx/碎片效果枚举、深链语法、JS API 与事件、版本化兼容策略
+- **黄金一致性 deck**：`examples/conformance.html`（25 页覆盖全部转场/fx/碎片/混合内容编辑/混合比例/交互元素）+ `tools/verify-conformance.mjs`（13 断言：指纹/导航/碎片/画布/i18n/深链）——回归基准 + AI 生成对照样板
+
+## 生态与体验
+
+- **MCP 扩展**：`h4s_slides`（insert/move/renumber/sync）+ `h4s_review`（一次调用返回结构化验收结论 verdict/errors/warnings/逐页计数）——共 7 工具
+- **导入适配器**：`import-reveal.mjs`（reveal.js → html4s，垂直页平铺/碎片/备注映射）、`import-pptx.mjs`（pptx → html4s 基础版：零依赖 zip 解析、标题/段落/图片 data URI/备注迁移，版式需重套）
+- **lint 增强**：W-MEDIA（DOM 级：媒体缺 controls/autoplay 未静音）、按页摘要（🌙 深色页分组聚类）
+- **壳设置对话框**（Ctrl+, / 右键标题栏菜单）：界面语言覆盖（跟随演示/中文/English，写入 localStorage 对播放器生效）+ 清空最近打开 + 关于（版本指纹）
+- **播放器 i18n 补全**：帮助表/工具条/演讲者窗/网页放映/编辑提示全量双语（zh/en）
+- **无障碍**：页码计数器 `aria-live`、工具条按钮 `aria-label`、总览/侧栏格语义化、装饰画布 `aria-hidden`
+- **WebHID 翻页笔**（实验性，J 键 / `H4S.connectRemote()`）：常见报告字节模式识别前进/后退/黑屏
+- **壳高 DPI 收尾**：对话框按宿主屏真实 DPI 缩放 + `--selftest-dpi` 自测（PrintWindow 安全截图，延时 400ms 防首帧伪影）；Esc 退出壳 F11 全屏同步恢复标题栏
+
+## 修复
+
+- 编辑 Esc 撤销失效（`__h4sOld` 从未赋值）；导出写回失败链路复活（`pendingSave`/`downloadEdited`）+ `.slides` 类 deck 导出定位同规则
+- 快照提前到 collectSlides 之前（导出不再被 `h4s-notes-el` 污染）；纯浏览器 Ctrl 系/F11 恢复原生行为；Esc 先关抽屉不结束放映
+- 恢复误删的党建 deck 源文件；帮助层版本号纠正
+
+## 0.3.2 基线
+
+- 播放器 `$$` 基线 12 / 单 `$` 37（`tools/check-dollar.mjs`），CI 把关
+- 全部 11 个 deck 重建（0.3.2 指纹），lint 0 警告；示例含 `*.share.html` 浏览器直开副本
+
+---
+
 # html4s 0.3.1 发布说明
 
 发布日期：2026-11-16 · 状态：转场特效引擎 + 增量编辑工具

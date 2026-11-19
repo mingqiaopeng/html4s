@@ -5,7 +5,7 @@
 <title>Frontend Slides × html4s</title>
 <script type="application/h4s+json">
 {
-  "h4s": "1.0",
+  "h4s": "1.0", "playerVersion": "0.3.2",
   "meta": { "title": "Frontend Slides × html4s", "lang": "zh-CN", "author": "Html4s Project" },
   "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "#111" },
   "defaults": { "transition": { "name": "fade", "duration": 450 }, "autoslide": 0, "loop": false },
@@ -77,7 +77,7 @@
 </h4s-deck>
 <script>
 /*!
- * h4s-core — html4s 播放器运行时 v0.3.1（转场特效引擎 · 增量编辑配套）
+ * h4s-core — html4s 播放器运行时 v0.3.2（转场特效引擎 · 增量编辑配套）
  * ------------------------------------------------
  * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
  * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
@@ -95,7 +95,8 @@
   if (window.__H4S_LOADED__) return;
   window.__H4S_LOADED__ = true;
 
-  var VERSION = '0.3.1';
+  var VERSION = '0.3.2';
+  var PV_STALE = null; /* 清单 playerVersion ≠ 本播放器版本 → 旧版内嵌（build 注入指纹后检测） */
 
   /* ================================================================
    * 工具
@@ -131,28 +132,88 @@
     } catch (e) {}
   }
 
-  /* ---- UI 多语言（i18n）：清单 meta.lang 优先，回退浏览器语言 ---- */
+  /* ---- UI 多语言（i18n）：壳语言覆盖（localStorage h4s-lang-override）>
+     清单 meta.lang > 浏览器语言 ---- */
   var UI_STR = {
     zh: { open: '打开', openT: '打开本地 .html4s 文件 (Ctrl+O)', url: '网址', urlT: '打开网址播放 (Ctrl+L)',
       toLight: '☀ 浅色', toDark: '🌙 深色', themeT: '深色/浅色切换',
       playcur: '从当前放映', playcurT: '从当前选中页放映 (Shift+F5)', play: '▶ 放映', playT: '从头放映 (F5)',
       presenter: '演讲者视图', notes: '备注', thisPage: '本页', total: '总计', fragN: '碎片 ', noFrags: '无碎片',
       nextFrag: '下一状态 · 碎片 ', nextSlide: '下一页 · 最终状态', lastPage: '已是最后一页', firstPage: '已是第一页',
-      noNotes: '（本页无备注）', nextCap: '下一状态' },
+      noNotes: '（本页无备注）', nextCap: '下一状态', nextCapFinal: '下一页 · 最终状态', endMark: '— END —',
+      prevT: '上一页 (← / PgUp)', nextT: '下一页 (→ / 空格)', timerT: '总时长 (T 暂停)',
+      rehearseT: '排练录制 (R)', laserT: '激光笔 (L)', blackT: '黑屏 (B)', overviewT: '总览 (G)',
+      drawerT: '演讲者视图 (S)', preswinT: '独立演讲者窗口（需 http 访问）', fullscreenT: '全屏 (F)', helpT: '帮助 (?)',
+      helpTitle: '键盘帮助', numEnter: '数字 + Enter',
+      hNext: '下一步（碎片内推进 → 翻页）', hPrev: '上一步', hHome: '首页 / 末页', hNum: '跳页（显示最终碎片状态）',
+      hBlack: '黑屏 / 白屏', hGrid: '总览网格 / 演讲者抽屉', hTime: '计时暂停 / 排练录制', hLaser: '激光笔',
+      hRemote: '连接翻页笔（实验性；多数翻页笔为键盘设备，直接可用）', hFull: '全屏切换', hEsc: '退出浮层 / 全屏',
+      drawerOn: '演讲者抽屉已开启（同屏练习模式）', drawerOff: '演讲者抽屉已关闭',
+      rehearseStart: '排练开始（R 结束）', rehearseEnd: '排练结束：共 {0}，明细已写回 .timings.json',
+      paused: '计时已暂停', resumed: '计时继续', numRange: '页码超出范围 1-{0}',
+      editHint: '文字微调模式：单击预览中的文字直接修改，Esc 退出', editOff: '文字微调模式已关闭',
+      edited: '✓ 已修改（第 {0} 页）', editedLack: ' · ⚠ 子集缺字: {0}（导出后该处回退系统字体）',
+      exporting: '正在写回源文件…', writeBackOk: '已写回源文件 ✓ 建议运行 h4s-build --subset 重建以更新字体子集',
+      writeBackFail: '写回失败（{0}），已改为导出下载', exported: '已导出包含文字修改的 .html4s',
+      snapFail: '快照不可用（deck 过早修改？）',
+      stalePlayer: '检测到旧版内嵌播放器（{0} → {1}）：功能可能缺失，建议 h4s-build 重建',
+      webHint: '未检测到幻灯片结构 · <b>F5</b> 网页放映（全屏按屏翻页） · Esc 退出',
+      webBadge: '{0} / {1} 屏 · → 翻页 · Esc 退出', webToast: '网页放映：方向键/空格按屏翻页，Esc 退出',
+      presPrev: '◀ 上一页', presNext: '下一页 ▶', presBlack: '黑屏 B', presWhite: '白屏 W', presGrid: '总览 G',
+      presTitle: '[演讲者] ',
+      presWarnNoStage: '未检测到舞台窗口（BroadcastChannel 需 http:// 访问），已切换本地练习模式',
+      presWarnLost: '信号中断：请确认舞台窗口仍开着',
+      kioskUnlock: 'kiosk 已解锁（Ctrl+Alt+Q 重新锁定）',
+      popupBlocked: '弹窗被浏览器拦截，请允许弹窗后重试', presWinOpened: '演讲者窗口已打开（双屏时拖到副屏）',
+      remoteUnsupported: '此环境不支持 WebHID（需 Chrome/Edge 与安全上下文）', remoteConnected: '翻页笔已连接: ',
+      remoteFail: '翻页笔连接失败' },
     en: { open: 'Open', openT: 'Open local .html4s file (Ctrl+O)', url: 'URL', urlT: 'Play from URL (Ctrl+L)',
       toLight: '☀ Light', toDark: '🌙 Dark', themeT: 'Toggle light/dark',
       playcur: 'From current', playcurT: 'Present from selected slide (Shift+F5)', play: '▶ Present', playT: 'Present from start (F5)',
       presenter: 'Presenter', notes: 'Notes', thisPage: 'Slide', total: 'Total', fragN: 'Frag ', noFrags: 'No fragments',
       nextFrag: 'Next state · frag ', nextSlide: 'Next slide · final', lastPage: 'Last page', firstPage: 'First page',
-      noNotes: '(no notes)', nextCap: 'Next state' }
+      noNotes: '(no notes)', nextCap: 'Next state', nextCapFinal: 'Next slide · final', endMark: '— END —',
+      prevT: 'Previous (← / PgUp)', nextT: 'Next (→ / Space)', timerT: 'Total time (T to pause)',
+      rehearseT: 'Rehearse (R)', laserT: 'Laser pointer (L)', blackT: 'Black screen (B)', overviewT: 'Overview (G)',
+      drawerT: 'Presenter drawer (S)', preswinT: 'Presenter window (needs http)', fullscreenT: 'Fullscreen (F)', helpT: 'Help (?)',
+      helpTitle: 'Keyboard help', numEnter: 'Number + Enter',
+      hNext: 'Next step (fragments first, then slides)', hPrev: 'Previous step', hHome: 'First / last slide', hNum: 'Jump to slide (final fragment state)',
+      hBlack: 'Black / white screen', hGrid: 'Overview grid / presenter drawer', hTime: 'Pause timer / rehearse', hLaser: 'Laser pointer',
+      hRemote: 'Connect presenter remote (experimental; most remotes are keyboard devices)', hFull: 'Toggle fullscreen', hEsc: 'Exit overlay / fullscreen',
+      drawerOn: 'Presenter drawer opened (same-screen practice)', drawerOff: 'Presenter drawer closed',
+      rehearseStart: 'Rehearsal started (R to stop)', rehearseEnd: 'Rehearsal done: {0}, timings written to .timings.json',
+      paused: 'Timer paused', resumed: 'Timer resumed', numRange: 'Slide number out of range 1-{0}',
+      editHint: 'Text touch-up: click text in the preview to edit, Esc to exit', editOff: 'Text touch-up off',
+      edited: '✓ Modified (slide {0})', editedLack: ' · ⚠ subset missing: {0} (falls back to system font after export)',
+      exporting: 'Writing back to source file…', writeBackOk: 'Written back to source ✓ run h4s-build --subset to refresh font subset',
+      writeBackFail: 'Write-back failed ({0}), exported as download instead', exported: 'Exported .html4s with text edits',
+      snapFail: 'Snapshot unavailable (deck modified too early?)',
+      stalePlayer: 'Stale embedded player ({0} → {1}): features may be missing, rebuild with h4s-build',
+      webHint: 'No slide structure found · <b>F5</b> web present (fullscreen page-by-page) · Esc exits',
+      webBadge: '{0} / {1} screens · → next · Esc exits', webToast: 'Web present: arrows/space page through, Esc exits',
+      presPrev: '◀ Prev', presNext: 'Next ▶', presBlack: 'Black B', presWhite: 'White W', presGrid: 'Grid G',
+      presTitle: '[Presenter] ',
+      presWarnNoStage: 'No stage window detected (BroadcastChannel needs http://), switched to local practice mode',
+      presWarnLost: 'Signal lost: make sure the stage window is still open',
+      kioskUnlock: 'kiosk unlocked (Ctrl+Alt+Q to re-lock)',
+      popupBlocked: 'Popup blocked — allow popups and retry', presWinOpened: 'Presenter window opened (drag to second screen)',
+      remoteUnsupported: 'WebHID not supported here (needs Chrome/Edge and a secure context)', remoteConnected: 'Remote connected: ',
+      remoteFail: 'Remote connection failed' }
   };
   var UILANG = 'zh';
   try {
+    var _ovr = localStorage.getItem('h4s-lang-override'); /* 壳设置对话框写入 */
     var _mlang = ((JSON.parse(($('script[type="application/h4s+json"]') || { textContent: '{}' }).textContent) || {}).meta || {}).lang || '';
     var _nav = (navigator.language || 'zh');
-    UILANG = /^zh/i.test(_mlang || _nav) ? 'zh' : 'en';
+    UILANG = (_ovr === 'zh' || _ovr === 'en') ? _ovr : (/^zh/i.test(_mlang || _nav) ? 'zh' : 'en');
   } catch (err) {}
   function t(k) { return (UI_STR[UILANG] && UI_STR[UILANG][k]) || UI_STR.zh[k] || k; }
+  /* 占位符版本：t 的键值里 {0}/{1} 依次替换为后续参数 */
+  function tf(k) {
+    var s = t(k);
+    for (var i = 1; i < arguments.length; i++) s = s.split('{' + (i - 1) + '}').join(String(arguments[i]));
+    return s;
+  }
 
   /* 浏览模式 UI 深浅色 */
   var uiTheme = 'dark';
@@ -183,10 +244,10 @@
           if (m && m.h4sSaved !== undefined && pendingSave) {
             var out = pendingSave; pendingSave = null;
             if (m.h4sSaved) {
-              toast('已写回源文件 ✓ 建议运行 h4s-build --subset 重建以更新字体子集');
+              toast(t('writeBackOk'));
             } else {
-              downloadEdited(out);
-              toast('写回失败（' + (m.reason || '未知') + '），已改为导出下载');
+              toast(tf('writeBackFail', m.reason || '-'));
+              downloadEdited(out, true); /* 失败提示已在前面，下载不再抢 toast */
             }
             return;
           }
@@ -589,21 +650,21 @@
     chrome = el('div', 'h4s-chrome');
     chrome.innerHTML =
       '<div class="h4s-chrome-left">' +
-        '<button data-act="prev" title="上一页 (← / PgUp)">‹</button>' +
-        '<button data-act="next" title="下一页 (→ / 空格)">›</button>' +
-        '<span class="h4s-counter"><b id="h4s-cur">1</b> / <span id="h4s-total">0</span>' +
+        '<button data-act="prev" aria-label="' + t('prevT') + '" title="' + t('prevT') + '">‹</button>' +
+        '<button data-act="next" aria-label="' + t('nextT') + '" title="' + t('nextT') + '">›</button>' +
+        '<span class="h4s-counter" role="status" aria-live="polite"><b id="h4s-cur">1</b> / <span id="h4s-total">0</span>' +
         '<span id="h4s-numbuf" style="color:#fbbf24"></span></span>' +
       '</div>' +
       '<div class="h4s-chrome-right">' +
-        '<span class="h4s-timer" id="h4s-timer" title="总时长 (T 暂停)">00:00</span>' +
-        '<button data-act="rehearse" title="排练录制 (R)">⏺</button>' +
-        '<button data-act="laser" title="激光笔 (L)">◎</button>' +
-        '<button data-act="black" title="黑屏 (B)">●</button>' +
-        '<button data-act="overview" title="总览 (G)">⊞</button>' +
-        '<button data-act="drawer" title="演讲者视图 (S)">☰</button>' +
-        '<button data-act="preswin" title="独立演讲者窗口（需 http 访问）">⧉</button>' +
-        '<button data-act="fullscreen" title="全屏 (F)">⛶</button>' +
-        '<button data-act="help" title="帮助 (?)">?</button>' +
+        '<span class="h4s-timer" id="h4s-timer" title="' + t('timerT') + '">00:00</span>' +
+        '<button data-act="rehearse" aria-label="' + t('rehearseT') + '" title="' + t('rehearseT') + '">⏺</button>' +
+        '<button data-act="laser" aria-label="' + t('laserT') + '" title="' + t('laserT') + '">◎</button>' +
+        '<button data-act="black" aria-label="' + t('blackT') + '" title="' + t('blackT') + '">●</button>' +
+        '<button data-act="overview" aria-label="' + t('overviewT') + '" title="' + t('overviewT') + '">⊞</button>' +
+        '<button data-act="drawer" aria-label="' + t('drawerT') + '" title="' + t('drawerT') + '">☰</button>' +
+        '<button data-act="preswin" aria-label="' + t('preswinT') + '" title="' + t('preswinT') + '">⧉</button>' +
+        '<button data-act="fullscreen" aria-label="' + t('fullscreenT') + '" title="' + t('fullscreenT') + '">⛶</button>' +
+        '<button data-act="help" aria-label="' + t('helpT') + '" title="' + t('helpT') + '">?</button>' +
       '</div>';
 
     blackout = el('div', 'h4s-blackout');
@@ -612,21 +673,23 @@
 
     helpEl = el('div', 'h4s-help');
     helpEl.innerHTML =
-      '<div><h2>html4s 播放器 v' + VERSION + ' — 键盘帮助</h2><table>' +
-      '<tr><td><kbd>→ ↓ 空格 PgDn Enter</kbd></td><td>下一步（碎片内推进 → 翻页）</td></tr>' +
-      '<tr><td><kbd>← ↑ PgUp Backspace</kbd></td><td>上一步</td></tr>' +
-      '<tr><td><kbd>Home / End</kbd></td><td>首页 / 末页</td></tr>' +
-      '<tr><td><kbd>数字 + Enter</kbd></td><td>跳页（显示最终碎片状态）</td></tr>' +
-      '<tr><td><kbd>B</kbd> / <kbd>W</kbd></td><td>黑屏 / 白屏</td></tr>' +
-      '<tr><td><kbd>G</kbd> / <kbd>S</kbd></td><td>总览网格 / 演讲者抽屉</td></tr>' +
-      '<tr><td><kbd>T</kbd> / <kbd>R</kbd></td><td>计时暂停 / 排练录制</td></tr>' +
-      '<tr><td><kbd>L</kbd></td><td>激光笔</td></tr>' +
-      '<tr><td><kbd>F</kbd></td><td>全屏切换</td></tr>' +
-      '<tr><td><kbd>Esc</kbd></td><td>退出浮层 / 全屏</td></tr>' +
+      '<div><h2>html4s 播放器 v' + VERSION + ' — ' + t('helpTitle') + '</h2><table>' +
+      '<tr><td><kbd>→ ↓ 空格 PgDn Enter</kbd></td><td>' + t('hNext') + '</td></tr>' +
+      '<tr><td><kbd>← ↑ PgUp Backspace</kbd></td><td>' + t('hPrev') + '</td></tr>' +
+      '<tr><td><kbd>Home / End</kbd></td><td>' + t('hHome') + '</td></tr>' +
+      '<tr><td><kbd>' + t('numEnter') + '</kbd></td><td>' + t('hNum') + '</td></tr>' +
+      '<tr><td><kbd>B</kbd> / <kbd>W</kbd></td><td>' + t('hBlack') + '</td></tr>' +
+      '<tr><td><kbd>G</kbd> / <kbd>S</kbd></td><td>' + t('hGrid') + '</td></tr>' +
+      '<tr><td><kbd>T</kbd> / <kbd>R</kbd></td><td>' + t('hTime') + '</td></tr>' +
+      '<tr><td><kbd>L</kbd></td><td>' + t('hLaser') + '</td></tr>' +
+      '<tr><td><kbd>J</kbd></td><td>' + t('hRemote') + '</td></tr>' +
+      '<tr><td><kbd>F</kbd></td><td>' + t('hFull') + '</td></tr>' +
+      '<tr><td><kbd>Esc</kbd></td><td>' + t('hEsc') + '</td></tr>' +
       '</table></div>';
 
     toastEl = el('div', 'h4s-toast');
     laserDot = el('div', 'h4s-laser-dot');
+    laserDot.setAttribute('aria-hidden', 'true');
 
     drawer = el('aside', 'h4s-drawer');
     drawer.innerHTML =
@@ -901,6 +964,7 @@
     if (fx.mode === 'none' || fx.mode === 'off') return;
     if (!fx.canvas) {
       fx.canvas = el('canvas', 'h4s-fx');
+      fx.canvas.setAttribute('aria-hidden', 'true');
       fx.ctx = fx.canvas.getContext('2d');
       on(window, 'resize', fxResize);
       on(document, 'visibilitychange', function () { document.hidden ? fxStop() : fxStart(); });
@@ -924,6 +988,7 @@
     if ((slide.el.getAttribute('data-h4s-fx') || '').toLowerCase() !== 'confetti') return;
     if (!confetti.canvas) {
       confetti.canvas = el('canvas', 'h4s-fx');
+      confetti.canvas.setAttribute('aria-hidden', 'true');
       confetti.canvas.style.zIndex = 60;
       holder.appendChild(confetti.canvas);
       confetti.ctx = confetti.canvas.getContext('2d');
@@ -1118,6 +1183,8 @@
         cell.appendChild(thumb);
         cell.appendChild(el('div', 'h4s-meta',
           '<b>' + (idx + 1) + '</b><span>' + esc(s.title) + '</span>'));
+        cell.setAttribute('role', 'button');
+        cell.setAttribute('aria-label', (idx + 1) + '. ' + s.title);
         on(cell, 'click', function () { go(idx, 'jump'); setOverlay(null); });
         overviewEl.appendChild(cell);
         self.cells.push(cell);
@@ -1203,7 +1270,7 @@
       clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
       box.appendChild(clone);
     } else {
-      box.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">— END —</div>';
+      box.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">' + t('endMark') + '</div>';
       box.style.height = '160px';
     }
   }
@@ -1213,7 +1280,7 @@
     document.body.classList.toggle('h4s-presenting', drawerOn);
     layout();
     updateDrawer();
-    toast(drawerOn ? '演讲者抽屉已开启（同屏练习模式）' : '演讲者抽屉已关闭');
+    toast(drawerOn ? t('drawerOn') : t('drawerOff'));
   }
 
   /* ================================================================
@@ -1282,6 +1349,16 @@
     buildSidebar();
     selectSlide(S.sel);
     bindEditing();
+    /* 旧版内嵌播放器提示（build 注入 playerVersion 指纹后启用） */
+    if (PV_STALE) {
+      try {
+        var staleBadge = el('span', null, '⚠ ' + PV_STALE + ' → ' + VERSION);
+        staleBadge.style.cssText = 'font-size:12px;color:#fbbf24;border:1px solid rgba(245,158,11,.35);padding:4px 10px;border-radius:6px;white-space:nowrap;';
+        staleBadge.title = tf('stalePlayer', PV_STALE, VERSION);
+        browseBar.insertBefore(staleBadge, browseBar.querySelector('.h4s-pageinfo'));
+        toast(tf('stalePlayer', PV_STALE, VERSION));
+      } catch (err) {}
+    }
   }
 
   function buildSidebar() {
@@ -1299,6 +1376,8 @@
       thumb.appendChild(clone);
       cell.appendChild(thumb);
       cell.appendChild(el('div', 'h4s-meta', '<b>' + (idx + 1) + '</b><span>' + esc(s.title) + '</span>'));
+      cell.setAttribute('role', 'button');
+      cell.setAttribute('aria-label', (idx + 1) + '. ' + s.title);
       on(cell, 'click', function () { selectSlide(idx); });
       on(cell, 'dblclick', function () { startShow(idx); });  /* 双击缩略图直接放映该页 */
       sidebar.appendChild(cell);
@@ -1423,8 +1502,7 @@
       });
       renderMini();
     }
-    toast(on ? '文字微调模式：单击预览中的文字直接修改，Esc 退出'
-             : '文字微调模式已关闭');
+    toast(on ? t('editHint') : t('editOff'));
   }
   /* 克隆编辑提交：文本节点级同步（元素路径 + tIdx → 真树 nodeValue），记入改动表，缺字预警 */
   function commitEdit(el) {
@@ -1455,7 +1533,7 @@
     if (i === ED.edits.length) ED.edits.push({ si: si, path: path, old: oldNow, now: nowHTML, lack: lack, title: slide.title });
     refreshExportBtn();
     renderMini();
-    toast('✓ 已修改（第 ' + (si + 1) + ' 页）' + (lack.length ? ' · ⚠ 子集缺字: ' + lack.join('') + '（导出后该处回退系统字体）' : ''));
+    toast(tf('edited', si + 1) + (lack.length ? tf('editedLack', lack.join('')) : ''));
   }
   function refreshExportBtn() {
     var b = $('[data-bact="export"]');
@@ -1474,8 +1552,8 @@
     }
     return nodes;
   }
-  /* 浏览器（非壳）环境导出为下载文件；壳内写回失败时也回退到这里 */
-  function downloadEdited(html) {
+  /* 浏览器（非壳）环境导出为下载文件；壳内写回失败时也回退到这里（silent=不重复 toast） */
+  function downloadEdited(html, silent) {
     var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
     var a = el('a');
     a.href = URL.createObjectURL(blob);
@@ -1483,11 +1561,11 @@
     document.body.appendChild(a);
     a.click();
     setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 200);
-    toast('已导出包含文字修改的 .html4s');
+    if (!silent) toast(t('exported'));
   }
   /* 导出：改动回写 boot 快照 → 完整 .html4s。壳内走 save 写回源文件，否则下载 */
   function exportEdited() {
-    if (!ED.snap) { toast('快照不可用（deck 过早修改？）'); return; }
+    if (!ED.snap) { toast(t('snapFail')); return; }
     var doc = new DOMParser().parseFromString(ED.snap, 'text/html');
     var secs = snapSections(doc);
     ED.edits.forEach(function (e) {
@@ -1500,7 +1578,7 @@
       /* 等壳回执：成功 → toast；失败/从网址打开 → 回退下载（downloadEdited） */
       pendingSave = out;
       shellAction('save', { html: out, name: (MANIFEST.meta && MANIFEST.meta.title || 'deck') });
-      toast('正在写回源文件…');
+      toast(t('exporting'));
       return;
     }
     downloadEdited(out);
@@ -1558,7 +1636,7 @@
     var b = document.querySelector('.h4s-webbadge');
     if (b && WP.on) {
       var w = wpInfo();
-      b.textContent = w.cur + ' / ' + w.total + ' 屏 · → 翻页 · Esc 退出';
+      b.textContent = tf('webBadge', w.cur, w.total);
     }
   }
   function wpStep(dir) {
@@ -1571,12 +1649,13 @@
     document.body.classList.add('h4s-webp');
     if (!document.querySelector('.h4s-webbadge')) {
       var b = el('div', 'h4s-webbadge');
+      b.setAttribute('role', 'status');
       document.body.appendChild(b);
     }
     try { document.documentElement.requestFullscreen().catch(function () {}); } catch (e) {}
     window.scrollTo(0, 0);
     wpBadge();
-    toast('网页放映：方向键/空格按屏翻页，Esc 退出');
+    toast(t('webToast'));
   }
   function wpHide() {
     WP.on = false;
@@ -1586,7 +1665,8 @@
   function initWebPresent() {
     /* 文档模式下的极简入口横幅（不与 deck 内容冲突） */
     var hint = el('div', 'h4s-webhint');
-    hint.innerHTML = '未检测到幻灯片结构 · <b>F5</b> 网页放映（全屏按屏翻页） · Esc 退出';
+    hint.setAttribute('role', 'note');
+    hint.innerHTML = t('webHint');
     document.body.appendChild(hint);
     on(document, 'keydown', function (e) {
       var k = e.key;
@@ -1733,18 +1813,18 @@
 
   function togglePause() {
     T.paused = !T.paused;
-    toast(T.paused ? '计时已暂停' : '计时继续');
+    toast(T.paused ? t('paused') : t('resumed'));
   }
 
   function toggleRehearse() {
     RH.on = !RH.on;
     if (RH.on) {
       RH.log = [];
-      toast('排练开始（R 结束）');
+      toast(t('rehearseStart'));
     } else {
       if (T.slideAt) RH.log.push({ page: S.i + 1, seconds: +dwell().toFixed(1), frags: S.f + 1 });
       shellAction('timings', { log: RH.log, total: Math.round(totalSec()) });
-      toast('排练结束：共 ' + fmt(totalSec()) + '，明细已写回 .timings.json');
+      toast(tf('rehearseEnd', fmt(totalSec())));
       console.table(RH.log);
       emit('h4s:rehearse', { log: RH.log, total: totalSec() });
     }
@@ -1842,8 +1922,36 @@
     var u = new URL(location.href);
     u.hash = '#presenter';
     var w = window.open(u.href, 'h4s-presenter', 'width=1100,height=720');
-    if (!w) toast('弹窗被浏览器拦截，请允许弹窗后重试');
-    else toast('演讲者窗口已打开（双屏时拖到副屏）');
+    if (!w) toast(t('popupBlocked'));
+    else toast(t('presWinOpened'));
+  }
+
+  /* ---- WebHID 翻页笔（实验性，J 键 / H4S.connectRemote）----
+     多数翻页笔是键盘类设备（PageUp/Down 直接可用，无需此功能）；
+     这里覆盖走厂商私有报告协议的型号，按常见字节模式尽力识别：
+     报告末字节/次末字节 = 1 前进 · 2 后退 · 4 黑屏（Logitech R400 系等） */
+  var remoteDev = null;
+  function connectRemote() {
+    if (!navigator.hid || !navigator.hid.requestDevice) { toast(t('remoteUnsupported')); return; }
+    navigator.hid.requestDevice({ filters: [] }).then(function (devs) {
+      var d = devs && devs[0];
+      if (!d) return;
+      return d.open().then(function () {
+        remoteDev = d;
+        d.addEventListener('inputreport', function (e) {
+          try {
+            var u = new Uint8Array(e.data.buffer);
+            var code = 0;
+            if (u.length >= 2 && u[u.length - 1] !== 0) code = u[u.length - 1];
+            else if (u.length >= 3 && u[u.length - 2] !== 0) code = u[u.length - 2];
+            if (code === 0x01) { if (S.presenting) next(); }
+            else if (code === 0x02) { if (S.presenting) prev(); }
+            else if (code === 0x04) setOverlay(S.overlay === 'black' ? null : 'black');
+          } catch (err) {}
+        });
+        toast(t('remoteConnected') + (d.productName || (d.vendorId + ':' + d.productId)));
+      });
+    }).then(function () {}, function () { toast(t('remoteFail')); }).catch(function () {});
   }
 
   /* ================================================================
@@ -1852,7 +1960,7 @@
   function presenterMode(hash) {
     var style = el('style', null, CSS + '' + PRESENTER_CSS);
     document.head.appendChild(style);
-    document.title = '[演讲者] ' + document.title;
+    document.title = t('presTitle') + document.title;
     document.body.classList.add('h4s-presenter');
 
     MANIFEST = readManifest();
@@ -1872,7 +1980,7 @@
     var ui = el('div', 'h4s-pres');
     ui.innerHTML =
       '<div class="col-l">' +
-        '<div class="pv"><div class="cap">当前 · <span id="h4s-p-frag"></span></div><div class="box" id="h4s-p-cur"></div></div>' +
+        '<div class="pv"><div class="cap">' + t('thisPage') + ' · <span id="h4s-p-frag"></span></div><div class="box" id="h4s-p-cur"></div></div>' +
         '<div class="pv"><div class="cap" id="h4s-p-nextcap">' + t('nextCap') + '</div><div class="box" id="h4s-p-next"></div></div>' +
       '</div>' +
       '<div class="col-r">' +
@@ -1885,11 +1993,11 @@
         '<div class="cap">' + t('notes') + '</div>' +
         '<div class="notes" id="h4s-p-notes"></div>' +
         '<div class="btns">' +
-          '<button data-act="prev">◀ 上一页</button>' +
-          '<button data-act="next">下一页 ▶</button>' +
-          '<button data-act="black">黑屏 B</button>' +
-          '<button data-act="white">白屏 W</button>' +
-          '<button data-act="overview">总览 G</button>' +
+          '<button data-act="prev">' + t('presPrev') + '</button>' +
+          '<button data-act="next">' + t('presNext') + '</button>' +
+          '<button data-act="black">' + t('presBlack') + '</button>' +
+          '<button data-act="white">' + t('presWhite') + '</button>' +
+          '<button data-act="overview">' + t('presGrid') + '</button>' +
         '</div>' +
       '</div>' +
       '<div class="h4s-pres-shade" id="h4s-p-shade"></div>' +
@@ -1933,14 +2041,14 @@
 
       fillBox(curBox, s, P.f < 0 ? 0 : P.f + 1);
 
-      var idx = P.i, fc = 0, cap = '下一状态';
-      if (P.f < s.frags.length - 1) { fc = P.f + 2; cap = '下一状态 · 碎片 ' + (P.f + 2) + '/' + s.frags.length; }
-      else if (P.i < n - 1) { idx = P.i + 1; fc = -2; cap = '下一页 · 最终状态'; }
+      var idx = P.i, fc = 0, cap = t('nextCap');
+      if (P.f < s.frags.length - 1) { fc = P.f + 2; cap = t('nextFrag') + (P.f + 2) + '/' + s.frags.length; }
+      else if (P.i < n - 1) { idx = P.i + 1; fc = -2; cap = t('nextCapFinal'); }
       else fc = -3;
       $('#h4s-p-nextcap', ui).textContent = cap;
       if (fc >= 0) fillBox(nextBox, slides[idx], fc);
       else if (fc === -2) fillBox(nextBox, slides[idx], -2);
-      else nextBox.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">— END —</div>';
+      else nextBox.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">' + t('endMark') + '</div>';
 
       /* 黑屏/白屏只作用于舞台窗（观众屏）；演讲者窗保持正常显示 */
     }
@@ -2001,11 +2109,11 @@
       try { bus.postMessage({ v: 1, role: 'presenter', type: 'hello' }); } catch (e) {}
     } else {
       localMode = true;
-      $('#h4s-p-warn', ui).textContent = '未检测到舞台窗口（BroadcastChannel 需 http:// 访问），已切换本地练习模式';
+      $('#h4s-p-warn', ui).textContent = t('presWarnNoStage');
     }
     setTimeout(function () {
       if (!localMode && Date.now() - P.lastMsg > 2500)
-        $('#h4s-p-warn', ui).textContent = '信号中断：请确认舞台窗口仍开着';
+        $('#h4s-p-warn', ui).textContent = t('presWarnLost');
     }, 3000);
 
     on(window, 'resize', render);
@@ -2037,7 +2145,7 @@
     if (n >= 1 && n <= S.n) {
       if (S.presenting) go(n - 1, 'jump');
       else selectSlide(n - 1);
-    } else toast('页码超出范围 1-' + S.n);
+    } else toast(tf('numRange', S.n));
   }
 
   function handleEscape() {
@@ -2065,7 +2173,7 @@
         if (e.ctrlKey && (k === 'w' || k === 'W')) { e.preventDefault(); shellAction('close'); return; }
         if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
       }
-      if (e.ctrlKey && e.altKey && (k === 'q' || k === 'Q') && S.kiosk) { e.preventDefault(); endShow(); toast('kiosk 已解锁（Ctrl+Alt+Q 重新锁定）'); return; }
+      if (e.ctrlKey && e.altKey && (k === 'q' || k === 'Q') && S.kiosk) { e.preventDefault(); endShow(); toast(t('kioskUnlock')); return; }
 
       /* 浏览模式键位（PowerPoint 式） */
       if (!S.presenting) {
@@ -2116,6 +2224,7 @@
         case 't': case 'T': togglePause(); break;
         case 'r': case 'R': toggleRehearse(); break;
         case 'l': case 'L': toggleLaser(); break;
+        case 'j': case 'J': connectRemote(); break;
         case '?': setOverlay(S.overlay === 'help' ? null : 'help'); break;
         case 'Escape': handleEscape(); break;
         default:
@@ -2253,6 +2362,8 @@
         background: MANIFEST.stage.background || '#000'
       };
     }
+    /* 内嵌播放器版本指纹：deck 由旧版播放器构建 → 提示重建（阶段1 可靠性） */
+    PV_STALE = (MANIFEST.playerVersion && MANIFEST.playerVersion !== VERSION) ? String(MANIFEST.playerVersion) : null;
     /* 文字微调快照：保存接管前的原始文档（导出/写回的基底）。
        必须在 collectSlides 之前——后者会给 notes 元素加 h4s-notes-el 类，
        快照晚于它就会把该类污染进导出文件 */
@@ -2283,6 +2394,7 @@
     toggleDrawer: toggleDrawer,
     toggleLaser: toggleLaser,
     toggleFullscreen: toggleFullscreen,
+    connectRemote: connectRemote,
     timings: function () { return RH.log; }
   };
 })();

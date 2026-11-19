@@ -11,6 +11,7 @@
 import { spawn, execFileSync } from 'node:child_process';
 import fs from 'node:fs';
 import path from 'node:path';
+import os from 'node:os';
 import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -50,6 +51,29 @@ const TOOLS = {
       properties: { deck: { type: 'string' }, out: { type: 'string' } },
     },
   },
+  h4s_slides: {
+    description: 'deck 增量编辑：insert（--after 后插入 snippet）/ move（--from --to 排序）/ renumber / sync（--build 自动重建产物）。',
+    inputSchema: {
+      type: 'object', required: ['deck', 'action'],
+      properties: {
+        deck: { type: 'string' },
+        action: { type: 'string', enum: ['insert', 'move', 'renumber', 'sync'] },
+        after: { type: 'string', description: 'insert: 插入位置（slide-id 或 1 起始序号，0=最前）' },
+        file: { type: 'string', description: 'insert: <section>…</section> 片段文件路径' },
+        id: { type: 'string', description: 'insert: 新页 data-slide-id' },
+        from: { type: 'string', description: 'move: 源页（slide-id 或序号）' },
+        to: { type: 'string', description: 'move: 目标序号（1 起始）' },
+        build: { type: 'boolean', description: 'sync: 有产物时自动重建（默认 true）' },
+      },
+    },
+  },
+  h4s_review: {
+    description: '一键验收：lint 全量检查并返回结构化结论（verdict/errors/warnings/逐页问题计数）——AI 自检闭环的单次调用入口。',
+    inputSchema: {
+      type: 'object', required: ['deck'],
+      properties: { deck: { type: 'string' } },
+    },
+  },
 };
 
 function runTool(name, args) {
@@ -73,8 +97,42 @@ function runTool(name, args) {
     }
     case 'h4s_build': {
       const args2 = [path.join(HERE, 'h4s-build.mjs'), abs];
-      if (args.subset === false) args2.push('--no-subset-marker');
+      if (args.subset !== false) args2.push('--subset'); /* 描述承诺"子集化默认开" */
+      if (args.share) args2.push('--share');
       return runCapture(process.execPath, args2);
+    }
+    case 'h4s_slides': {
+      const act = String(args.action || '');
+      const args2 = [path.join(HERE, 'h4s-slides.mjs'), act, abs];
+      if (act === 'insert') {
+        if (!args.after || !args.file) return { error: 'insert 需要 after 与 file 参数' };
+        args2.push('--after', String(args.after), '--file', path.resolve(args.file));
+        if (args.id) args2.push('--id', String(args.id));
+      } else if (act === 'move') {
+        if (!args.from || !args.to) return { error: 'move 需要 from 与 to 参数' };
+        args2.push('--from', String(args.from), '--to', String(args.to));
+      } else if (act === 'sync' && args.build !== false) {
+        args2.push('--build');
+      }
+      return runCapture(process.execPath, args2);
+    }
+    case 'h4s_review': {
+      const tmp = path.join(os.tmpdir(), 'h4s-review-' + Date.now() + '.json');
+      const r = runCapture(process.execPath, [path.join(HERE, 'h4s-lint.mjs'), abs, '--json', tmp]);
+      let data = null;
+      try { data = JSON.parse(fs.readFileSync(tmp, 'utf8')); fs.unlinkSync(tmp); } catch { }
+      if (!data) return { failed: true, output: r.output || 'lint 未产出 JSON' };
+      const pageSummary = (data.pages || []).map((p) => ({
+        page: p.index, title: p.title, notes: p.notes,
+        issues: (p.issues || []).map((it) => it.kind + (it.detail ? '(' + it.detail + ')' : '')),
+      }));
+      return {
+        deck: abs,
+        verdict: (data.errors || []).length ? 'FAIL' : 'PASS',
+        errors: data.errors || [],
+        warnings: data.warnings || [],
+        pages: pageSummary,
+      };
     }
     case 'h4s_outline': {
       const html = fs.readFileSync(abs, 'utf8');

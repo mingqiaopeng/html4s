@@ -13,8 +13,11 @@ release/
 .h4s-sub-*
 *-shots/
 
-# 可再生的导出产物
+# 可再生的导出产物（--share 浏览器直开副本可由 h4s-build --share 重建；发布页副本在 docs/web/）
 examples/*.pdf
+*.share.html
+*.edited.html4s
+*.timings.json
 
 # 系统文件
 Thumbs.db

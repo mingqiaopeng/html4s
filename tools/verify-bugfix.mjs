@@ -8,9 +8,11 @@
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { withPage } from './h4s-cdp.mjs';
 
-const PLAYER = 'D:/MyProjects/Html4s/player/h4s.player.js';
+/* 播放器源相对本文件定位（CI/Linux 可运行，不依赖 Windows 盘符） */
+const PLAYER = pathToFileURL(fileURLToPath(new URL('../player/h4s.player.js', import.meta.url))).href;
 let fails = 0;
 function ok(name, cond) {
   console.log((cond ? '  ✓ ' : '  ✗ FAIL ') + name);
@@ -31,7 +33,7 @@ window.__shellReply = function (obj) { window.chrome.webview._ls.forEach(functio
   <h4s-slide data-h4s-title="封面"><h1>工欲善其事，<br>必先利其器。</h1><h4s-notes hidden><p>备注甲</p></h4s-notes></h4s-slide>
   <h4s-slide data-h4s-title="第二页"><p class="lead">正文内容甲</p></h4s-slide>
 </h4s-deck>
-<script src="file:///${PLAYER}"></script>
+<script src="${PLAYER}"></script>
 </body></html>`;
 }
 function deckB() {
@@ -41,7 +43,7 @@ function deckB() {
   <section data-h4s-title="S1"><h2>标题一</h2></section>
   <section data-h4s-title="S2"><p class="lead">第二页正文</p></section>
 </div>
-<script src="file:///${PLAYER}"></script>
+<script src="${PLAYER}"></script>
 </body></html>`;
 }
 
@@ -49,7 +51,7 @@ const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'h4s-bugfix-'));
 function writeDeck(name, html) {
   const p = path.join(tmp, name);
   fs.writeFileSync(p, html, 'utf8');
-  return 'file:///' + p.replace(/\\/g, '/');
+  return pathToFileURL(p).href; /* Windows/Linux 通用的 file URL */
 }
 /* 常用步骤：进入编辑模式并激活某个可编辑元素的 contenteditable */
 async function startEdit(ev, sel) {

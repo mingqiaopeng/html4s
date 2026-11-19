@@ -13,7 +13,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { pathToFileURL, fileURLToPath } from 'node:url';
 import { withPage } from './h4s-cdp.mjs';
 
 const inFile = process.argv[2] && !process.argv[2].startsWith('--') ? process.argv[2] : null;
@@ -43,6 +43,17 @@ let manifest = {};
 for (const f of manifest.fonts || []) {
   if (f.file && !fs.existsSync(path.resolve(path.dirname(inPath), f.file)))
     errors.push('E-FONT · 字体文件不存在: ' + f.file);
+}
+
+/* 内嵌播放器版本指纹：deck 由旧版播放器构建 → 新功能/修复不在其中（版本覆盖缺口的自动检测） */
+{
+  try {
+    const playerSrc = fs.readFileSync(fileURLToPath(new URL('../player/h4s.player.js', import.meta.url)), 'utf8');
+    const cur = (/"VERSION = '([^']+)'"/.exec(playerSrc) || [])[1];
+    if (manifest.playerVersion && cur && manifest.playerVersion !== cur)
+      warnings.push('W-STALE-PLAYER · 此 deck 内嵌播放器 v' + manifest.playerVersion + '，工具链当前 v' + cur +
+        ' —— 用 h4s-build 重建以获得新功能与修复');
+  } catch { /* player 源不可得则跳过 */ }
 }
 
 const KNOWN_TRANS = new Set(['none','fade','slide','push','zoom','wipe','flip','zoomblur','cube','iris','unfold','rise','dissolve','curtain','blinds','checkerboard','pixelate']);
@@ -180,6 +191,15 @@ const measurement = `
         }
       }
 
+      // 媒体元素（W-MEDIA）：无 controls 且不在 data-h4s-media 容器内 → 放映中观众无法操作；
+      // video autoplay 未 muted → 无手势环境可能被自动播放策略拦截（DOM 级检查，容器包裹可识别）
+      if (el.tagName === 'VIDEO' || el.tagName === 'AUDIO') {
+        if (!el.hasAttribute('controls') && !el.closest('[data-h4s-media]'))
+          issues.push({ kind: 'media-controls', sel: el.tagName.toLowerCase(), detail: '', text: (el.getAttribute('src') || '').trim().slice(0, 20) });
+        if (el.tagName === 'VIDEO' && el.hasAttribute('autoplay') && !el.hasAttribute('muted'))
+          issues.push({ kind: 'media-autoplay', sel: el.tagName.toLowerCase(), detail: '', text: (el.getAttribute('src') || '').trim().slice(0, 20) });
+      }
+
       var text = (el.textContent || '').trim();
       if (!hasOwnText(el) || !text) continue;
 
@@ -203,6 +223,7 @@ const measurement = `
       id: slide.id || '',
       title: title,
       notes: notes,
+      bg: sBg,
       checked: checked,
       issues: issues
     };
@@ -288,7 +309,32 @@ try {
       else if (it.kind === 'font-small-warn') warnings.push('W-FONT-SIZE · ' + loc + ' 字号偏小(' + it.detail + ')');
       else if (it.kind === 'overflow-deco') warnings.push('W-OVERFLOW-DECO · ' + loc + ' 装饰元素溢出(' + it.detail + ')——若为有意出血可忽略');
       else if (it.kind === 'text-clipped') errors.push('E-TEXT-CLIP · ' + loc + ' 文本被容器裁切(' + it.detail + ')——bounding box 未越界但 nowrap/overflow-hidden 裁掉了文字');
+      else if (it.kind === 'media-controls') warnings.push('W-MEDIA · ' + loc + ' 无 controls 且不在 data-h4s-media 容器内 —— 放映中观众无法暂停/调节');
+      else if (it.kind === 'media-autoplay') warnings.push('W-MEDIA · ' + loc + ' autoplay 未 muted —— 无用户手势环境可能被浏览器拦截');
     }
+  }
+
+  /* ---------- 按页摘要（dark-page 分组报告）：深色页 🌙 标注，问题聚类 ---------- */
+  const lumOf = (rgb) => {
+    const m = /rgba?\((\d+),\s*(\d+),\s*(\d+)/.exec(rgb || '');
+    if (!m) return 1;
+    const f = (v) => { v /= 255; return v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4); };
+    return 0.2126 * f(+m[1]) + 0.7152 * f(+m[2]) + 0.0722 * f(+m[3]);
+  };
+  const isDark = (p) => lumOf(p.bg) < 0.2;
+  const badPages = result.pages.filter((p) => p.issues.length);
+  if (badPages.length) {
+    const darkCount = result.pages.filter(isDark).length;
+    console.log('按页摘要' + (darkCount ? '（🌙 深色背景页 ' + darkCount + ' 页）' : '') + ':');
+    for (const p of badPages) {
+      const kinds = {};
+      for (const it of p.issues) kinds[it.kind] = (kinds[it.kind] || 0) + 1;
+      console.log('  第 ' + p.index + ' 页' + (isDark(p) ? ' 🌙' : '') + ' · ' + p.issues.length +
+        ' 问题（' + Object.entries(kinds).map(([k, n]) => k + '×' + n).join('，') + '）');
+    }
+    const clean = result.pages.length - badPages.length;
+    if (clean) console.log('  其余 ' + clean + ' 页 ✓');
+    console.log('');
   }
 
   /* ---------- 报告 ---------- */
@@ -311,7 +357,7 @@ try {
     const KIND = {
       'overflow-text': ['E', '舞台溢出'], 'font-small': ['E', '字号过小'], 'contrast': ['E', '对比度过低'],
       'text-clipped': ['E', '文本被裁切'], 'overflow-deco': ['W', '装饰溢出'], 'contrast-warn': ['W', '对比度偏低'],
-      'font-small-warn': ['W', '字号偏小'],
+      'font-small-warn': ['W', '字号偏小'], 'media-controls': ['W', '媒体缺控件'], 'media-autoplay': ['W', 'autoplay 未静音'],
     };
     const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
     const pageCards = result.pages.map((p) => {
@@ -320,7 +366,7 @@ try {
         return `<div class="iss ${lv}"><span class="tag">${lv}</span><b>${esc(label)}</b> <code>${esc(it.sel)}</code> — ${esc(it.detail)}${it.text ? ' ·「' + esc(it.text) + '」' : ''}</div>`;
       }).join('');
       return `<div class="page ${p.issues.length ? 'bad' : 'ok'}">
-  <div class="ph"><span class="pn">第 ${p.index} 页</span><span class="pt">${esc(p.title || '(无标题)')}</span>
+  <div class="ph"><span class="pn">第 ${p.index} 页${lumOf(p.bg) < 0.2 ? ' 🌙' : ''}</span><span class="pt">${esc(p.title || '(无标题)')}</span>
     <span class="pm">${p.notes ? '备注 ✓' : '备注 ✗'} · 元素 ${p.checked}</span></div>
   ${items || '<div class="clean">✓ 无问题</div>'}
 </div>`;

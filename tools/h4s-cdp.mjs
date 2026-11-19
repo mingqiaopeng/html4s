@@ -13,14 +13,22 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
+/* 浏览器候选：环境变量 H4S_BROWSER 优先 → Windows Edge/Chrome → Linux Chrome/Chromium/Edge。
+   CI（GitHub ubuntu runner 预装 google-chrome）与非 Windows 环境靠后段兜底。 */
 const EDGE_CANDIDATES = [
+  process.env.H4S_BROWSER || '',
   'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
   'C:/Program Files/Microsoft/Edge/Application/msedge.exe',
-];
+  'C:/Program Files/Google/Chrome/Application/chrome.exe',
+  'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+  '/usr/bin/google-chrome', '/usr/bin/google-chrome-stable',
+  '/usr/bin/chromium', '/usr/bin/chromium-browser',
+  '/usr/bin/msedge', '/snap/bin/chromium',
+].filter(Boolean);
 
 export function findEdge() {
   for (const p of EDGE_CANDIDATES) if (fs.existsSync(p)) return p;
-  throw new Error('未找到 Edge（h4s 工具链用它做无头渲染），请安装 Microsoft Edge。');
+  throw new Error('未找到 Edge/Chrome（可用环境变量 H4S_BROWSER 指定浏览器路径）。');
 }
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));

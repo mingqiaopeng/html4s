@@ -61,6 +61,22 @@ internal static class Program
         }
         catch { return new List<string>(); }
     }
+
+    /* 应用设置（阶段4b）：界面语言覆盖等，持久化于 settings.json */
+    internal sealed class AppSettings
+    {
+        public string Lang { get; set; } = "auto"; /* auto | zh | en */
+    }
+    internal static readonly string SettingsPath = Path.Combine(AppDataDir, "settings.json");
+    internal static AppSettings LoadSettings()
+    {
+        try { return JsonSerializer.Deserialize<AppSettings>(File.ReadAllText(SettingsPath)) ?? new AppSettings(); }
+        catch { return new AppSettings(); }
+    }
+    internal static void SaveSettings(AppSettings s)
+    {
+        try { File.WriteAllText(SettingsPath, JsonSerializer.Serialize(s)); } catch { }
+    }
     internal static readonly string OpenQueuePath = Path.Combine(AppDataDir, "open.txt");
     internal static readonly string DebugLogPath = Path.Combine(AppDataDir, "debug.log");
 
@@ -480,6 +496,7 @@ internal class StageWindow : Form
             if (e.Control && e.KeyCode == Keys.L) OpenUrlViaPrompt();
             if (e.Control && e.KeyCode == Keys.O) OpenFileViaDialog();
             if (e.Control && e.KeyCode == Keys.R) ShowRecent();
+            if (e.Control && e.KeyCode == Keys.Oemcomma) ShowSettings();
             if (e.Control && e.KeyCode == Keys.W) Close();
         };
 
@@ -525,10 +542,78 @@ internal class StageWindow : Form
         }
     }
 
-    /* 标题栏右键 → 最近打开对话框 */
+    /* 标题栏右键 → 上下文菜单（最近打开 / 设置 / 关于） */
     private void TitleBarRightClick(object? sender, MouseEventArgs e)
     {
-        if (e.Button == MouseButtons.Right) ShowRecent();
+        if (e.Button != MouseButtons.Right) return;
+        var menu = new ContextMenuStrip();
+        menu.Items.Add("最近打开", null, (_, _) => ShowRecent());
+        menu.Items.Add("设置…", null, (_, _) => ShowSettings());
+        menu.Items.Add("关于", null, (_, _) => MessageBox.Show(
+            "html4s 播放器 " + Application.ProductVersion + "\nhtml4s 格式 + PowerPoint 习惯的播放器\nhttps://github.com/mingqiaopeng/html4s",
+            "关于 html4s", MessageBoxButtons.OK, MessageBoxIcon.Information));
+        menu.Show(_titleBar, e.Location);
+    }
+
+    /* 语言注入：在页面脚本运行前写/清 localStorage（player boot 读取 h4s-lang-override）。
+       设置变更后重新注册——按注册顺序执行，最后注册者生效。 */
+    private void RegisterLangInjection()
+    {
+        var lang = Program.LoadSettings().Lang;
+        var script = "try{localStorage.removeItem('h4s-lang-override');"
+            + (lang == "zh" || lang == "en" ? "localStorage.setItem('h4s-lang-override','" + lang + "');" : "")
+            + "}catch(e){}";
+        _wv.CoreWebView2?.AddScriptToExecuteOnDocumentCreatedAsync(script);
+    }
+
+    /* 设置对话框（Ctrl+, / 标题栏右键）：语言覆盖 + 清空最近 + 关于。
+       几何按宿主屏真实 DPI 手动缩放（同 Prompt 套路）。 */
+    private void ShowSettings()
+    {
+        var s = Program.LoadSettings();
+        int S(int v) => (int)Math.Round(v * Program.DpiScale(this));
+        using var form = new Form
+        {
+            Text = "设置",
+            AutoScaleMode = AutoScaleMode.None,
+            FormBorderStyle = FormBorderStyle.FixedDialog,
+            MaximizeBox = false, MinimizeBox = false,
+            ClientSize = new Size(S(420), S(190)),
+            StartPosition = FormStartPosition.CenterParent,
+            Font = new Font("Microsoft YaHei UI", S(13), GraphicsUnit.Pixel),
+        };
+        var lbl = new Label { Left = S(14), Top = S(16), AutoSize = true, Text = "界面语言（对新打开的演示生效）：" };
+        var combo = new ComboBox { Left = S(14), Top = S(44), Width = S(220), DropDownStyle = ComboBoxStyle.DropDownList };
+        combo.Items.AddRange(new object[] { "跟随演示（默认）", "中文", "English" });
+        combo.SelectedIndex = s.Lang == "en" ? 2 : s.Lang == "zh" ? 1 : 0;
+        var btnClear = new Button { Text = "清空最近打开", Left = S(14), Top = S(96), Width = S(160), Height = S(34) };
+        btnClear.Click += (_, _) =>
+        {
+            try { File.WriteAllText(Program.RecentPath, ""); MessageBox.Show(form, "已清空。", "最近打开", MessageBoxButtons.OK, MessageBoxIcon.Information); }
+            catch (Exception ex) { MessageBox.Show(form, "清空失败：" + ex.Message, "最近打开", MessageBoxButtons.OK, MessageBoxIcon.Warning); }
+        };
+        var about = new Label
+        {
+            Left = S(14), Top = S(148), AutoSize = true,
+            Text = "html4s 播放器 " + Application.ProductVersion,
+            ForeColor = Color.Gray
+        };
+        var ok = new Button { Text = "确定", Left = S(200), Top = S(140), Width = S(96), Height = S(34), DialogResult = DialogResult.OK };
+        var cancel = new Button { Text = "取消", Left = S(308), Top = S(140), Width = S(96), Height = S(34), DialogResult = DialogResult.Cancel };
+        form.Controls.AddRange(new Control[] { lbl, combo, btnClear, about, ok, cancel });
+        form.AcceptButton = ok;
+        form.CancelButton = cancel;
+        var before = combo.SelectedIndex;
+        if (form.ShowDialog(this) == DialogResult.OK && combo.SelectedIndex != before)
+        {
+            s.Lang = combo.SelectedIndex == 2 ? "en" : combo.SelectedIndex == 1 ? "zh" : "auto";
+            Program.SaveSettings(s);
+            RegisterLangInjection();
+            if (_wv.CoreWebView2 != null && MessageBox.Show(form,
+                "语言设置对新打开的演示生效。立即重新加载当前演示？", "设置",
+                MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes && _wv.CoreWebView2.Source != null)
+                NavigateTo(_wv.CoreWebView2.Source);
+        }
     }
 
     private void LayoutTitleButtons(Control min, Control max, Control close)
@@ -714,6 +799,7 @@ internal class StageWindow : Form
             "document.addEventListener('DOMContentLoaded',function(){check();try{new MutationObserver(check).observe(document.documentElement,{subtree:true,attributes:true,attributeFilter:['data-ui']})}catch(e){}});" +
             "check();})();";
         core.AddScriptToExecuteOnDocumentCreatedAsync(themeObserver);
+        RegisterLangInjection(); /* 设置里的语言覆盖（每页脚本运行前生效） */
         /* 播放器 JS 转发过来的壳级快捷键 + 排练计时写回 */
         core.WebMessageReceived += OnWebMessage;
         core.Navigate(_url);

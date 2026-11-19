@@ -4,9 +4,9 @@
 
 > AI 写得准，人演得稳，格式永远可版本化。
 
-[![Version](https://img.shields.io/badge/version-0.3.1-blue)]() [![License](https://img.shields.io/badge/license-AGPL--3.0-orange)]() [![Platform](https://img.shields.io/badge/platform-Windows%20%2B%20Web-green)]()
+[![Version](https://img.shields.io/badge/version-0.3.2-blue)]() [![License](https://img.shields.io/badge/license-AGPL--3.0-orange)]() [![Platform](https://img.shields.io/badge/platform-Windows%20%2B%20Web-green)]()
 
-设计规范与路线图见 [ARCHITECTURE.md](ARCHITECTURE.md) · 许可归属见 [docs/NOTICE.md](docs/NOTICE.md)
+设计规范与路线图见 [ARCHITECTURE.md](ARCHITECTURE.md)（格式规范正式文本见 [docs/SPEC.md](docs/SPEC.md)）· 许可归属见 [docs/NOTICE.md](docs/NOTICE.md)
 
 ---
 
@@ -57,7 +57,7 @@ PowerPoint 式浏览界面（缩略图侧栏 + 页码指示器）、**20 种转�
 AI 按 skill 写 deck → h4s-lint（7 类检查 + HTML 分页报告）→ h4s-shot（逐页截图自审）
 → 修复回环 → h4s-build（字体子集化 + 单文件交付）→ 双击验收
 ```
-MCP server 把 lint/shot/outline/build/pdf 暴露给 AI Agent，打开项目即自动连接。
+MCP server 把 lint/shot/outline/build/pdf/slides 增量编辑与 **h4s_review（一键结构化验收结论）** 暴露给 AI Agent，打开项目即自动连接。
 
 ### 🇨🇳 中文演示优先
 - **中文可读性适配层**：正文 26px 下限（西文模板常见的 16px 正文投影到会议室后排不可读）
@@ -107,9 +107,9 @@ MCP server 把 lint/shot/outline/build/pdf 暴露给 AI Agent，打开项目即�
 
 ### 安装（Windows 10/11）
 
-1. 下载 [release/html4s-0.3.1-setup.exe](release/html4s-0.3.1-setup.exe) 运行（用户级安装，无需管理员）
+1. 下载 [release/html4s-0.3.2-setup.exe](release/html4s-0.3.2-setup.exe) 运行（用户级安装，无需管理员）
    - 自动注册 `.html4s` 双击关联 + 桌面/开始菜单快捷方式
-2. 或用免安装版 [html4s-0.3.1.zip](release/html4s-0.3.1.zip)，运行 `Html4sPlayer/Html4sPlayer.exe`
+2. 或用免安装版 [html4s-0.3.2.zip](release/html4s-0.3.2.zip)，运行 `Html4sPlayer/Html4sPlayer.exe`
 
 需要 WebView2 运行时（Windows 10/11 系统自带）。
 
@@ -122,12 +122,13 @@ MCP server 把 lint/shot/outline/build/pdf 暴露给 AI Agent，打开项目即�
 | 操作 | 按键 |
 |---|---|
 | 打开文件 / 网址 | Ctrl+O / Ctrl+L |
-| 最近打开 | Ctrl+R 或右键标题栏 |
+| 最近打开 / 设置 / 关于 | Ctrl+R / Ctrl+, / 右键标题栏 |
 | 从头 / 从当前页放映 | F5 / Shift+F5 |
 | 翻页 / 碎片 | → ↓ 空格 / ← ↑ |
 | 总览网格 / 黑屏 / 白屏 / 激光笔 | G / B / W / L |
 | 演讲者抽屉（同屏练习） | S |
 | 排练计时（写回 .timings.json） | R 开始 / R 结束 |
+| 连接翻页笔（WebHID，实验性） | J（多数翻页笔是键盘设备，直接可用） |
 | 文字微调模式 | ✎ 编辑按钮 |
 | kiosk 循环放映（隐藏 UI） | `--kiosk` 启动参数（解锁：Ctrl+Alt+Q） |
 
@@ -144,12 +145,20 @@ node tools/h4s-build.mjs my-deck.html --subset   # 字体子集内嵌 → my-dec
 # 3. 双击 my-deck.html4s 验收
 ```
 
-增量编辑与字体：
+增量编辑、字体与迁移：
 
 ```bash
 node tools/h4s-slides.mjs insert my-deck.html --after 3 --file new-page.html   # 插页 + 自动重编页码
 node tools/h4s-slides.mjs sync   my-deck.html --build                          # 页码重编 + 重建产物
 node tools/h4s-fonts.mjs scan --need "方正小标宋"                               # 扫描系统字体给内嵌推荐
+node tools/import-reveal.mjs reveal-deck.html                                  # reveal.js → html4s 源
+node tools/import-pptx.mjs  deck.pptx                                          # pptx → html4s 源（文本/图片/备注）
+```
+
+构建加 `--share` 同时产出浏览器直开的 `.share.html`（无壳机器直接拖进浏览器即可播放）。一键发布管线：
+
+```bash
+node tools/release.mjs        # 全 deck 重建（playerVersion 指纹）→ lint 门禁 → 回归 → staging → ISCC → zip → 静默自检
 ```
 
 MCP 接入见 [docs/MCP-SETUP.md](docs/MCP-SETUP.md)，壳/Web 能力差异见 [docs/CAPABILITIES.md](docs/CAPABILITIES.md)。
@@ -159,12 +168,12 @@ MCP 接入见 [docs/MCP-SETUP.md](docs/MCP-SETUP.md)，壳/Web 能力差异见 [
 ## 目录结构
 
 ```
-player/    播放器运行时（h4s.player.js ~91KB 零依赖单文件）
+player/    播放器运行时（h4s.player.js ~100KB 零依赖单文件）
 shell/     Windows 桌面壳（.NET 10 + WebView2）
-tools/     工具链（lint/shot/pdf/build/slides/fonts/cdp/mcp/gz-theme）
+tools/     工具链（lint/shot/pdf/build/slides/fonts/cdp/mcp/release/导入器）
 skills/    三个创作技能（guizang / frontend-slides / huashu）
-examples/  示例 deck（项目介绍 intro-fs / 转场特效演示 fx-showcase / 党建示例等）
-docs/      架构 / 发布说明 / 能力矩阵 / 许可 / MCP 注册
+examples/  示例 deck（项目介绍 intro-fs / 一致性基准 conformance / 转场特效 fx-showcase / 党建示例等）
+docs/      架构 / 格式规范 SPEC / 发布说明 / 能力矩阵 / 许可 / MCP 注册
 ```
 
 ## 许可

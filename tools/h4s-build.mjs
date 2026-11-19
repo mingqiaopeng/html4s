@@ -32,7 +32,10 @@ const getOpt = (name, def) => {
 };
 const outFile = getOpt('-o', null);
 const doSubset = argv.includes('--subset');
+const doShare = argv.includes('--share');
 const maxFontMB = parseFloat(getOpt('--max-font-mb', '8'));
+
+let playerVersion = null; /* 内嵌播放器版本指纹（写入清单 playerVersion） */
 
 if (!inFile) { console.error('用法: node tools/h4s-build.mjs <deck> [-o out.html4s] [--subset]'); process.exit(1); }
 const inPath = path.resolve(inFile);
@@ -124,6 +127,8 @@ function inlineScript(htmlStr) {
     const playerPath = path.resolve(deckDir, m[1]);
     if (fs.existsSync(playerPath)) {
       const code = fs.readFileSync(playerPath, 'utf8');
+      const vm = /var VERSION = '([^']+)'/.exec(code);
+      playerVersion = vm ? vm[1] : null;
       /* 必须用函数替换器：字符串替换会把代码里的 $$/$& 等 $ 模式展开（曾把 function $$ 折叠成 function $） */
       html = html.replace(playerRe, function () { return '<script>\n' + code + '\n</script>'; });
       ok('播放器运行时已内嵌 (' + (code.length / 1024).toFixed(0) + 'KB)');
@@ -232,10 +237,26 @@ if (fonts.length && html.includes('"fonts":')) {
   html = html.replace(/"fonts":\s*\[/, flags + ' "fonts": [');
 }
 
+/* ---------- 4b. 内嵌播放器版本指纹（W-STALE-PLAYER / 播放器旧版提示的依据） ---------- */
+if (playerVersion && /application\/h4s\+json/.test(html)) {
+  /* 先清旧的指纹（从产物重建时可能已存在），再注入 */
+  html = html.replace(/,\s*"playerVersion":\s*"[^"]*"/g, '');
+  html = html.replace(/"h4s":\s*"[^"]*"/, function (mm) {
+    return mm + ', "playerVersion": "' + playerVersion + '"';
+  });
+  ok('playerVersion 指纹: ' + playerVersion);
+}
+
 /* ---------- 5. 输出 ---------- */
 const out = outFile || path.join(deckDir, base + '.html4s');
 fs.writeFileSync(out, html);
 const totalKB = (fs.statSync(out).size / 1024).toFixed(0);
 console.log('\n=== 构建完成 ===');
 console.log('产物: ' + out + ' (' + totalKB + ' KB)');
+if (doShare) {
+  /* 分享版：扩展名 .html —— 无壳机器上浏览器直接打开即可播放（.html4s 会被当下载） */
+  const sharePath = out.replace(/\.(html4s|html)$/i, '') + '.share.html';
+  fs.writeFileSync(sharePath, html);
+  ok('分享版: ' + sharePath);
+}
 console.log(report.join('\n'));
