@@ -17,7 +17,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22 # CDP 的 WebSocket 客户端依赖全局 WebSocket（22+ 默认可用）
 
       - name: 播放器语法检查
         run: node --check player/h4s.player.js
