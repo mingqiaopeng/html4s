@@ -198,18 +198,32 @@ export const LAYOUTS = [
   </div>`,
   },
   {
-    id: 'list', name: '要点清单', use: '图标 + 标题 + 说明行的能力清单',
+    id: 'list', name: '要点清单', use: '图标 + 标题 + 说明行（data-h4s-icon 声明式图标）',
     css: `
 .ly-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 30px 56px; }
 .ly-list li { display: flex; gap: 24px; align-items: flex-start; border-bottom: 1px solid var(--bd2); padding-bottom: 24px; }
-.ly-list .ly-ico { font-size: 40px; line-height: 1.2; }
+.ly-list .ly-ico { font-size: 40px; line-height: 1.2; color: var(--ac); }
 .ly-list b { font-size: 26px; display: block; margin-bottom: 8px; }
 .ly-list p { font-size: 22px; line-height: 1.6; color: var(--dim); margin: 0; }`,
     html: `<ul class="ly-list">
-    <li class="reveal"><span class="ly-ico">📦</span><div><b>一个文件，双击即演</b><p>运行时/图标/字体全部内嵌，离线可用</p></div></li>
-    <li class="reveal"><span class="ly-ico">🎬</span><div><b>播放器专职演播</b><p>20 种转场、特效层、演讲者双屏</p></div></li>
-    <li class="reveal"><span class="ly-ico">🤖</span><div><b>AI 创作闭环</b><p>lint / 截图 / 构建指纹 / MCP</p></div></li>
-    <li class="reveal"><span class="ly-ico">🇨🇳</span><div><b>中文演示优先</b><p>正文 26px 下限，字体子集 1116KB→34KB</p></div></li>
+    <li class="reveal"><span class="ly-ico" data-h4s-icon="download"></span><div><b>一个文件，双击即演</b><p>运行时/图标/字体全部内嵌，离线可用</p></div></li>
+    <li class="reveal"><span class="ly-ico" data-h4s-icon="layers"></span><div><b>播放器专职演播</b><p>20 种转场、特效层、演讲者双屏</p></div></li>
+    <li class="reveal"><span class="ly-ico" data-h4s-icon="zap"></span><div><b>AI 创作闭环</b><p>lint / 截图 / 构建指纹 / MCP</p></div></li>
+    <li class="reveal"><span class="ly-ico" data-h4s-icon="globe"></span><div><b>中文演示优先</b><p>正文 26px 下限，字体子集 1116KB→34KB</p></div></li>
+  </ul>`,
+  },
+  {
+    id: 'checklist', name: '对勾清单', use: '完成项 / 检查表：对勾图标 + 陈述',
+    css: `
+.ly-check { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 26px; max-width: 1300px; }
+.ly-check li { display: flex; gap: 22px; align-items: flex-start; }
+.ly-check .ly-ck { color: var(--ac); font-size: 30px; flex: none; margin-top: 2px; }
+.ly-check b { font-size: 27px; display: block; margin-bottom: 6px; }
+.ly-check p { font-size: 22px; line-height: 1.6; color: var(--dim); margin: 0; }`,
+    html: `<ul class="ly-check">
+    <li class="reveal"><span class="ly-ck" data-h4s-icon="check"></span><div><b>格式合法</b><p>.html4s 即合法 HTML，浏览器打开兜底</p></div></li>
+    <li class="reveal"><span class="ly-ck" data-h4s-icon="check"></span><div><b>数据可校验</b><p>声明式图表与清单，lint 逐项把关</p></div></li>
+    <li class="reveal"><span class="ly-ck" data-h4s-icon="check"></span><div><b>分发零门槛</b><p>单文件 + share 副本 + 桌面客户端</p></div></li>
   </ul>`,
   },
   {
@@ -392,6 +406,8 @@ const guide = `# html4s 版式模板库 · 生成指南
 
 ${LAYOUTS.length} 种典型页面版式（对标常见 deck 设计软件的内置版式），由 \`tools/gen-layouts.mjs\` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
 
+> **决策前置**：生成 deck 前先读 [DECK-DESIGN.md](DECK-DESIGN.md)——"场景 → 主题 → 叙事骨架 → 版式分配 → 特效强度"五步决策；本文档只负责版式层。
+
 ## 版式目录
 
 | # | 片段 | 版式 | 适用场景 |
@@ -399,6 +415,10 @@ ${LAYOUTS.length} 种典型页面版式（对标常见 deck 设计软件的内�
 ${catalog}
 
 在线预览：**https://mingqiaopeng.github.io/html4s/decks/layouts.html**（版式图鉴 deck，每页右下角标注片段文件名）。
+
+## 图标引擎
+
+要点/清单类版式使用内置图标引擎：\`<i data-h4s-icon="名称"></i>\`——46 枚 24×24 stroke 图标（check / zap / layers / download / globe / trending-up / rocket…），颜色随 currentColor、尺寸随 font-size，零依赖（替代全量图标库）。可用名称与 deck 校验：\`node tools/icon-list.mjs\` / \`--check <deck>\`。
 
 ## 使用三步（人类 / AI Agent 通用）
 
@@ -430,6 +450,7 @@ ${catalog}
 ## 变更
 
 - 版式由 \`tools/gen-layouts.mjs\` 生成——**改版式请改生成器再重新生成**，勿直接手改产物
+- v1.1（2026-11-21）：版式 13→20（+图表页/四象限/层级架构/表格页/双图并置/对勾清单/附录页）；要点清单改用图标引擎；新增图标引擎章节
 - v1（2026-11-21）：13 版式首发
 `;
 

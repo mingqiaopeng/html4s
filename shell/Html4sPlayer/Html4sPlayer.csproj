@@ -9,7 +9,7 @@
     <ApplicationHighDpiMode>PerMonitorV2</ApplicationHighDpiMode>
     <AssemblyName>Html4sPlayer</AssemblyName>
     <RootNamespace>Html4sPlayer</RootNamespace>
-    <Version>0.4.0</Version>
+    <Version>0.4.1</Version>
     <Description>html4s 播放器桌面壳（WebView2 内核）</Description>
   </PropertyGroup>
 

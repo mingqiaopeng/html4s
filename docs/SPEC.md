@@ -1,6 +1,6 @@
-# html4s 格式规范 v1.0（正式冻结）
+# html4s 格式规范 v1.0.1
 
-状态：**1.0 正式冻结**——L1/L2 字段与 §5/§6/§4.5 枚举冻结，此后仅允许勘误与扩展性新增（新层级/新枚举需提案） · 对应实现：h4s-core 0.4.0 · 在线参考实现：**https://mingqiaopeng.github.io/html4s/** · 日期：2026-11-21
+状态：**1.0 正式冻结 + 扩展性新增**（§8.2 允许的增量） · 对应实现：h4s-core 0.4.1 · 在线参考实现：**https://mingqiaopeng.github.io/html4s/** · 日期：2026-11-21
 父文档：[ARCHITECTURE.md](../ARCHITECTURE.md)（架构与 ADR）。本文件是**格式与运行时行为**的规范文本；与实现不一致处以实现为准并在变更记录中说明。
 
 ## 1. 能力分级
@@ -87,6 +87,24 @@
 - lint：`E-CHART-DATA`（数据非法）、`W-CHART`（未知 type / 项数 >12）
 - 实现要求（第三方）：五类型全支持或明确降级；克隆（缩略图/预览）中的图表必须同步呈现
 
+**v1.0.1 图表扩展**：
+- 数据 v2 格式：`{"labels":["Q1","Q2"],"series":[{"name":"营收","values":[120,156]}]}`——多系列（分组柱/多线/多横条），单系列 v1 数组继续有效
+- 新类型 `area`：折线 + 面积填充
+- 负值：柱/折线支持（零线自动居中）
+- `unit` 属性：数值标签后缀（如 `unit="万"`）
+- 值轴网格刻度 + 系列图例（多系列时）
+
+### 4.1.2 图标引擎（L3）
+
+```html
+<i data-h4s-icon="check"></i>
+```
+
+- 内置 46 枚 24×24 stroke 风格图标（check/x/arrow-right/star/target/users/gear/calendar/mail/download/zap/shield/layers/trending-up/award/rocket 等），零依赖（替代全量图标库内嵌）
+- 渲染：播放器将元素替换为内联 SVG，`currentColor` 继承文字颜色（主题自适应），尺寸 `1em` 随 font-size
+- 未知名：元素标记 `data-h4s-icon-missing` 并留空（不报错）
+- 实现要求（第三方）：同名图标等价呈现；未知名称静默降级
+
 ### 4.2 页级属性（`h4s-slide` / `section`）
 
 | 属性 | 说明 |
@@ -157,7 +175,8 @@
 
 ## 变更记录
 
-- **v1.0（2026-11-21）**：**正式冻结**——新增 §4.1.1 声明式图表（`h4s-chart`，L2：五类型/JSON 数据/主题变量配色/可见性动画，第三方须全支持或降级）；版本号与 `playerVersion` 语义随 0.4.0 实现。
+- **v1.0.1（2026-11-21）**：**扩展性新增**（§8.2 允许）——①§4.1.1 图表引擎 v1.1：多系列数据格式 `{labels,series}`（分组柱/多线）、`area` 面积图、负值支持、值轴网格刻度、`unit` 属性、系列图例；②新增 §4.1.2 图标引擎（`data-h4s-icon`，46 枚内置 24×24 stroke 图标，currentColor/尺寸随字号）。
+- v1.0（2026-11-21）：**正式冻结**——新增 §4.1.1 声明式图表（`h4s-chart`，L2：五类型/JSON 数据/主题变量配色/可见性动画，第三方须全支持或降级）；版本号与 `playerVersion` 语义随 0.4.0 实现。
 - v1.0-rc1（2026-11-20）：冻结候选——L1/L2 字段与全部枚举冻结；新增 §9 第三方运行时准入规则；在线参考实现上线（mingqiaopeng.github.io/html4s）。
 - v0.9（2026-11-19）：从 ARCHITECTURE.md §3 独立成文并对齐 0.3.1 实现：转场 6→20 种、fx 层、页面礼花、文字微调（L3）、媒体控制、网页放映、i18n（含壳语言覆盖）、WebHID、`playerVersion`/`fontSubsetChars`/`fontsEmbedded` 字段、深链完整语法。
 - v0.1（2026-11-10）：初版（ARCHITECTURE.md §3）。

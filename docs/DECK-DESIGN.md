@@ -2,7 +2,7 @@
 
 **本文档是 AI 生成 deck 的第一步**：在写任何 HTML 之前，按"场景 → 主题 → 叙事骨架 → 版式分配 → 特效强度"五步做出设计决策，再进入创作闭环。人类作者同样适用。
 
-> 配套文件：主题库 `tools/gen-themes.mjs`（8 主题）· 版式库 `examples/layouts/`（13 版式，见 [LAYOUTS.md](LAYOUTS.md)）· 规范 [SPEC.md](SPEC.md)（v1.0-rc1）· 在线参考 https://mingqiaopeng.github.io/html4s/
+> 配套文件：主题库 `tools/gen-themes.mjs`（8 主题）· 版式库 `examples/layouts/`（20 版式，见 [LAYOUTS.md](LAYOUTS.md)）· 规范 [SPEC.md](SPEC.md)（v1.0.1）· 在线参考 https://mingqiaopeng.github.io/html4s/
 
 ---
 
@@ -13,7 +13,7 @@
 | ① 场景分析 | 观众是谁 / 场合正式度 / 投影环境 / 内容类型 | 用户输入 |
 | ② 选主题 | 8 主题选 1（§1 决策表） | 观众身份 + 场合正式度 |
 | ③ 定叙事骨架 | 页面序列模板（§2 四种骨架） | 内容类型 + 时长 |
-| ④ 分配版式 | 每页一个版式（§3 意图映射，13 选 N） | 每页的信息意图 |
+| ④ 分配版式 | 每页一个版式（§3 意图映射，20 选 N） | 每页的信息意图 |
 | ⑤ 定特效强度 | 转场 2-3 种 + fx 开关（§5 强度分级） | 场合正式度（与主题联动） |
 
 ---

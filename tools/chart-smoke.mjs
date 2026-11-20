@@ -27,6 +27,15 @@ fs.writeFileSync(p, `<!DOCTYPE html><html><head><meta charset="utf-8"><title>图
   <h4s-chart type="pie" style="width:500px;height:360px">
   [{"label":"X","value":60},{"label":"Y","value":40}]
   </h4s-chart>
+  <h4s-chart type="area" style="width:760px;height:360px" unit="万">
+  {"labels":["Q1","Q2","Q3","Q4"],"series":[{"name":"营收","values":[120,156,189,224]}]}
+  </h4s-chart>
+  <h4s-chart type="bar" style="width:760px;height:380px" unit="万">
+  {"labels":["Q1","Q2","Q3","Q4"],"series":[{"name":"营收","values":[120,156,189,224]},{"name":"成本","values":[90,102,128,150]}]}
+  </h4s-chart>
+  <h4s-chart type="bar" style="width:500px;height:300px">
+  [{"label":"盈","value":60},{"label":"亏","value":-35}]
+  </h4s-chart>
   <h4s-chart type="bar" style="width:400px;height:200px">这不是JSON</h4s-chart>
 </section></h4s-deck>
 <script src="${PLAYER}"></script></body></html>`);
@@ -43,14 +52,14 @@ await withPage(pathToFileURL(p).href, async ({ ev }) => {
     bars: document.querySelectorAll('.h4s-chart .bar').length,
     slices: document.querySelectorAll('.h4s-chart .slice').length,
     polys: document.querySelectorAll('.h4s-chart polyline').length,
-    badmsg: (document.querySelectorAll('h4s-chart')[5] || {}).textContent || ''
+    badmsg: (document.querySelectorAll('h4s-chart')[8] || {}).textContent || ''
   })`));
   console.log('  实际计数:', JSON.stringify(r));
   /* 浏览模式下每个图表有 真身+侧栏克隆+预览克隆 三份（克隆计数陷阱），断言按 ≥ 真身数 */
-  ok('5 个图表全部渲染出 SVG', r.svgs >= 5);
-  ok('bar 柱体 + hbar 横条（.bar ≥ 7）', r.bars >= 7);
-  ok('donut/pie 切片（.slice ≥ 5）', r.slices >= 5);
-  ok('line 折线（polyline ≥ 1）', r.polys >= 1);
+  ok('9 个图表全部渲染出 SVG', r.svgs >= 9);
+  ok('柱体/横条（.bar ≥ 15）', r.bars >= 15);
+  ok('切片+面积（.slice ≥ 7）', r.slices >= 7);
+  ok('折线（polyline ≥ 3）', r.polys >= 3);
   ok('无效 JSON 容错（提示而非崩溃）', r.badmsg.includes('图表无效'));
   /* 放映状态动画类生效 */
   await ev(`H4S.present(0)`);

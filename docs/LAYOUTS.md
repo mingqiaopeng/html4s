@@ -1,6 +1,8 @@
 # html4s 版式模板库 · 生成指南
 
-19 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
+20 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
+
+> **决策前置**：生成 deck 前先读 [DECK-DESIGN.md](DECK-DESIGN.md)——"场景 → 主题 → 叙事骨架 → 版式分配 → 特效强度"五步决策；本文档只负责版式层。
 
 ## 版式目录
 
@@ -17,16 +19,21 @@
 | 09 | [`kpi`](../examples/layouts/kpi.html) | 数据看板 | 关键指标：2×2 大数字网格 |
 | 10 | [`quote`](../examples/layouts/quote.html) | 引用页 | 金句 / 原则 / 用户证言 |
 | 11 | [`media`](../examples/layouts/media.html) | 图文页 | 左图右文：把占位块换成 <img> |
-| 12 | [`list`](../examples/layouts/list.html) | 要点清单 | 图标 + 标题 + 说明行的能力清单 |
-| 13 | [`closing`](../examples/layouts/closing.html) | 收束页 | 收束 + 行动号召（居中构图） |
-| 14 | [`chart`](../examples/layouts/chart.html) | 图表页 | 数据可视化：声明式 h4s-chart（AI 写数据不写图） |
-| 15 | [`quadrant`](../examples/layouts/quadrant.html) | 四象限 | 定位 / 优先级：两轴四格 |
-| 16 | [`hierarchy`](../examples/layouts/hierarchy.html) | 层级架构 | 组织 / 递进：顶层 + 子节点 |
-| 17 | [`table`](../examples/layouts/table.html) | 表格页 | 结构化数据：表头 + 数据行 |
-| 18 | [`dual`](../examples/layouts/dual.html) | 双图并置 | 两张图 / 两种形态并排比较 |
-| 19 | [`appendix`](../examples/layouts/appendix.html) | 附录页 | 备查数据 / 详细表格（正文讲完再翻） |
+| 12 | [`list`](../examples/layouts/list.html) | 要点清单 | 图标 + 标题 + 说明行（data-h4s-icon 声明式图标） |
+| 13 | [`checklist`](../examples/layouts/checklist.html) | 对勾清单 | 完成项 / 检查表：对勾图标 + 陈述 |
+| 14 | [`closing`](../examples/layouts/closing.html) | 收束页 | 收束 + 行动号召（居中构图） |
+| 15 | [`chart`](../examples/layouts/chart.html) | 图表页 | 数据可视化：声明式 h4s-chart（AI 写数据不写图） |
+| 16 | [`quadrant`](../examples/layouts/quadrant.html) | 四象限 | 定位 / 优先级：两轴四格 |
+| 17 | [`hierarchy`](../examples/layouts/hierarchy.html) | 层级架构 | 组织 / 递进：顶层 + 子节点 |
+| 18 | [`table`](../examples/layouts/table.html) | 表格页 | 结构化数据：表头 + 数据行 |
+| 19 | [`dual`](../examples/layouts/dual.html) | 双图并置 | 两张图 / 两种形态并排比较 |
+| 20 | [`appendix`](../examples/layouts/appendix.html) | 附录页 | 备查数据 / 详细表格（正文讲完再翻） |
 
 在线预览：**https://mingqiaopeng.github.io/html4s/decks/layouts.html**（版式图鉴 deck，每页右下角标注片段文件名）。
+
+## 图标引擎
+
+要点/清单类版式使用内置图标引擎：`<i data-h4s-icon="名称"></i>`——46 枚 24×24 stroke 图标（check / zap / layers / download / globe / trending-up / rocket…），颜色随 currentColor、尺寸随 font-size，零依赖（替代全量图标库）。可用名称与 deck 校验：`node tools/icon-list.mjs` / `--check <deck>`。
 
 ## 使用三步（人类 / AI Agent 通用）
 
@@ -58,4 +65,5 @@
 ## 变更
 
 - 版式由 `tools/gen-layouts.mjs` 生成——**改版式请改生成器再重新生成**，勿直接手改产物
+- v1.1（2026-11-21）：版式 13→20（+图表页/四象限/层级架构/表格页/双图并置/对勾清单/附录页）；要点清单改用图标引擎；新增图标引擎章节
 - v1（2026-11-21）：13 版式首发

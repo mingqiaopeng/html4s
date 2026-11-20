@@ -83,7 +83,7 @@ const KNOWN_TRANS = new Set(['none','fade','slide','push','zoom','wipe','flip','
   let cm;
   const cre = /<h4s-chart\b([^>]*)>([\s\S]*?)<\/h4s-chart>/gi;
   let ci = 0;
-  const CHART_TYPES = ['bar', 'hbar', 'line', 'pie', 'donut'];
+  const CHART_TYPES = ['bar', 'hbar', 'line', 'area', 'pie', 'donut'];
   while ((cm = cre.exec(html))) {
     ci++;
     const typeM = /type="([^"]*)"/.exec(cm[1]);
