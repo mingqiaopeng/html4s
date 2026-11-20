@@ -1,6 +1,6 @@
 # html4s 版式模板库 · 生成指南
 
-42 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
+60 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
 
 > **决策前置**：生成 deck 前先读 [DECK-DESIGN.md](DECK-DESIGN.md)——"场景 → 主题 → 叙事骨架 → 版式分配 → 特效强度"五步决策；本文档只负责版式层。
 
@@ -50,6 +50,24 @@
 | 40 | [`schedule`](../examples/layouts/schedule.html) | 日程页 | 时间 + 事项 + 时长的会议议程 |
 | 41 | [`roadmap`](../examples/layouts/roadmap.html) | 路线图 | 三阶段横向推进（现在/中期/远期） |
 | 42 | [`contact`](../examples/layouts/contact.html) | 联系页 | 联系方式 + 入口（图标引擎） |
+| 43 | [`bullet-list`](../examples/layouts/bullet-list.html) | 纯文字要点 | 简洁列表：无图标纯文字要点（极简风格） |
+| 44 | [`two-quotes`](../examples/layouts/two-quotes.html) | 双引用 | 两条证言/原则左右并排 |
+| 45 | [`numbered-steps`](../examples/layouts/numbered-steps.html) | 编号步骤 | 纵向编号步骤（非横向流程，步骤多时用） |
+| 46 | [`before-after`](../examples/layouts/before-after.html) | 前后对比 | 改造前/后（时间轴方向性 vs vs 的对抗性） |
+| 47 | [`icon-grid`](../examples/layouts/icon-grid.html) | 图标网格 | 图标 + 短标签 3×3 网格（能力/生态一览） |
+| 48 | [`data-table`](../examples/layouts/data-table.html) | 数据表 | 多行结构化数据 + 汇总行 |
+| 49 | [`split-list`](../examples/layouts/split-list.html) | 双栏清单 | 两组清单左右对照（待办 vs 已办 / 需求 vs 交付） |
+| 50 | [`timeline-vertical`](../examples/layouts/timeline-vertical.html) | 纵向时间线 | 垂直时间轴（步骤多/日期长时用） |
+| 51 | [`three-quotes`](../examples/layouts/three-quotes.html) | 三重证言 | 三条证言/原则横排 |
+| 52 | [`photo-left`](../examples/layouts/photo-left.html) | 图左文右 | 大图占左侧 + 右侧文字（视觉主导） |
+| 53 | [`photo-right`](../examples/layouts/photo-right.html) | 文左图右 | 文字占左 + 大图占右（与图左文右镜像） |
+| 54 | [`banner-tag`](../examples/layouts/banner-tag.html) | 高亮横幅 | 大字标语横贯页面（关键信息强调） |
+| 55 | [`multi-col-4`](../examples/layouts/multi-col-4.html) | 四栏卡片 | 四个并列卡片（比三列信息量大时用） |
+| 56 | [`icon-features`](../examples/layouts/icon-features.html) | 图标特性 | 大图标 + 标题 + 描述（6 个能力特性） |
+| 57 | [`key-takeaways`](../examples/layouts/key-takeaways.html) | 核心要点 | 三条核心要点（总结页/回顾页） |
+| 58 | [`question-prompt`](../examples/layouts/question-prompt.html) | 思考题 | 互动提问：抛出问题引导讨论 |
+| 59 | [`company-info`](../examples/layouts/company-info.html) | 关于我们 | 公司/项目信息概览（数据 + 描述） |
+| 60 | [`metrics-dashboard`](../examples/layouts/metrics-dashboard.html) | 指标仪表 | 多个小型指标卡（仪表盘风格 3×2） |
 
 在线预览：**https://mingqiaopeng.github.io/html4s/decks/layouts.html**（版式图鉴 deck，每页右下角标注片段文件名）。
 

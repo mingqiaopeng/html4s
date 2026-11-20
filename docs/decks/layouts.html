@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>html4s 版式图鉴 · 42 种典型页面版式</title>
+<title>html4s 版式图鉴 · 60 种典型页面版式</title>
 <script type="application/h4s+json">
 {
   "h4s": "1.0", "playerVersion": "0.6.0",
@@ -31,7 +31,7 @@
 <body>
 <h4s-deck>
 
-<!-- gen-layouts.mjs · 版式模板库图鉴：42 种典型页面版式（同内容样例 · CSS 变量主题化） -->
+<!-- gen-layouts.mjs · 版式模板库图鉴：60 种典型页面版式（同内容样例 · CSS 变量主题化） -->
 <style>
 :root { --bg:#0d1117; --tx:#e6edf3; --tx2:#c3cfe2; --dim:#8b949e; --ac:#38bdf8; --bad:#ff7b72; --bd:#30363d; --bd2:#21262d;
   --font:'Segoe UI','Microsoft YaHei',sans-serif; }
@@ -294,7 +294,108 @@ h4s-chart { min-height: 540px; }
 
 .ly-contact { display: flex; flex-direction: column; gap: 34px; max-width: 1200px; }
 .ly-contact-row { display: flex; gap: 20px; align-items: center; font-size: 26px; color: var(--tx2); }
-.ly-contact-row .ly-ico { color: var(--ac); font-size: 30px; }</style>
+.ly-contact-row .ly-ico { color: var(--ac); font-size: 30px; }
+
+.ly-blist { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 30px; max-width: 1300px; }
+.ly-blist li { font-size: 28px; line-height: 1.7; color: var(--tx2); padding-left: 30px; position: relative; }
+.ly-blist li::before { content: '—'; color: var(--ac); position: absolute; left: 0; }
+.ly-blist li b { color: var(--tx); }
+
+.ly-twoq { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; flex: 1; align-content: center; }
+.ly-twoq blockquote { margin: 0; border-left: 4px solid var(--ac); padding-left: 28px; }
+.ly-twoq blockquote p { font-size: 27px; line-height: 1.6; color: var(--tx2); margin: 0 0 18px; }
+.ly-twoq cite { font-size: 20px; color: var(--dim); font-style: normal; }
+
+.ly-nsteps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 24px; counter-reset: step; }
+.ly-nsteps li { counter-increment: step; display: flex; gap: 24px; align-items: baseline; }
+.ly-nsteps li::before { content: counter(step); font-size: 34px; font-weight: 300; color: var(--ac); min-width: 40px; }
+.ly-nsteps b { font-size: 25px; display: block; margin-bottom: 4px; }
+.ly-nsteps p { font-size: 21px; color: var(--dim); margin: 0; }
+
+.ly-ba { display: flex; flex-direction: column; gap: 36px; flex: 1; justify-content: center; }
+.ly-ba-row { display: flex; gap: 28px; align-items: center; }
+.ly-ba-label { font-size: 22px; color: var(--dim); min-width: 90px; text-align: right; }
+.ly-ba-box { flex: 1; border: 1px solid var(--bd); border-radius: 10px; padding: 26px 32px; font-size: 24px; color: var(--tx2); }
+.ly-ba-box.is-after { border-color: var(--ac); color: var(--tx); background: color-mix(in srgb, var(--ac) 5%, var(--bg)); }
+.ly-ba-arrow { font-size: 34px; color: var(--ac); }
+
+.ly-igrid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; flex: 1; align-content: center; }
+.ly-igrid-item { display: flex; gap: 18px; align-items: center; border: 1px solid var(--bd); border-radius: 10px; padding: 20px 24px; box-sizing: border-box; }
+.ly-igrid-item .ly-ico { color: var(--ac); font-size: 34px; flex: none; }
+.ly-igrid-item span { font-size: 22px; color: var(--tx2); }
+
+.ly-dtable { width: 100%; border-collapse: collapse; font-size: 23px; }
+.ly-dtable th { text-align: left; color: var(--ac); padding: 14px 20px; border-bottom: 2px solid var(--ac); }
+.ly-dtable td { padding: 13px 20px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }
+.ly-dtable tr:last-child td { border-top: 2px solid var(--ac); color: var(--tx); font-weight: 600; }
+
+.ly-slist { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; flex: 1; }
+.ly-slist-col h3 { font-size: 26px; color: var(--ac); margin: 0 0 22px; }
+.ly-slist-col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.ly-slist-col li { font-size: 23px; line-height: 1.6; color: var(--tx2); padding-left: 28px; position: relative; }
+.ly-slist-col li::before { content: '✓'; color: var(--ac); position: absolute; left: 0; }
+
+.ly-tlv { list-style: none; margin: 0; padding: 0 0 0 30px; display: flex; flex-direction: column; gap: 28px; position: relative; }
+.ly-tlv::before { content: ''; position: absolute; left: 8px; top: 10px; bottom: 10px; width: 2px; background: var(--bd); }
+.ly-tlv li { position: relative; padding-left: 34px; }
+.ly-tlv li::before { content: ''; position: absolute; left: 0; top: 8px; width: 14px; height: 14px; border-radius: 50%; background: var(--ac); box-shadow: 0 0 0 4px var(--bg); }
+.ly-tlv b { font-size: 24px; color: var(--ac); display: block; margin-bottom: 6px; }
+.ly-tlv p { font-size: 22px; line-height: 1.6; color: var(--tx2); margin: 0; }
+
+.ly-tq3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; flex: 1; align-content: start; }
+.ly-tq3 blockquote { margin: 0; border: 1px solid var(--bd); border-radius: 12px; padding: 30px 34px; box-sizing: border-box; }
+.ly-tq3 blockquote p { font-size: 23px; line-height: 1.65; color: var(--tx2); margin: 0 0 18px; }
+.ly-tq3 cite { font-size: 19px; color: var(--dim); font-style: normal; }
+
+.ly-plft { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; flex: 1; }
+.ly-plft-img { border: 2px dashed var(--bd); border-radius: 12px; min-height: 600px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 26px; }
+.ly-plft-txt h3 { font-size: 36px; margin: 0 0 22px; }
+.ly-plft-txt p { font-size: 24px; line-height: 1.75; color: var(--tx2); margin: 0 0 16px; }
+
+.ly-prgt { display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; flex: 1; }
+.ly-prgt-txt h3 { font-size: 36px; margin: 0 0 22px; }
+.ly-prgt-txt p { font-size: 24px; line-height: 1.75; color: var(--tx2); margin: 0 0 16px; }
+.ly-prgt-img { border: 2px dashed var(--bd); border-radius: 12px; min-height: 600px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 26px; }
+
+.ly-banner { flex: 1; display: flex; align-items: center; justify-content: center; }
+.ly-banner-inner { background: var(--ac); color: var(--bg); font-size: 44px; font-weight: 600; padding: 40px 90px; border-radius: 14px; text-align: center; }
+
+.ly-four { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 28px; }
+.ly-four-card { border: 1px solid var(--bd); border-radius: 10px; padding: 30px 28px; box-sizing: border-box; }
+.ly-four-card h3 { font-size: 24px; color: var(--ac); margin: 0 0 14px; }
+.ly-four-card p { font-size: 21px; line-height: 1.65; color: var(--tx2); margin: 0; }
+
+.ly-ifeat { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px 48px; flex: 1; align-content: start; }
+.ly-ifeat-item { display: flex; flex-direction: column; gap: 14px; }
+.ly-ifeat-item .ly-ico { color: var(--ac); font-size: 46px; line-height: 1; }
+.ly-ifeat-item b { font-size: 25px; display: block; margin-bottom: 6px; }
+.ly-ifeat-item p { font-size: 21px; line-height: 1.6; color: var(--dim); margin: 0; }
+
+.ly-take { flex: 1; display: flex; flex-direction: column; justify-content: center; gap: 40px; }
+.ly-take-item { display: flex; gap: 28px; align-items: flex-start; }
+.ly-take-item .ly-take-n { font-size: 54px; font-weight: 300; color: var(--ac); min-width: 60px; line-height: 1.1; }
+.ly-take-item b { font-size: 30px; display: block; margin-bottom: 8px; }
+.ly-take-item p { font-size: 22px; line-height: 1.65; color: var(--dim); margin: 0; }
+
+.ly-qp { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; gap: 30px; }
+.ly-qp-q { font-size: 48px; font-weight: 300; color: var(--tx); max-width: 1100px; line-height: 1.5; }
+.ly-qp-hint { font-size: 22px; color: var(--dim); }
+.ly-qp-tags { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.ly-qp-tags span { font-size: 20px; color: var(--ac); border: 1px solid var(--ac); border-radius: 20px; padding: 6px 22px; }
+
+.ly-about { display: grid; grid-template-columns: 1fr 1fr; gap: 70px; flex: 1; align-items: start; }
+.ly-about-txt p { font-size: 25px; line-height: 1.75; color: var(--tx2); margin: 0 0 20px; }
+.ly-about-txt b { color: var(--tx); }
+.ly-about-stats { display: flex; flex-direction: column; gap: 24px; }
+.ly-about-stat { display: flex; gap: 16px; align-items: baseline; }
+.ly-about-stat .n { font-size: 46px; font-weight: 300; color: var(--ac); min-width: 110px; }
+.ly-about-stat .l { font-size: 20px; color: var(--dim); }
+
+.ly-metrics { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; flex: 1; align-content: start; }
+.ly-metric { border: 1px solid var(--bd); border-radius: 10px; padding: 26px 28px; box-sizing: border-box; display: flex; flex-direction: column; gap: 8px; }
+.ly-metric .n { font-size: 42px; font-weight: 300; color: var(--ac); }
+.ly-metric .l { font-size: 19px; color: var(--dim); }
+.ly-metric .d { font-size: 19px; color: var(--ac); }</style>
 
 <section class="slide" data-h4s-title="封面">
   <div class="ly-body">
@@ -823,6 +924,234 @@ h4s-chart { min-height: 540px; }
     <div class="ly-tag">版式 · 联系页 · 片段 examples/layouts/contact.html</div>
   </div>
   <h4s-notes hidden>版式「联系页」：联系方式 + 入口（图标引擎）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="纯文字要点">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 43 · BULLET-LIST</p><h2 class="reveal">纯文字要点</h2></div>
+<ul class="ly-blist">
+    <li class="reveal"><b>零依赖</b>——不装插件、不开网络、不依赖字体服务</li>
+    <li class="reveal"><b>版本化</b>——纯文本逐行 diff，回滚与分支和代码一样</li>
+    <li class="reveal"><b>AI 原生</b>——lang="zh-CN" 的 HTML 就是 AI 的通用输出格式</li>
+    <li class="reveal"><b>规格固定</b>——1920×1080 舞台等比缩放，排版永远不崩</li>
+  </ul>
+    <div class="ly-tag">版式 · 纯文字要点 · 片段 examples/layouts/bullet-list.html</div>
+  </div>
+  <h4s-notes hidden>版式「纯文字要点」：简洁列表：无图标纯文字要点（极简风格）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="双引用">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 44 · TWO-QUOTES</p><h2 class="reveal">双引用</h2></div>
+<div class="ly-twoq">
+    <blockquote class="reveal"><p>AI 写得准——因为格式就是它最擅长的语言。</p><cite>—— 设计原则 · 第一</cite></blockquote>
+    <blockquote class="reveal"><p>人演得稳——因为播放器只做一件事，而且做到极致。</p><cite>—— 设计原则 · 第二</cite></blockquote>
+  </div>
+    <div class="ly-tag">版式 · 双引用 · 片段 examples/layouts/two-quotes.html</div>
+  </div>
+  <h4s-notes hidden>版式「双引用」：两条证言/原则左右并排。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="编号步骤">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 45 · NUMBERED-STEPS</p><h2 class="reveal">编号步骤</h2></div>
+<ol class="ly-nsteps">
+    <li class="reveal"><div><b>安装播放器</b><p>setup.exe 用户级安装，自动注册 .html4s 关联</p></div></li>
+    <li class="reveal"><div><b>AI 写 deck</b><p>按 skill 模板和版式库产出 HTML 源文件</p></div></li>
+    <li class="reveal"><div><b>构建单文件</b><p>h4s-build 字体子集内嵌 → .html4s</p></div></li>
+    <li class="reveal"><div><b>双击交付</b><p>拷到 U 盘、发邮件，演示机零依赖</p></div></li>
+  </ol>
+    <div class="ly-tag">版式 · 编号步骤 · 片段 examples/layouts/numbered-steps.html</div>
+  </div>
+  <h4s-notes hidden>版式「编号步骤」：纵向编号步骤（非横向流程，步骤多时用）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="前后对比">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 46 · BEFORE-AFTER</p><h2 class="reveal">前后对比</h2></div>
+<div class="ly-ba">
+    <div class="ly-ba-row reveal"><span class="ly-ba-label">改造前</span><div class="ly-ba-box">3 天手工排版，字体忘带现场糊，PPT 二进制进 git 不可 diff</div><span class="ly-ba-arrow">→</span></div>
+    <div class="ly-ba-row reveal"><span class="ly-ba-label">改造后</span><div class="ly-ba-box is-after">AI 出稿 3 分钟 · lint 把关 · 单文件分发 · 逐行可 diff</div></div>
+  </div>
+    <div class="ly-tag">版式 · 前后对比 · 片段 examples/layouts/before-after.html</div>
+  </div>
+  <h4s-notes hidden>版式「前后对比」：改造前/后（时间轴方向性 vs vs 的对抗性）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="图标网格">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 47 · ICON-GRID</p><h2 class="reveal">图标网格</h2></div>
+<div class="ly-igrid">
+    <div class="ly-igrid-item reveal"><span class="ly-ico" data-h4s-icon="zap"></span><span>零依赖单文件</span></div>
+    <div class="ly-igrid-item reveal"><span class="ly-ico" data-h4s-icon="layers"></span><span>20 种转场</span></div>
+    <div class="ly-igrid-item reveal"><span class="ly-ico" data-h4s-icon="award"></span><span>排练计时</span></div>
+    <div class="ly-igrid-item reveal"><span class="ly-ico" data-h4s-icon="search"></span><span>lint 质量门</span></div>
+    <div class="ly-igrid-item reveal"><span class="ly-ico" data-h4s-icon="users"></span><span>双屏演讲者</span></div>
+    <div class="ly-igrid-item reveal"><span class="ly-ico" data-h4s-icon="shield"></span><span>kiosk 循环</span></div>
+  </div>
+    <div class="ly-tag">版式 · 图标网格 · 片段 examples/layouts/icon-grid.html</div>
+  </div>
+  <h4s-notes hidden>版式「图标网格」：图标 + 短标签 3×3 网格（能力/生态一览）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="数据表">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 48 · DATA-TABLE</p><h2 class="reveal">数据表</h2></div>
+<table class="ly-dtable">
+    <tr><th>季度</th><th>营收</th><th>成本</th><th>利润</th></tr>
+    <tr><td>Q1</td><td>1200 万</td><td>900 万</td><td>300 万</td></tr>
+    <tr><td>Q2</td><td>1450 万</td><td>1020 万</td><td>430 万</td></tr>
+    <tr><td>Q3</td><td>1680 万</td><td>1280 万</td><td>400 万</td></tr>
+    <tr><td>Q4</td><td>1890 万</td><td>1500 万</td><td>390 万</td></tr>
+    <tr><td>合计</td><td>6220 万</td><td>4700 万</td><td>1520 万</td></tr>
+  </table>
+    <div class="ly-tag">版式 · 数据表 · 片段 examples/layouts/data-table.html</div>
+  </div>
+  <h4s-notes hidden>版式「数据表」：多行结构化数据 + 汇总行。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="双栏清单">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 49 · SPLIT-LIST</p><h2 class="reveal">双栏清单</h2></div>
+<div class="ly-slist">
+    <div class="ly-slist-col"><h3>已完成</h3><ul><li>播放器 v0.5 运行时</li><li>桌面壳 + 安装器</li><li>CI 质量门禁</li></ul></div>
+    <div class="ly-slist-col"><h3>进行中</h3><ul><li>主题社区征集</li><li>macOS 壳评估</li><li>VS Code 扩展</li></ul></div>
+  </div>
+    <div class="ly-tag">版式 · 双栏清单 · 片段 examples/layouts/split-list.html</div>
+  </div>
+  <h4s-notes hidden>版式「双栏清单」：两组清单左右对照（待办 vs 已办 / 需求 vs 交付）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="纵向时间线">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 50 · TIMELINE-VERTICAL</p><h2 class="reveal">纵向时间线</h2></div>
+<ol class="ly-tlv">
+    <li class="reveal"><b>2026-11-10</b><p>P0 概念验证：格式 + 播放器原型 + 3 个试点 deck</p></li>
+    <li class="reveal"><b>2026-11-12</b><p>P1 工具链 α：lint / shot / build / MCP server</p></li>
+    <li class="reveal"><b>2026-11-14</b><p>P2 桌面壳 β：文件关联 / 双屏 / kiosk / 排练写回</p></li>
+    <li class="reveal"><b>2026-11-18</b><p>GitHub 上线 · 0.3.x 转场 / 编辑 / 主题 / 版式</p></li>
+    <li class="reveal"><b>2026-11-21</b><p>0.6.0 媒体内嵌 / 图表联动 / 版式 42 / SPEC 1.0</p></li>
+  </ol>
+    <div class="ly-tag">版式 · 纵向时间线 · 片段 examples/layouts/timeline-vertical.html</div>
+  </div>
+  <h4s-notes hidden>版式「纵向时间线」：垂直时间轴（步骤多/日期长时用）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="三重证言">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 51 · THREE-QUOTES</p><h2 class="reveal">三重证言</h2></div>
+<div class="ly-tq3">
+    <blockquote class="reveal"><p>"一个格式标准能同时服务 AI 和人类，这件事本身就值得做。"</p><cite>—— 开发者</cite></blockquote>
+    <blockquote class="reveal"><p>"终于不用在字体路径和图片链接上浪费时间了。"</p><cite>—— 设计师</cite></blockquote>
+    <blockquote class="reveal"><p>"git diff 看得见的演示文稿，这才是版本控制该有的样子。"</p><cite>—— 运维</cite></blockquote>
+  </div>
+    <div class="ly-tag">版式 · 三重证言 · 片段 examples/layouts/three-quotes.html</div>
+  </div>
+  <h4s-notes hidden>版式「三重证言」：三条证言/原则横排。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="图左文右">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 52 · PHOTO-LEFT</p><h2 class="reveal">图左文右</h2></div>
+<div class="ly-plft">
+    <div class="ly-plft-img reveal">图片占位（构建时 data URI 内嵌）</div>
+    <div class="ly-plft-txt reveal"><h3>所见即所得的编辑体验</h3><p>浏览模式点 ✎ 编辑，预览中直接改字——改动自动同步回真实页面并写回源文件。</p><p>子集缺字实时预警，壳内写回 + 浏览器导出双路径兜底。</p></div>
+  </div>
+    <div class="ly-tag">版式 · 图左文右 · 片段 examples/layouts/photo-left.html</div>
+  </div>
+  <h4s-notes hidden>版式「图左文右」：大图占左侧 + 右侧文字（视觉主导）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="文左图右">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 53 · PHOTO-RIGHT</p><h2 class="reveal">文左图右</h2></div>
+<div class="ly-prgt">
+    <div class="ly-prgt-txt reveal"><h3>质量闭环</h3><p>lint 7 类检查 → 逐页截图 → AI 修复 → 构建指纹——每个环节都是产品能力。</p><p>一条命令出包，CI 自动把关。</p></div>
+    <div class="ly-prgt-img reveal">截图占位</div>
+  </div>
+    <div class="ly-tag">版式 · 文左图右 · 片段 examples/layouts/photo-right.html</div>
+  </div>
+  <h4s-notes hidden>版式「文左图右」：文字占左 + 大图占右（与图左文右镜像）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="高亮横幅">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 54 · BANNER-TAG</p><h2 class="reveal">高亮横幅</h2></div>
+<div class="ly-banner"><div class="ly-banner-inner reveal">双击即演 · 零依赖 · 离线可用</div></div>
+    <div class="ly-tag">版式 · 高亮横幅 · 片段 examples/layouts/banner-tag.html</div>
+  </div>
+  <h4s-notes hidden>版式「高亮横幅」：大字标语横贯页面（关键信息强调）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="四栏卡片">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 55 · MULTI-COL-4</p><h2 class="reveal">四栏卡片</h2></div>
+<div class="ly-four">
+    <div class="ly-four-card reveal"><h3>格式</h3><p>合法 HTML 单文件，自定义元素 + data-* 行为层</p></div>
+    <div class="ly-four-card reveal"><h3>播放器</h3><p>零依赖运行时，PowerPoint 习惯全保留</p></div>
+    <div class="ly-four-card reveal"><h3>工具链</h3><p>lint / shot / build / MCP 全覆盖</p></div>
+    <div class="ly-four-card reveal"><h3>生态</h3><p>三技能 + 主题库 + 版式库 + 社区规范</p></div>
+  </div>
+    <div class="ly-tag">版式 · 四栏卡片 · 片段 examples/layouts/multi-col-4.html</div>
+  </div>
+  <h4s-notes hidden>版式「四栏卡片」：四个并列卡片（比三列信息量大时用）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="图标特性">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 56 · ICON-FEATURES</p><h2 class="reveal">图标特性</h2></div>
+<div class="ly-ifeat">
+    <div class="ly-ifeat-item reveal"><span class="ly-ico" data-h4s-icon="zap"></span><b>零依赖</b><p>不装插件、不开网络、不依赖字体服务</p></div>
+    <div class="ly-ifeat-item reveal"><span class="ly-ico" data-h4s-icon="layers"></span><b>转场特效</b><p>20 种转场 + 背景特效层 + 礼花</p></div>
+    <div class="ly-ifeat-item reveal"><span class="ly-ico" data-h4s-icon="award"></span><b>排练计时</b><p>写回 timings.json + 洞察报告</p></div>
+    <div class="ly-ifeat-item reveal"><span class="ly-ico" data-h4s-icon="search"></span><b>质量闭环</b><p>lint + 截图 + 构建指纹</p></div>
+    <div class="ly-ifeat-item reveal"><span class="ly-ico" data-h4s-icon="edit"></span><b>现场编辑</b><p>文字微调写回源文件</p></div>
+    <div class="ly-ifeat-item reveal"><span class="ly-ico" data-h4s-icon="shield"></span><b>离线可用</b><p>字体子集内嵌，断网照演</p></div>
+  </div>
+    <div class="ly-tag">版式 · 图标特性 · 片段 examples/layouts/icon-features.html</div>
+  </div>
+  <h4s-notes hidden>版式「图标特性」：大图标 + 标题 + 描述（6 个能力特性）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="核心要点">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 57 · KEY-TAKEAWAYS</p><h2 class="reveal">核心要点</h2></div>
+<div class="ly-take">
+    <div class="ly-take-item reveal"><span class="ly-take-n">01</span><div><b>AI 写得准</b><p>合法 HTML + 固定舞台 + lint 闭环，排版确定</p></div></div>
+    <div class="ly-take-item reveal"><span class="ly-take-n">02</span><div><b>人演得稳</b><p>双击即演 + 双屏提词 + 离线可用</p></div></div>
+    <div class="ly-take-item reveal"><span class="ly-take-n">03</span><div><b>格式可版本化</b><p>纯文本逐行 diff，git 分支与回滚和代码一样</p></div></div>
+  </div>
+    <div class="ly-tag">版式 · 核心要点 · 片段 examples/layouts/key-takeaways.html</div>
+  </div>
+  <h4s-notes hidden>版式「核心要点」：三条核心要点（总结页/回顾页）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="思考题">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 58 · QUESTION-PROMPT</p><h2 class="reveal">思考题</h2></div>
+<div class="ly-qp">
+    <p class="ly-kicker reveal">DISCUSSION</p>
+    <p class="ly-qp-q reveal">如果你的团队明天开始用 AI 写演示文稿，<br>你希望它先解决哪个问题？</p>
+    <div class="ly-qp-tags reveal"><span>排版崩坏</span><span>字体丢失</span><span>版本混乱</span><span>分发困难</span></div>
+  </div>
+    <div class="ly-tag">版式 · 思考题 · 片段 examples/layouts/question-prompt.html</div>
+  </div>
+  <h4s-notes hidden>版式「思考题」：互动提问：抛出问题引导讨论。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="关于我们">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 59 · COMPANY-INFO</p><h2 class="reveal">关于我们</h2></div>
+<div class="ly-about">
+    <div class="ly-about-txt reveal"><p><b>html4s</b> 是一个开放格式标准，让演示文稿回归"内容即代码"的本质。</p><p>从 2026-11-10 启动到 0.6.0 发布，11 天完成从概念验证到 CI 守门的全链路。</p></div>
+    <div class="ly-about-stats">
+      <div class="ly-about-stat reveal"><span class="n">11</span><span class="l">天从 0 到 0.6.0</span></div>
+      <div class="ly-about-stat reveal"><span class="n">42</span><span class="l">种版式</span></div>
+      <div class="ly-about-stat reveal"><span class="n">10</span><span class="l">套主题</span></div>
+      <div class="ly-about-stat reveal"><span class="n">3</span><span class="l">个创作技能</span></div>
+    </div>
+  </div>
+    <div class="ly-tag">版式 · 关于我们 · 片段 examples/layouts/company-info.html</div>
+  </div>
+  <h4s-notes hidden>版式「关于我们」：公司/项目信息概览（数据 + 描述）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="指标仪表">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 60 · METRICS-DASHBOARD</p><h2 class="reveal">指标仪表</h2></div>
+<div class="ly-metrics">
+    <div class="ly-metric reveal"><span class="n">42</span><span class="l">种版式</span><span class="d">↑ 22 新增</span></div>
+    <div class="ly-metric reveal"><span class="n">10</span><span class="l">套主题</span><span class="d">↑ 2 社区</span></div>
+    <div class="ly-metric reveal"><span class="n">46</span><span class="l">枚内置图标</span><span class="d">零依赖</span></div>
+    <div class="ly-metric reveal"><span class="n">20</span><span class="l">种转场</span><span class="d">含 4 遮罩</span></div>
+    <div class="ly-metric reveal"><span class="n">8</span><span class="l">MCP 工具</span><span class="d">含 scaffold</span></div>
+    <div class="ly-metric reveal"><span class="n">1.0</span><span class="l">SPEC 冻结</span><span class="d">扩展性新增</span></div>
+  </div>
+    <div class="ly-tag">版式 · 指标仪表 · 片段 examples/layouts/metrics-dashboard.html</div>
+  </div>
+  <h4s-notes hidden>版式「指标仪表」：多个小型指标卡（仪表盘风格 3×2）。复制片段文件后替换样例文案即可。</h4s-notes>
 </section>
 
 </h4s-deck>
