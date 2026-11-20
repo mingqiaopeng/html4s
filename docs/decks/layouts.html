@@ -81,8 +81,9 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .ly-vs-card { border: 1px solid var(--bd); padding: 44px 48px; box-sizing: border-box; }
 .ly-vs-card h3 { font-size: 30px; margin: 0 0 22px; }
 .ly-vs-card li { font-size: 23px; line-height: 1.95; color: var(--tx2); }
-.ly-vs-card.is-win { border: 2px solid var(--ac); background: rgba(56, 189, 248, .06); }
+.ly-vs-card.is-win { border: 2px solid var(--ac); }
 .ly-vs-card.is-win h3 { color: var(--ac); }
+.ly-vs-card.is-win li::marker { color: var(--ac); }
 .ly-vs-mid { display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; color: var(--dim); }
 
 .ly-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; }

@@ -136,7 +136,7 @@ MCP server 把 lint/shot/outline/build/pdf/slides 增量编辑与 **h4s_review�
 
 ### 创作（AI Agent 工作流）
 
-三个创作技能（[skills/](skills/)）内含视觉体系、锁定版式与质量清单：
+三个创作技能（[skills/](skills/)）内含视觉体系、锁定版式与质量清单。**第 0 步读 [docs/DECK-DESIGN.md](docs/DECK-DESIGN.md)**（AI 先读的决策指南：场景 → 主题 8 选 1 → 叙事骨架 → 版式分配 → 特效强度）：
 
 ```bash
 # 1. AI 按 skill 写 deck（HTML 源文件）

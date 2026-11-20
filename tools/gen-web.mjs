@@ -47,6 +47,7 @@ const themes = ['深色科技', '瑞士克莱因蓝', '党建红', '电子杂志
 /* 版式图鉴（非主题画廊成员，独立入口） */
 const layoutsShare = path.join(ROOT, 'examples', 'layouts.share.html');
 if (fs.existsSync(layoutsShare)) fs.copyFileSync(layoutsShare, path.join(OUT, 'decks', 'layouts.html'));
+wanted.add('layouts.html'); /* 防清理误删（复制发生在清理后，双保险） */
 
 const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -120,6 +121,7 @@ ${cards.join('\n')}
 
 <h2>文档与规范</h2>
 <div class="docs">
+<a href="${GH}/blob/master/docs/DECK-DESIGN.md"><b>deck 设计决策指南（AI 先读）</b><span>场景 → 主题 8 选 1 → 叙事骨架 4 模板 → 版式分配 → 特效强度分级</span></a>
 <a href="${GH}/blob/master/docs/SPEC.md"><b>格式规范 v1.0-rc1</b><span>清单 Schema · 元素与属性注册表 · 转场/fx/碎片枚举 · 版本化与第三方准入</span></a>
 <a href="${GH}/blob/master/docs/LAYOUTS.md"><b>版式模板库</b><span>13 种典型页面版式 · 生成指南 · 主题适配（CSS 变量正交）</span></a>
 <a href="${GH}/blob/master/ARCHITECTURE.md"><b>架构与路线图</b><span>核心设计决策（ADR）· P0-P4 里程碑 · 风险清单</span></a>

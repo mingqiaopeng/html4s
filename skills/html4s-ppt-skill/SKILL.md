@@ -139,3 +139,7 @@ description: 基于 guizang-ppt-skill 视觉体系（电子杂志风/瑞士国�
 - **片段位置**：`examples/layouts/<id>.html`（每版式一个 `<section>` 片段）+ `examples/layouts/layouts.css`（版式样式，全 CSS 变量）
 - **在线图鉴**：https://mingqiaopeng.github.io/html4s/decks/layouts.html（每页右下角标注片段文件名）
 - **使用约定**：保持片段 DOM 结构与 class 不动、只替换文本数据；片段颜色全部走 CSS 变量（与主题库 gen-themes 同一套）——粘进任何主题 deck 自动换肤；生成前先选版式，一页一个版式；替换后必走 `h4s-lint → h4s-shot → h4s-build` 闭环
+
+## 第 0 步：读《deck 设计决策指南》
+
+生成任何 deck 前**第一步读 `docs/DECK-DESIGN.md`**——五步决策：场景 → 主题（8 选 1 决策表）→ 叙事骨架（4 种页面序列模板）→ 版式分配（13 版式意图映射）→ 转场/特效强度分级。主题用 `tools/gen-themes.mjs`（8 主题），版式片段在 `examples/layouts/`，随后进入 `h4s-lint → h4s-shot → h4s-build` 闭环。
