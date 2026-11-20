@@ -1,0 +1,98 @@
+/* layouts.css — html4s 版式模板库样式（gen-layouts.mjs 生成）
+   用法：把 <section> 片段粘进 deck 后，引入本文件（或拷贝所需规则）。
+   全部颜色走 CSS 变量——与 gen-themes.mjs 主题库同一套变量，自动适配任何主题。
+   变量：--bg/--tx/--tx2/--dim/--ac/--bad/--bd/--bd2/--font */
+
+:root { --bg:#0d1117; --tx:#e6edf3; --tx2:#c3cfe2; --dim:#8b949e; --ac:#38bdf8; --bad:#ff7b72; --bd:#30363d; --bd2:#21262d;
+  --font:'Segoe UI','Microsoft YaHei',sans-serif; }
+html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
+.slide { position: absolute; inset: 0; width: 1920px; height: 1080px; overflow: hidden;
+  background: var(--bg); color: var(--tx); font-family: var(--font); }
+.h4s-holder > .slide { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; position: absolute !important; inset: 0 !important; }
+.reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+.slide.visible .reveal { opacity: 1; transform: translateY(0); }
+.ly-body { display: flex; flex-direction: column; height: 100%; box-sizing: border-box; padding: 90px 130px; position: relative; }
+.ly-head { margin-bottom: 44px; }
+.ly-kicker { font-size: 20px; letter-spacing: .3em; color: var(--ac); text-transform: uppercase; margin: 0 0 18px; }
+.ly-head h2 { font-size: 64px; font-weight: 600; margin: 0; letter-spacing: -.01em; }
+.ly-tag { position: absolute; right: 44px; bottom: 34px; font-size: 18px; color: var(--dim); letter-spacing: .08em; }
+
+
+.ly-cover-main { height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+.ly-cover-main h1 { font-size: 150px; font-weight: 300; letter-spacing: -.03em; margin: 28px 0; }
+.ly-cover-sub { font-size: 32px; color: var(--tx2); max-width: 60ch; margin: 0; }
+.ly-cover-meta { font-size: 22px; color: var(--ac); letter-spacing: .1em; margin-top: 44px; }
+
+.ly-agenda-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 36px; }
+.ly-agenda-list li { display: flex; gap: 36px; align-items: baseline; border-bottom: 1px solid var(--bd2); padding-bottom: 30px; }
+.ly-agenda-list b { font-size: 64px; font-weight: 300; color: var(--ac); min-width: 110px; }
+.ly-agenda-list h3 { font-size: 36px; margin: 0 0 8px; }
+.ly-agenda-list p { font-size: 22px; color: var(--dim); margin: 0; }
+
+.ly-divider-main { height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+.ly-divider-num { font-size: 190px; font-weight: 300; color: var(--ac); opacity: .32; margin: 0; line-height: 1; }
+.ly-divider-main h2 { font-size: 96px; font-weight: 600; margin: 12px 0 22px; }
+.ly-divider-sub { font-size: 30px; color: var(--dim); margin: 0; }
+
+.ly-lead { font-size: 44px; line-height: 1.55; margin: 0 0 56px; max-width: 62ch; }
+.ly-lead b, .ly-lead strong { color: var(--ac); }
+.ly-cols { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 44px; }
+.ly-cols h3 { font-size: 24px; color: var(--ac); margin: 0 0 14px; }
+.ly-cols p { font-size: 24px; line-height: 1.7; color: var(--tx2); margin: 0; }
+
+.ly-two { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; }
+.ly-col { border: 1px solid var(--bd); border-top: 6px solid var(--ac); padding: 40px 44px; box-sizing: border-box; }
+.ly-col h3 { font-size: 32px; margin: 0 0 20px; color: var(--ac); }
+.ly-col p { font-size: 24px; line-height: 1.7; color: var(--tx2); margin: 0 0 18px; }
+.ly-col ul { margin: 0; padding-left: 26px; }
+.ly-col li { font-size: 23px; line-height: 1.9; color: var(--tx2); }
+
+.ly-versus { display: grid; grid-template-columns: 1fr 120px 1fr; gap: 0; align-items: stretch; }
+.ly-vs-card { border: 1px solid var(--bd); padding: 44px 48px; box-sizing: border-box; }
+.ly-vs-card h3 { font-size: 30px; margin: 0 0 22px; }
+.ly-vs-card li { font-size: 23px; line-height: 1.95; color: var(--tx2); }
+.ly-vs-card.is-win { border: 2px solid var(--ac); }
+.ly-vs-card.is-win h3 { color: var(--ac); }
+.ly-vs-card.is-win li::marker { color: var(--ac); }
+.ly-vs-mid { display: flex; align-items: center; justify-content: center; font-size: 40px; font-weight: 700; color: var(--dim); }
+
+.ly-flow { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; }
+.ly-flow li { position: relative; padding: 34px 34px 34px 0; }
+.ly-flow li:not(:last-child)::after { content: '→'; position: absolute; right: 6px; top: 42px; font-size: 34px; color: var(--ac); }
+.ly-step-n { display: inline-block; font-size: 22px; color: var(--bg); background: var(--ac); border-radius: 8px; padding: 4px 14px; margin-bottom: 18px; font-weight: 700; }
+.ly-flow h3 { font-size: 27px; margin: 0 0 12px; }
+.ly-flow p { font-size: 21px; line-height: 1.6; color: var(--dim); margin: 0; }
+
+.ly-tline { list-style: none; margin: 72px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; position: relative; }
+.ly-tline::before { content: ''; position: absolute; top: 9px; left: 4%; right: 4%; height: 3px; background: var(--bd); }
+.ly-tline li { position: relative; padding: 44px 30px 0 0; }
+.ly-tline .ly-dot { position: absolute; top: 0; left: 0; width: 20px; height: 20px; border-radius: 50%; background: var(--ac); box-shadow: 0 0 0 5px var(--bg); }
+.ly-tline h3 { font-size: 25px; margin: 0 0 10px; color: var(--ac); }
+.ly-tline p { font-size: 22px; line-height: 1.6; color: var(--tx2); margin: 0; }
+
+.ly-kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; }
+.ly-kpis .stat { border-left: 5px solid var(--ac); padding-left: 34px; }
+.ly-kpis .n { font-size: 110px; font-weight: 300; letter-spacing: -.02em; line-height: 1.05; }
+.ly-kpis .l { font-size: 22px; letter-spacing: .14em; color: var(--dim); text-transform: uppercase; }
+
+.ly-quote { margin: 0; max-width: 1300px; }
+.ly-quote p { font-size: 66px; line-height: 1.5; font-weight: 300; margin: 0 0 40px; }
+.ly-quote p::before { content: '“'; color: var(--ac); margin-right: 6px; }
+.ly-quote p::after { content: '”'; color: var(--ac); margin-left: 6px; }
+.ly-quote cite { font-size: 26px; color: var(--dim); font-style: normal; letter-spacing: .08em; }
+
+.ly-media { display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: center; flex: 1; }
+.ly-media-img { border: 2px dashed var(--bd); border-radius: 12px; min-height: 640px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 26px; background: var(--bg2, rgba(255,255,255,.03)); }
+.ly-media-txt h3 { font-size: 40px; margin: 0 0 24px; }
+.ly-media-txt p { font-size: 25px; line-height: 1.75; color: var(--tx2); margin: 0 0 18px; }
+
+.ly-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 30px 56px; }
+.ly-list li { display: flex; gap: 24px; align-items: flex-start; border-bottom: 1px solid var(--bd2); padding-bottom: 24px; }
+.ly-list .ly-ico { font-size: 40px; line-height: 1.2; }
+.ly-list b { font-size: 26px; display: block; margin-bottom: 8px; }
+.ly-list p { font-size: 22px; line-height: 1.6; color: var(--dim); margin: 0; }
+
+.ly-close { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
+.ly-close h2 { font-size: 110px; font-weight: 300; letter-spacing: -.03em; margin: 30px 0; }
+.ly-close .ly-close-sub { font-size: 28px; color: var(--tx2); margin: 0 0 30px; }
+.ly-close .ly-cta { font-size: 23px; color: var(--ac); letter-spacing: .14em; margin: 0; }

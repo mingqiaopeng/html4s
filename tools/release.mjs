@@ -59,6 +59,7 @@ const DECKS = [
   'media-test/media-deck',
   'intro-swiss', 'intro-partyred', 'intro-magazine', 'intro-ink',
   'intro-aurora', 'intro-light', 'intro-terminal',
+  'layouts',
 ];
 for (const d of DECKS) {
   const src = path.join(ROOT, 'examples', d + '.html');
@@ -116,6 +117,7 @@ for (const legacy of ['hello.h4s.html', 'showcase.h4s.html', 'plain-legacy.html'
   copyFile(path.join(ROOT, 'examples', legacy), 'examples/' + legacy);
 copy(path.join(ROOT, 'examples/fonts'), 'examples/fonts');
 copy(path.join(ROOT, 'examples/media-test'), 'examples/media-test');
+copy(path.join(ROOT, 'examples/layouts'), 'examples/layouts'); /* 版式模板库片段 + layouts.css */
 /* tools / docs / skill / 根文档 */
 for (const f of fs.readdirSync(path.join(ROOT, 'tools')))
   if (/\.mjs$|\.iss$|\.html$|\.ico$|\.py$/.test(f)) copyFile(path.join(ROOT, 'tools', f), 'tools/' + f);

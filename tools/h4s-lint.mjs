@@ -94,13 +94,21 @@ const measurement = `
     return false;
   }
   function bgOf(el, slideBg) {
+    /* 收集祖先链上的背景层（含半透明），从最底向上合成到不透明——
+       rgba 叠层背景此前被当作实色直接参与对比度计算（1.0:1 假阳性） */
+    var layers = [];
     var cur = el;
     while (cur && cur !== document.body) {
       var c = getComputedStyle(cur).backgroundColor;
-      if (c && !/rgba?\\([^)]*,\\s*0\\s*\\)/.test(c) && c !== 'transparent') return c;
+      if (c && c !== 'transparent') {
+        var p = parseColor(c);
+        if (p && p.a > 0) { layers.push(p); if (p.a >= 1) break; }
+      }
       cur = cur.parentElement;
     }
-    return slideBg;
+    var bg = parseColor(slideBg) || { r: 255, g: 255, b: 255, a: 1 };
+    for (var i = layers.length - 1; i >= 0; i--) bg = blend(layers[i], bg);
+    return rgbStr(bg);
   }
   function parseColor(c) {
     var m = /rgba?\\(([^)]+)\\)/.exec(c);

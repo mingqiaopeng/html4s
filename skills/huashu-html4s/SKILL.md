@@ -101,3 +101,12 @@ description: 基于 花叔Design（alchaincyf/huashu-design）改造：三稿探
 - 适配层以 `!important` 注入模板 `</style>` 前，**不要手动调回 16-18px**
 - 新增版式或自定义段落类遵守同底线；标题大字层级不变（对比度靠字号差 + 字重，不靠把正文压小）
 - 检查工具：`h4s-lint` 的 font-small 规则（<13px 错误、<14px 警告）
+
+## 版式模板库（13 种典型页面版式）
+
+常见 deck 设计软件的典型页面版式已做成可复制片段库：封面 / 目录 / 章节页 / 大字观点（大量文字）/ 双栏对照 / 对比图 / 流程图 / 时间线 / 数据看板 / 引用页 / 图文页 / 要点清单 / 收束页。
+
+- **生成指南**：`docs/LAYOUTS.md`（目录表 + 使用三步 + 主题适配 + Agent 工作流）
+- **片段位置**：`examples/layouts/<id>.html`（每版式一个 `<section>` 片段）+ `examples/layouts/layouts.css`（版式样式，全 CSS 变量）
+- **在线图鉴**：https://mingqiaopeng.github.io/html4s/decks/layouts.html（每页右下角标注片段文件名）
+- **使用约定**：保持片段 DOM 结构与 class 不动、只替换文本数据；片段颜色全部走 CSS 变量（与主题库 gen-themes 同一套）——粘进任何主题 deck 自动换肤；生成前先选版式，一页一个版式；替换后必走 `h4s-lint → h4s-shot → h4s-build` 闭环
