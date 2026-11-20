@@ -1,0 +1,19 @@
+{
+  "id": "emerald",
+  "label": "翡翠深绿",
+  "desc": "翡翠深绿：沉稳商务与可持续发展主题",
+  "transition": "slide",
+  "fx": "stars",
+  "vars": {
+    "--bg": "#06231c",
+    "--tx": "#e8f5ef",
+    "--tx2": "#c2ded4",
+    "--dim": "#8fb8a8",
+    "--ac": "#34d399",
+    "--bad": "#f87171",
+    "--bd": "#1b4a3c",
+    "--bd2": "#0f3629",
+    "--font": "'Segoe UI','Microsoft YaHei',sans-serif"
+  },
+  "deco": ".card.good { border-color: #34d399; box-shadow: 0 0 22px rgba(52, 211, 153, .12); }"
+}

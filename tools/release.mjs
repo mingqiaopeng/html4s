@@ -58,7 +58,7 @@ const DECKS = [
   '2027-dangjian', 'style-a-pilot', 'fs-bridge', 'huashu-bridge', 'conformance',
   'media-test/media-deck',
   'intro-swiss', 'intro-partyred', 'intro-magazine', 'intro-ink',
-  'intro-aurora', 'intro-light', 'intro-terminal',
+  'intro-aurora', 'intro-light', 'intro-terminal', 'intro-sunset', 'intro-emerald',
   'layouts',
 ];
 for (const d of DECKS) {

@@ -11,6 +11,9 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
+const argv = process.argv.slice(2);
+const getOpt = (n) => { const i = argv.indexOf(n); return i > -1 ? argv[i + 1] : null; };
+
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const SRC = path.join(ROOT, 'examples', 'html4s-intro-fs.html');
@@ -160,22 +163,56 @@ export const THEMES = [
 
 /* ---------- fx 页文案替换（与主题 fx 氛围一致） ---------- */
 function applyFxCopy(sections, theme) {
-  if (theme.fx === 'stars') return sections; /* 原文即 stars */
+  if (theme.fx === 'stars') return sections;
   let s = sections;
-  const fxName = theme.fx === 'none' ? 'stars / snow / dust（按需开启）' : theme.fx;
-  s = s.split('星空，就在你身后。').join(theme.fxCopy.h1);
+  const h1 = (theme.fxCopy && theme.fxCopy.h1) || (theme.fx === 'none' ? '留白，即是舞台。' : '光，落在数据上。');
+  s = s.split('星空，就在你身后。').join(h1);
   s = s.split('本页清单 defaults.fx = "stars"——零依赖 canvas，仅放映时渲染，离开自动暂停。另有 snow / dust 与页面级 confetti 礼花。')
-    .join(theme.fxCopy.note
+    .join(theme.fxCopy && theme.fxCopy.note
       ? `本主题清单 defaults.fx 未启用——零依赖 canvas 特效层（stars / snow / dust）在清单中一行开启，仅放映时渲染，离开自动暂停。另有页面级 confetti 礼花。`
       : `本页清单 defaults.fx = "${theme.fx}"——零依赖 canvas，仅放映时渲染，离开自动暂停。另有 stars / snow 与页面级 confetti 礼花。`);
   s = s.split('defaults.fx="stars"').join(`defaults.fx="${theme.fx === 'none' ? 'stars|snow|dust' : theme.fx}"`);
   return s;
 }
 
+/* ---------- 主题文件（themes/*.theme.json，社区投稿格式，见 docs/THEMES.md） ---------- */
+function loadThemeFiles() {
+  const dir = path.join(ROOT, 'themes');
+  if (!fs.existsSync(dir)) return [];
+  const out = [];
+  for (const f of fs.readdirSync(dir)) {
+    if (!/\.theme\.json$/.test(f)) continue;
+    const j = JSON.parse(fs.readFileSync(path.join(dir, f), 'utf8'));
+    if (!j.id || !j.label || !j.vars) { console.error('✗ 主题文件字段不全（需 id/label/vars）: ' + f); process.exit(1); }
+    out.push({
+      id: j.id, label: j.label, desc: j.desc || '',
+      transition: j.transition || 'fade', fx: j.fx || 'none',
+      vars: Object.entries(j.vars || {}).map(([k, v]) => k + ':' + v).join(';') + ';',
+      deco: j.deco || '', fxCopy: null
+    });
+  }
+  return out;
+}
+export function allThemes() {
+  const j = loadThemeFiles();
+  const ids = new Set(THEMES.map((t) => t.id));
+  return THEMES.concat(j.filter((t) => !ids.has(t.id)));
+}
+function validateThemeFile(f) {
+  const j = JSON.parse(fs.readFileSync(path.resolve(f), 'utf8'));
+  const need = ['id', 'label', 'vars'];
+  const miss = need.filter((k) => !j[k]);
+  if (miss.length) { console.error('✗ 缺字段: ' + miss.join(', ')); process.exit(1); }
+  if (THEMES.some((t) => t.id === j.id)) { console.error('✗ id 与内置主题冲突: ' + j.id); process.exit(1); }
+  if (!/#[0-9a-fA-F]{3,8}/.test(JSON.stringify(j.vars))) { console.error('✗ vars 缺少颜色定义'); process.exit(1); }
+  console.log('✓ 主题文件有效: ' + j.id + '（' + j.label + '）——放回 themes/ 目录后 gen-themes 会自动生成变体');
+}
+
 /* ---------- 生成 ---------- */
 function main() {
 let made = 0;
-for (const theme of THEMES) {
+for (const theme of allThemes()) {
+  if (theme.id === 'darktech') { console.log('跳过 darktech（本体 = html4s-intro-fs，含字体内嵌，不重复生成）'); continue; }
   const css = `:root { ${theme.vars.replace(/\n\s*/g, ' ')} }\n${BASE_CSS}\n${theme.deco}`;
   const html = `<!DOCTYPE html>
 <html lang="zh-CN">
@@ -212,8 +249,28 @@ ${applyFxCopy(substituted(sections), theme)}
   if (pages !== 8) { console.error('页数异常'); process.exit(1); }
   made++;
 }
-console.log('共 ' + made + ' 个主题变体（深色科技 = html4s-intro-fs 本体，不在生成范围）');
+console.log('共 ' + made + ' 个主题变体（darktech 本体 = html4s-intro-fs，不重复生成）');
 }
 
-/* 直接运行时才生成；被 gen-deck 导入时只取 THEMES/BASE_CSS */
-if (import.meta.url === pathToFileURL(process.argv[1] || '').href) main();
+/* 直接运行：--validate 校验主题文件 · --apply 给任意 deck 套主题层 · 无参=生成全部变体 */
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
+  const vi = argv.indexOf('--validate');
+  const ai = argv.indexOf('--apply');
+  if (vi > -1 && argv[vi + 1]) { validateThemeFile(argv[vi + 1]); process.exit(0); }
+  if (ai > -1 && argv[ai + 1]) {
+    const theme = allThemes().find((t) => t.id === (getOpt('--theme') || 'darktech'));
+    if (!theme) { console.error('未知主题: ' + getOpt('--theme')); process.exit(2); }
+    const deckFile = path.resolve(argv[ai + 1]);
+    let html = fs.readFileSync(deckFile, 'utf8');
+    const layer = `<style data-h4s-theme="${theme.id}">:root { ${theme.vars.replace(/\n\s*/g, ' ')} }\n${theme.deco}\n</style>`;
+    const marker = /<style data-h4s-theme="[^"]*">[\s\S]*?<\/style>/;
+    if (marker.test(html)) html = html.replace(marker, layer);
+    else if (html.includes('</head>')) html = html.replace('</head>', layer + '\n</head>');
+    else html = layer + html;
+    fs.writeFileSync(deckFile, html, 'utf8');
+    console.log('主题层已应用: ' + theme.label + ' → ' + deckFile);
+    console.log('注意：CSS 变量只对使用变量的 deck（gen-deck/版式库）生效换肤；字面量色值的 deck 不受影响。');
+    process.exit(0);
+  }
+  main();
+}

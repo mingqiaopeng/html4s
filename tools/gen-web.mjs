@@ -23,6 +23,8 @@ const DECKS = [
   { id: 'intro-aurora', title: '极光渐变', skill: '官方', desc: '深蓝紫双色径向渐变底 + 霓虹描边卡，星空特效层' },
   { id: 'intro-light', title: '晨雾浅色', skill: '官方', desc: '浅灰白极简：无框左线卡 + 大量留白' },
   { id: 'intro-terminal', title: '终端绿', skill: '官方', desc: '黑底等宽字体 + $ 提示符 + 扫描线，程序员浪漫' },
+  { id: 'intro-sunset', title: '落日暖橙', skill: '社区主题', desc: '暖橙浅色 + 晨昏光带，文化与生活方式主题' },
+  { id: 'intro-emerald', title: '翡翠深绿', skill: '社区主题', desc: '翡翠深底 + 霓虹绿描边，可持续发展气质' },
 ];
 
 fs.mkdirSync(path.join(OUT, 'decks'), { recursive: true });
@@ -44,7 +46,7 @@ wanted.add('layouts.html'); /* 版式图鉴独立入口（复制在其后的 mai
 for (const f of fs.readdirSync(path.join(OUT, 'decks'))) {
   if (!wanted.has(f)) { fs.rmSync(path.join(OUT, 'decks', f)); console.log('清理下线副本: ' + f); }
 }
-const themes = ['深色科技', '瑞士克莱因蓝', '党建红', '电子杂志', '水墨编辑', '极光渐变', '晨雾浅色', '终端绿'];
+const themes = [...new Set(DECKS.map((d) => d.title))];
 /* 版式图鉴（非主题画廊成员，独立入口） */
 const layoutsShare = path.join(ROOT, 'examples', 'layouts.share.html');
 if (fs.existsSync(layoutsShare)) fs.copyFileSync(layoutsShare, path.join(OUT, 'decks', 'layouts.html'));

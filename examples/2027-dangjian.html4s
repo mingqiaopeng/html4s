@@ -10,7 +10,7 @@
   <!-- H4S 清单：固定舞台 + 播放信息（自动播放/循环/字体声明）。构建期处理 fonts[].file -->
   <script type="application/h4s+json">
   {
-    "h4s": "1.0", "playerVersion": "0.4.1",
+    "h4s": "1.0", "playerVersion": "0.5.0",
     "meta": { "title": "html4s · 把演示文稿还给一个文件", "lang": "zh-CN", "author": "Html4s Project" },
     "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "transparent" },
     "defaults": {
@@ -2473,7 +2473,7 @@ if (window.lucide) lucide.createIcons();
 <!-- h4s 播放器：构建期(h4s-build)内联为单文件；开发期相对路径 -->
 <script>
 /*!
- * h4s-core — html4s 播放器运行时 v0.4.1（转场特效 · 增量编辑 · 声明式图表）
+ * h4s-core — html4s 播放器运行时 v0.5.0（转场特效 · 增量编辑 · 声明式图表）
  * ------------------------------------------------
  * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
  * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
@@ -2491,7 +2491,7 @@ if (window.lucide) lucide.createIcons();
   if (window.__H4S_LOADED__) return;
   window.__H4S_LOADED__ = true;
 
-  var VERSION = '0.4.1';
+  var VERSION = '0.5.0';
   var PV_STALE = null; /* 清单 playerVersion ≠ 本播放器版本 → 旧版内嵌（build 注入指纹后检测） */
 
   /* ================================================================
@@ -2537,6 +2537,7 @@ if (window.lucide) lucide.createIcons();
       presenter: '演讲者视图', notes: '备注', thisPage: '本页', total: '总计', fragN: '碎片 ', noFrags: '无碎片',
       nextFrag: '下一状态 · 碎片 ', nextSlide: '下一页 · 最终状态', lastPage: '已是最后一页', firstPage: '已是第一页',
       noNotes: '（本页无备注）', nextCap: '下一状态', nextCapFinal: '下一页 · 最终状态', endMark: '— END —',
+      tele: '提词', teleT: '提词模式：备注大字号跟随', npEnd: '已是最后一段', npStart: '已是第一段', hNote: '备注段落推进（提词，不动幻灯片）',
       prevT: '上一页 (← / PgUp)', nextT: '下一页 (→ / 空格)', timerT: '总时长 (T 暂停)',
       rehearseT: '排练录制 (R)', laserT: '激光笔 (L)', blackT: '黑屏 (B)', overviewT: '总览 (G)',
       drawerT: '演讲者视图 (S)', preswinT: '独立演讲者窗口（需 http 访问）', fullscreenT: '全屏 (F)', helpT: '帮助 (?)',
@@ -2569,6 +2570,7 @@ if (window.lucide) lucide.createIcons();
       presenter: 'Presenter', notes: 'Notes', thisPage: 'Slide', total: 'Total', fragN: 'Frag ', noFrags: 'No fragments',
       nextFrag: 'Next state · frag ', nextSlide: 'Next slide · final', lastPage: 'Last page', firstPage: 'First page',
       noNotes: '(no notes)', nextCap: 'Next state', nextCapFinal: 'Next slide · final', endMark: '— END —',
+      tele: 'Tele', teleT: 'Teleprompter: large notes follow', npEnd: 'Last paragraph', npStart: 'First paragraph', hNote: 'Notes paragraph step (teleprompter, slides stay)',
       prevT: 'Previous (← / PgUp)', nextT: 'Next (→ / Space)', timerT: 'Total time (T to pause)',
       rehearseT: 'Rehearse (R)', laserT: 'Laser pointer (L)', blackT: 'Black screen (B)', overviewT: 'Overview (G)',
       drawerT: 'Presenter drawer (S)', preswinT: 'Presenter window (needs http)', fullscreenT: 'Fullscreen (F)', helpT: 'Help (?)',
@@ -2899,7 +2901,14 @@ if (window.lucide) lucide.createIcons();
 
     /* ---- 图标引擎（data-h4s-icon，零依赖内置 SVG 集） ---- */
     '[data-h4s-icon]{display:inline-flex;align-items:center;justify-content:center;line-height:1;}',
-    '[data-h4s-icon] .h4s-icon-svg{width:1em;height:1em;display:block;}'
+    '[data-h4s-icon] .h4s-icon-svg{width:1em;height:1em;display:block;}',
+
+    /* ---- 提词模式（备注分段跟随，0.5.0-M3） ---- */
+    '.h4s-draw-notes .ly-np, .h4s-pres .notes .ly-np { margin: 0 0 14px; padding: 8px 14px; border-left: 3px solid transparent; border-radius: 6px; }',
+    '.h4s-draw-notes .ly-np.is-cur { border-left-color: var(--ac); background: rgba(56, 189, 248, .08); }',
+    '.h4s-pres .notes .ly-np.is-cur { border-left-color: var(--ac); background: rgba(56, 189, 248, .07); }',
+    '.h4s-tele .h4s-draw-notes .ly-np { font-size: 40px !important; line-height: 1.85; margin-bottom: 26px; }',
+    '.h4s-tele .h4s-draw-notes .ly-np.is-cur { background: rgba(56, 189, 248, .14); }'
   ].join('\n');
 
   var PRESENTER_CSS = [
@@ -3012,7 +3021,7 @@ if (window.lucide) lucide.createIcons();
   var S = {
     i: 0, f: -1, n: 0, overlay: null, lock: false, queued: null,
     kiosk: false, loop: false, slides: [], fragTimers: [],
-    presenting: false, sel: 0   /* presenting: 放映中；sel: 浏览模式选中页 */
+    presenting: false, sel: 0, np: 0   /* np: 备注段落指针（提词模式，0.5.0-M3） */
   };
   var T = {
     bootAt: Date.now(), slideAt: Date.now(),
@@ -3076,8 +3085,12 @@ if (window.lucide) lucide.createIcons();
     blackout = el('div', 'h4s-blackout');
     overviewEl = el('div', 'h4s-overview');
     overviewEl.hidden = true;
+    overviewEl.setAttribute('role', 'dialog');
+    overviewEl.setAttribute('aria-label', '总览网格');
 
     helpEl = el('div', 'h4s-help');
+    helpEl.setAttribute('role', 'dialog');
+    helpEl.setAttribute('aria-label', '键盘帮助');
     helpEl.innerHTML =
       '<div><h2>html4s 播放器 v' + VERSION + ' — ' + t('helpTitle') + '</h2><table>' +
       '<tr><td><kbd>→ ↓ 空格 PgDn Enter</kbd></td><td>' + t('hNext') + '</td></tr>' +
@@ -3088,18 +3101,22 @@ if (window.lucide) lucide.createIcons();
       '<tr><td><kbd>G</kbd> / <kbd>S</kbd></td><td>' + t('hGrid') + '</td></tr>' +
       '<tr><td><kbd>T</kbd> / <kbd>R</kbd></td><td>' + t('hTime') + '</td></tr>' +
       '<tr><td><kbd>L</kbd></td><td>' + t('hLaser') + '</td></tr>' +
+      '<tr><td><kbd>Shift + ←/→</kbd></td><td>' + t('hNote') + '</td></tr>' +
       '<tr><td><kbd>J</kbd></td><td>' + t('hRemote') + '</td></tr>' +
       '<tr><td><kbd>F</kbd></td><td>' + t('hFull') + '</td></tr>' +
       '<tr><td><kbd>Esc</kbd></td><td>' + t('hEsc') + '</td></tr>' +
       '</table></div>';
 
     toastEl = el('div', 'h4s-toast');
+    toastEl.setAttribute('role', 'status');
     laserDot = el('div', 'h4s-laser-dot');
     laserDot.setAttribute('aria-hidden', 'true');
 
     drawer = el('aside', 'h4s-drawer');
+    drawer.setAttribute('aria-label', '演讲者视图');
     drawer.innerHTML =
       '<h3><span>' + t('presenter') + '</span><span>' +
+        '<button data-dact="tmode" title="' + t('teleT') + '" style="all:unset;cursor:pointer;padding:2px 7px;">' + t('tele') + '</button>' +
         '<button data-dact="afont-" title="备注字号减小" style="all:unset;cursor:pointer;padding:2px 7px;">A−</button>' +
         '<button data-dact="afont+" title="备注字号增大" style="all:unset;cursor:pointer;padding:2px 7px;font-weight:700;">A＋</button>' +
         '<span id="h4s-draw-clock"></span></span></h3>' +
@@ -3125,10 +3142,18 @@ if (window.lucide) lucide.createIcons();
     on(drawer, 'click', function (e) {
       var b = e.target.closest('[data-dact]');
       if (!b) return;
+      if (b.getAttribute('data-dact') === 'tmode') {
+        var on2 = !drawer.classList.contains('h4s-tele');
+        drawer.classList.toggle('h4s-tele', on2);
+        try { localStorage.setItem('h4s-notes-tele', on2 ? '1' : '0'); } catch (err) {}
+        toast(on2 ? t('tele') + ' ON' : t('tele') + ' OFF');
+        return;
+      }
       notesFs = Math.max(12, Math.min(40, notesFs + (b.getAttribute('data-dact') === 'afont+' ? 2 : -2)));
       applyNotesFs();
     });
     applyNotesFs();
+    try { if (localStorage.getItem('h4s-notes-tele') === '1') drawer.classList.add('h4s-tele'); } catch (err) {}
 
     app.appendChild(viewport);
     app.appendChild(progress);
@@ -3834,6 +3859,7 @@ if (window.lucide) lucide.createIcons();
 
     S.i = i;
     S.f = (mode !== 'fwd' && nextSlide.frags.length) ? nextSlide.frags.length - 1 : -1;
+    S.np = 0; /* 翻页重置备注段落指针（提词模式） */
     setFragClasses(nextSlide, S.f);
 
     var name = nextSlide.transition || (DEFAULTS.transition && DEFAULTS.transition.name) || 'fade';
@@ -3989,11 +4015,30 @@ if (window.lucide) lucide.createIcons();
   /* ================================================================
    * 演讲者抽屉
    * ================================================================ */
+  /* 备注分段（提词模式数据源）：优先 p/li 逐段，无则整块一段 */
+  function noteParas(s) {
+    if (!s.notesEl) return [];
+    var ps = $$('p, li', s.notesEl);
+    if (!ps.length) {
+      var t0 = (s.notesEl.textContent || '').trim();
+      return t0 ? [t0] : [];
+    }
+    return ps.map(function (p) { return (p.innerHTML || '').trim(); }).filter(Boolean);
+  }
+
   function updateDrawer() {
     if (!drawerOn) return;
     var s = S.slides[S.i];
-    $('#h4s-draw-notes', drawer).innerHTML =
-      s.notesEl ? s.notesEl.innerHTML : '<span style="color:#475569">' + t('noNotes') + '</span>';
+    var paras = noteParas(s);
+    S.npMax = Math.max(0, paras.length - 1);
+    if (S.np > S.npMax) S.np = S.npMax;
+    $('#h4s-draw-notes', drawer).innerHTML = paras.length
+      ? paras.map(function (p, i) {
+          return '<p class="ly-np' + (i === S.np ? ' is-cur' : '') + '">' + p + '</p>';
+        }).join('')
+      : '<span style="color:#475569">' + t('noNotes') + '</span>';
+    var cur = $('.ly-np.is-cur', drawer);
+    if (cur && cur.scrollIntoView) cur.scrollIntoView({ block: 'center' });
     $('#h4s-t-frag', drawer).textContent =
       s.frags.length ? (t('fragN') + (S.f + 1) + '/' + s.frags.length) : t('noFrags');
 
@@ -4018,6 +4063,20 @@ if (window.lucide) lucide.createIcons();
       box.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">' + t('endMark') + '</div>';
       box.style.height = '160px';
     }
+  }
+
+  /* 段级推进（提词模式）：Shift+方向键移动备注段落指针，不动幻灯片 */
+  function noteStep(dir) {
+    if (!S.presenting) return;
+    if (!drawerOn) toggleDrawer();
+    var s = S.slides[S.i];
+    if (!s) return;
+    var max = Math.max(0, noteParas(s).length - 1);
+    var next = clamp(S.np + dir, 0, max);
+    if (next === S.np) { toast(dir > 0 ? t('npEnd') : t('npStart')); return; }
+    S.np = next;
+    updateDrawer();
+    sendState();
   }
 
   function toggleDrawer() {
@@ -4436,6 +4495,7 @@ if (window.lucide) lucide.createIcons();
     var s = S.slides[clamp(i, 0, S.n - 1)];
     S.i = s.index;
     S.f = fragHint >= 0 ? clamp(fragHint, 0, s.frags.length - 1) : -1;
+    S.np = 0; /* 提词指针随页重置 */
     setFragClasses(s, S.f);
     applyStageSize(s);
     layout();
@@ -4630,7 +4690,7 @@ if (window.lucide) lucide.createIcons();
     try {
       bus.postMessage({
         v: 1, role: 'stage', type: 'state',
-        i: S.i, f: S.f, overlay: S.overlay,
+        i: S.i, f: S.f, overlay: S.overlay, np: S.np,
         total: Math.round(totalSec()), kiosk: S.kiosk
       });
     } catch (e) {}
@@ -4752,7 +4812,7 @@ if (window.lucide) lucide.createIcons();
     document.body.appendChild(ui);
     var mainEl = ui;
 
-    var P = { i: 0, f: -1, overlay: null, total: 0, slideAt: Date.now(), lastMsg: 0 };
+    var P = { i: 0, f: -1, np: 0, overlay: null, total: 0, slideAt: Date.now(), lastMsg: 0 };
     var localMode = false;
     var shade = $('#h4s-p-shade', ui);
 
@@ -4783,8 +4843,15 @@ if (window.lucide) lucide.createIcons();
       $('#h4s-p-frag', ui).textContent = s.frags.length
         ? (t('fragN') + (P.f + 1) + '/' + s.frags.length) : t('noFrags');
       $('#h4s-p-page', ui).textContent = (P.i + 1) + ' / ' + n;
-      $('#h4s-p-notes', ui).innerHTML =
-        s.notesEl ? s.notesEl.innerHTML : '<span style="color:#475569">' + t('noNotes') + '</span>';
+      /* 备注分段 + 提词指针高亮（与舞台抽屉同步，np 来自状态总线） */
+      var paras = noteParas(s);
+      $('#h4s-p-notes', ui).innerHTML = paras.length
+        ? paras.map(function (p, i) {
+            return '<p class="ly-np' + (i === (P.np || 0) ? ' is-cur' : '') + '">' + p + '</p>';
+          }).join('')
+        : '<span style="color:#475569">' + t('noNotes') + '</span>';
+      var curNp = $('.ly-np.is-cur', ui.querySelector('.notes'));
+      if (curNp && curNp.scrollIntoView) curNp.scrollIntoView({ block: 'center' });
 
       fillBox(curBox, s, P.f < 0 ? 0 : P.f + 1);
 
@@ -4847,8 +4914,8 @@ if (window.lucide) lucide.createIcons();
         P.lastMsg = Date.now();
         $('#h4s-p-warn', ui).textContent = '';
         if (m.i !== P.i) P.slideAt = Date.now();
-        var changed = (m.i !== P.i || m.f !== P.f || m.overlay !== P.overlay);
-        P.i = m.i; P.f = m.f; P.overlay = m.overlay;
+        var changed = (m.i !== P.i || m.f !== P.f || m.overlay !== P.overlay || (m.np || 0) !== P.np);
+        P.i = m.i; P.f = m.f; P.overlay = m.overlay; P.np = m.np || 0;
         P.total = m.total || 0;
         $('#h4s-p-total', ui).textContent = fmt(P.total);
         if (changed) render();
@@ -4921,6 +4988,8 @@ if (window.lucide) lucide.createIcons();
         if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
       }
       if (e.ctrlKey && e.altKey && (k === 'q' || k === 'Q') && S.kiosk) { e.preventDefault(); endShow(); toast(t('kioskUnlock')); return; }
+      if (e.shiftKey && (k === 'ArrowRight' || k === 'ArrowDown')) { e.preventDefault(); noteStep(1); return; }
+      if (e.shiftKey && (k === 'ArrowLeft' || k === 'ArrowUp')) { e.preventDefault(); noteStep(-1); return; }
 
       /* 浏览模式键位（PowerPoint 式） */
       if (!S.presenting) {

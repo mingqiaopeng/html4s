@@ -1,0 +1,19 @@
+{
+  "id": "sunset",
+  "label": "落日暖橙",
+  "desc": "暖橙浅色：晨昏光感，适合文化与生活方式主题",
+  "transition": "slide",
+  "fx": "none",
+  "vars": {
+    "--bg": "#fff7ee",
+    "--tx": "#2b1d12",
+    "--tx2": "#4a3a2a",
+    "--dim": "#7a5f47",
+    "--ac": "#9a4a0c",
+    "--bad": "#b3261e",
+    "--bd": "#ead9c3",
+    "--bd2": "#f3e8d8",
+    "--font": "'Segoe UI','Microsoft YaHei',sans-serif"
+  },
+  "deco": ".slide::before { content: ''; position: absolute; left: 0; right: 0; top: 0; height: 10px; background: linear-gradient(90deg, #9a4a0c, #e8a34d); }"
+}

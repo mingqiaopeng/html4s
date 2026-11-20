@@ -20,7 +20,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
-import { THEMES, BASE_CSS as THEME_BASE } from './gen-themes.mjs';
+import { allThemes, BASE_CSS as THEME_BASE } from './gen-themes.mjs';
 import { LAYOUTS, BASE_CSS as LAYOUT_BASE } from './gen-layouts.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -34,13 +34,13 @@ const author = getOpt('--author') || '';
 const outlineFile = getOpt('--outline');
 const outFile = getOpt('-o');
 
-const theme = THEMES.find((t) => t.id === themeId);
+const theme = allThemes().find((t) => t.id === themeId);
 if (!theme) {
-  console.error('未知主题: ' + themeId + ' —— 可用: ' + THEMES.map((t) => t.id).join(' '));
+  console.error('未知主题: ' + themeId + ' —— 可用: ' + allThemes().map((t) => t.id).join(' '));
   process.exit(2);
 }
 if (!outlineFile || !fs.existsSync(path.resolve(outlineFile))) {
-  console.error('用法: node tools/gen-deck.mjs --theme <id> --title "标题" --outline outline.md [-o out.html]\n主题: ' + THEMES.map((t) => t.id).join(' '));
+  console.error('用法: node tools/gen-deck.mjs --theme <id> --title "标题" --outline outline.md [-o out.html]\n主题: ' + allThemes().map((t) => t.id).join(' '));
   process.exit(2);
 }
 const title = titleArg || '';
