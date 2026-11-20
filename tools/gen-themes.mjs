@@ -9,7 +9,7 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
@@ -32,7 +32,7 @@ const sections = deckChunk
 const substituted = (chunk) => COLOR_MAP.reduce((s, [a, b]) => s.split(a).join(b), chunk);
 
 /* ---------- 结构层（变量化，8 主题共享） ---------- */
-const BASE_CSS = `
+export const BASE_CSS = `
   html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
   .slide {
     position: absolute; inset: 0; width: 1920px; height: 1080px;
@@ -60,7 +60,15 @@ const BASE_CSS = `
 `;
 
 /* ---------- 主题定义 ---------- */
-const THEMES = [
+export const THEMES = [
+  {
+    id: 'darktech', label: '深色科技', transition: 'fade', fx: 'stars',
+    vars: `--bg:#0a0f1c;--tx:#ffffff;--tx2:#c9d1d9;--dim:#9ca3af;--ac:#00ffcc;--bad:#ff6b72;--bd:#263041;--bd2:#1a2233;
+    --font:'Space Grotesk','Noto Sans SC',sans-serif;`,
+    deco: `
+    /* 深色科技：单色锚点极简（html4s-intro-fs 同源；Space Grotesk 由清单 fonts 内嵌时生效） */`,
+    fxCopy: null,
+  },
   {
     id: 'swiss', label: '瑞士克莱因蓝', transition: 'slide', fx: 'none',
     vars: `--bg:#ffffff;--tx:#0f172a;--tx2:#1e293b;--dim:#5b6b7f;--ac:#002fa7;--bad:#c0272d;--bd:#c9d4e2;--bd2:#eef2f6;
@@ -165,6 +173,7 @@ function applyFxCopy(sections, theme) {
 }
 
 /* ---------- 生成 ---------- */
+function main() {
 let made = 0;
 for (const theme of THEMES) {
   const css = `:root { ${theme.vars.replace(/\n\s*/g, ' ')} }\n${BASE_CSS}\n${theme.deco}`;
@@ -204,3 +213,7 @@ ${applyFxCopy(substituted(sections), theme)}
   made++;
 }
 console.log('共 ' + made + ' 个主题变体（深色科技 = html4s-intro-fs 本体，不在生成范围）');
+}
+
+/* 直接运行时才生成；被 gen-deck 导入时只取 THEMES/BASE_CSS */
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) main();

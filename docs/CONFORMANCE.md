@@ -6,9 +6,9 @@
 
 | 组件 | 内容 |
 |---|---|
-| `examples/conformance.html` | 黄金一致性 deck 源（25 页：12 动画转场 + 4 遮罩 + none、碎片 6 效果、fx 层 + 礼花、混合内容编辑、混合比例、交互元素） |
+| `examples/conformance.html` | 黄金一致性 deck 源（26 页：12 动画转场 + 4 遮罩 + none、碎片 6 效果、fx 层 + 礼花、混合内容编辑、混合比例、交互元素、声明式图表） |
 | `examples/conformance.html4s` | 官方构建产物（内嵌 h4s-core + playerVersion 指纹） |
-| `tools/verify-conformance.mjs` | 13 项行为断言（CDP 无头浏览器） |
+| `tools/verify-conformance.mjs` | 14 项行为断言（CDP 无头浏览器，含图表渲染） |
 | `tools/h4s-lint.mjs --structure` | 结构检查（清单/枚举/指纹/静态扫描） |
 
 ## 被测对象要求
@@ -54,4 +54,4 @@ node tools/h4s-lint.mjs examples/conformance.html --structure
 
 | 运行时 | 版本 | 结果 | 日期 |
 |---|---|---|---|
-| h4s-core（官方参考实现） | 0.3.2 | 13/13 ✓ · 结构 lint 0 错误（本地 + CI Linux/Chrome 双环境） | 2026-11-20 |
+| h4s-core（官方参考实现） | 0.4.0 | 14/14 ✓ · 结构 lint 0 错误（本地 + CI Linux/Chrome 双环境） | 2026-11-21 |

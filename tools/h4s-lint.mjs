@@ -78,6 +78,32 @@ const KNOWN_TRANS = new Set(['none','fade','slide','push','zoom','wipe','flip','
   }
 }
 
+/* ---------- 图表数据校验（h4s-chart，M1） ---------- */
+{
+  let cm;
+  const cre = /<h4s-chart\b([^>]*)>([\s\S]*?)<\/h4s-chart>/gi;
+  let ci = 0;
+  const CHART_TYPES = ['bar', 'hbar', 'line', 'pie', 'donut'];
+  while ((cm = cre.exec(html))) {
+    ci++;
+    const typeM = /type="([^"]*)"/.exec(cm[1]);
+    const type = (typeM ? typeM[1] : 'bar').trim().toLowerCase();
+    if (!CHART_TYPES.includes(type))
+      warnings.push('W-CHART · 第 ' + ci + ' 个图表 type "' + type + '" 未知——可用: ' + CHART_TYPES.join(' '));
+    let data = null;
+    try { data = JSON.parse(cm[2].trim()); } catch { }
+    if (!Array.isArray(data) || !data.length) {
+      errors.push('E-CHART-DATA · 第 ' + ci + ' 个图表内容须为非空 JSON 数组（元素内直接写 [{"label":"…","value":数字},…]）');
+      continue;
+    }
+    const bad = data.filter((d) => !d || typeof d.label !== 'string' || !Number.isFinite(+d.value));
+    if (bad.length)
+      errors.push('E-CHART-DATA · 第 ' + ci + ' 个图表有 ' + bad.length + ' 项缺 label（字符串）或 value（数值）');
+    if (data.length > 12)
+      warnings.push('W-CHART · 第 ' + ci + ' 个图表有 ' + data.length + ' 项——超过 12 项建议拆分或用表格版式');
+  }
+}
+
 /* ---------- 渲染检查（无头 Edge + CDP） ---------- */
 // 准备 lint 副本：剥离播放器（保证文档模式，尺寸以模板 CSS 为准）
 let lintHtml = html.replace(/<script\s[^>]*src="[^"]*h4s\.player\.js"[^>]*>\s*<\/script>/gi, '');

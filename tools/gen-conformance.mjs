@@ -108,10 +108,16 @@ body += page('', '交互 · INTERACT', '交互元素与点击翻页', '放映中
     <a href="https://github.com/mingqiaopeng/html4s" style="font-size:30px;color:#38bdf8">链接（不翻页）</a></p>`,
   '交互元素页：验证 data-h4s-noclick 与点击翻页的边界。');
 
-body += page('', '收束 · END', '基准结束', '一致性基准走完：转场/碎片/特效/编辑/比例/交互全部覆盖。回浏览模式检查侧栏与页码指示器。', '',
+body += page('', '图表 · CHART', '声明式图表', '下方柱状图由 &lt;h4s-chart&gt; 声明式数据渲染——AI 写数据不写图，lint 可校验数据合法性，颜色随主题 CSS 变量。', `
+    <h4s-chart type="bar" style="height:520px">
+    [{"label":"营收","value":4200},{"label":"利润","value":3100},{"label":"现金流","value":5600},{"label":"海外","value":1800}]
+    </h4s-chart>`,
+  '声明式图表页：数据写在元素内，零依赖 SVG 渲染，slide.visible 触发生长动画。');
+
+body += page('', '收束 · END', '基准结束', '一致性基准走完：转场/碎片/特效/图表/编辑/比例/交互全部覆盖。回浏览模式检查侧栏与页码指示器。', '',
   '收束页。');
 
 fs.writeFileSync(OUT, head + body + '</h4s-deck>\n<script src="../player/h4s.player.js"></script>\n</body></html>\n', 'utf8');
 const pages = (body.match(/<h4s-slide/g) || []).length;
 console.log('生成: ' + OUT + '（' + pages + ' 页）');
-if (pages !== 25) { console.error('页数异常，预期 25'); process.exit(1); }
+if (pages !== 26) { console.error('页数异常，预期 26'); process.exit(1); }

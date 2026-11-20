@@ -1,8 +1,6 @@
 # html4s 版式模板库 · 生成指南
 
-13 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与主题库同一套变量），粘进任何主题 deck 自动适配配色。
-
-> **决策前置**：生成 deck 前先读 [DECK-DESIGN.md](DECK-DESIGN.md)——"场景 → 主题 → 叙事骨架 → 版式分配 → 特效强度"五步决策；本文档只负责版式层。
+19 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
 
 ## 版式目录
 
@@ -21,6 +19,12 @@
 | 11 | [`media`](../examples/layouts/media.html) | 图文页 | 左图右文：把占位块换成 <img> |
 | 12 | [`list`](../examples/layouts/list.html) | 要点清单 | 图标 + 标题 + 说明行的能力清单 |
 | 13 | [`closing`](../examples/layouts/closing.html) | 收束页 | 收束 + 行动号召（居中构图） |
+| 14 | [`chart`](../examples/layouts/chart.html) | 图表页 | 数据可视化：声明式 h4s-chart（AI 写数据不写图） |
+| 15 | [`quadrant`](../examples/layouts/quadrant.html) | 四象限 | 定位 / 优先级：两轴四格 |
+| 16 | [`hierarchy`](../examples/layouts/hierarchy.html) | 层级架构 | 组织 / 递进：顶层 + 子节点 |
+| 17 | [`table`](../examples/layouts/table.html) | 表格页 | 结构化数据：表头 + 数据行 |
+| 18 | [`dual`](../examples/layouts/dual.html) | 双图并置 | 两张图 / 两种形态并排比较 |
+| 19 | [`appendix`](../examples/layouts/appendix.html) | 附录页 | 备查数据 / 详细表格（正文讲完再翻） |
 
 在线预览：**https://mingqiaopeng.github.io/html4s/decks/layouts.html**（版式图鉴 deck，每页右下角标注片段文件名）。
 

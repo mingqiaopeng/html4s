@@ -2,12 +2,12 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>html4s 版式图鉴 · 13 种典型页面版式</title>
+<title>html4s 版式图鉴 · 19 种典型页面版式</title>
 <script type="application/h4s+json">
 {
   "h4s": "1.0",
   "meta": {
-    "title": "html4s 版式图鉴 · 13 种典型页面版式",
+    "title": "html4s 版式图鉴 · ${LAYOUTS.length} 种典型页面版式",
     "lang": "zh-CN",
     "author": "Html4s Project"
   },
@@ -31,7 +31,7 @@
 <body>
 <h4s-deck>
 
-<!-- gen-layouts.mjs · 版式模板库图鉴：13 种典型页面版式（同内容样例 · CSS 变量主题化） -->
+<!-- gen-layouts.mjs · 版式模板库图鉴：19 种典型页面版式（同内容样例 · CSS 变量主题化） -->
 <style>
 :root { --bg:#0d1117; --tx:#e6edf3; --tx2:#c3cfe2; --dim:#8b949e; --ac:#38bdf8; --bad:#ff7b72; --bd:#30363d; --bd2:#21262d;
   --font:'Segoe UI','Microsoft YaHei',sans-serif; }
@@ -125,7 +125,39 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .ly-close { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .ly-close h2 { font-size: 110px; font-weight: 300; letter-spacing: -.03em; margin: 30px 0; }
 .ly-close .ly-close-sub { font-size: 28px; color: var(--tx2); margin: 0 0 30px; }
-.ly-close .ly-cta { font-size: 23px; color: var(--ac); letter-spacing: .14em; margin: 0; }</style>
+.ly-close .ly-cta { font-size: 23px; color: var(--ac); letter-spacing: .14em; margin: 0; }
+
+.ly-chart-points { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 26px; }
+.ly-chart-points p { font-size: 22px; color: var(--dim); margin: 0; }
+.ly-chart-points b { color: var(--ac); }
+h4s-chart { min-height: 540px; }
+
+.ly-quad { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 4px; background: var(--bd); border: 2px solid var(--bd); flex: 1; }
+.ly-q { background: var(--bg); padding: 40px 44px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+.ly-q b { font-size: 28px; color: var(--ac); }
+.ly-q p { font-size: 23px; color: var(--tx2); margin: 0; }
+.ly-q.is-do { background: rgba(56, 189, 248, .08); }
+
+.ly-hier { display: flex; flex-direction: column; flex: 1; gap: 0; }
+.ly-hier-top { align-self: center; border: 2px solid var(--ac); color: var(--ac); font-size: 30px; padding: 20px 60px; border-radius: 10px; }
+.ly-hier-link { align-self: center; width: 3px; height: 46px; background: var(--bd); }
+.ly-hier-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
+.ly-hier-node { border: 1px solid var(--bd); border-top: 5px solid var(--ac); padding: 30px 34px; box-sizing: border-box; }
+.ly-hier-node b { font-size: 26px; display: block; margin-bottom: 10px; }
+.ly-hier-node p { font-size: 21px; color: var(--dim); margin: 0; }
+
+.ly-table { width: 100%; border-collapse: collapse; font-size: 23px; line-height: 1.55; }
+.ly-table th { text-align: left; color: var(--ac); font-weight: 600; padding: 16px 22px; border-bottom: 2px solid var(--ac); }
+.ly-table td { padding: 15px 22px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }
+
+.ly-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; }
+.ly-dual-item { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.ly-dual-img { flex: 1; border: 2px dashed var(--bd); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 24px; min-height: 400px; }
+.ly-dual-item figcaption { font-size: 21px; color: var(--dim); text-align: center; }
+
+.ly-appx { width: 100%; border-collapse: collapse; font-size: 21px; line-height: 1.5; }
+.ly-appx th { text-align: left; color: var(--ac); padding: 12px 18px; border-bottom: 2px solid var(--ac); }
+.ly-appx td { padding: 11px 18px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }</style>
 
 <section class="slide" data-h4s-title="封面">
   <div class="ly-body">
@@ -289,6 +321,89 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
     <div class="ly-tag">版式 · 收束页 · 片段 examples/layouts/closing.html</div>
   </div>
   <h4s-notes hidden>版式「收束页」：收束 + 行动号召（居中构图）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="图表页">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 14 · CHART</p><h2 class="reveal">图表页</h2></div>
+<h4s-chart type="bar" class="reveal" style="height:540px">
+    [{"label":"营收","value":4200},{"label":"利润","value":3100},{"label":"现金流","value":5600},{"label":"海外","value":1800}]
+  </h4s-chart>
+  <div class="ly-chart-points">
+    <p class="reveal"><b>42%</b> — 营收增速，三年新高</p>
+    <p class="reveal"><b>31%</b> — 利润率改善来自结构优化</p>
+    <p class="reveal"><b>1800万</b> — 海外市场首年突破</p>
+  </div>
+    <div class="ly-tag">版式 · 图表页 · 片段 examples/layouts/chart.html</div>
+  </div>
+  <h4s-notes hidden>版式「图表页」：数据可视化：声明式 h4s-chart（AI 写数据不写图）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="四象限">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 15 · QUADRANT</p><h2 class="reveal">四象限</h2></div>
+<div class="ly-quad">
+    <div class="ly-q is-do reveal"><b>高影响 · 低成本</b><p>立即做：AI 创作闭环</p></div>
+    <div class="ly-q reveal"><b>高影响 · 高成本</b><p>规划做：macOS 壳</p></div>
+    <div class="ly-q reveal"><b>低影响 · 低成本</b><p>顺手做：文档补齐</p></div>
+    <div class="ly-q reveal"><b>低影响 · 高成本</b><p>不做：实时协作</p></div>
+  </div>
+    <div class="ly-tag">版式 · 四象限 · 片段 examples/layouts/quadrant.html</div>
+  </div>
+  <h4s-notes hidden>版式「四象限」：定位 / 优先级：两轴四格。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="层级架构">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 16 · HIERARCHY</p><h2 class="reveal">层级架构</h2></div>
+<div class="ly-hier">
+    <div class="ly-hier-top reveal">html4s 双宿主架构</div>
+    <div class="ly-hier-link reveal"></div>
+    <div class="ly-hier-row">
+      <div class="ly-hier-node reveal"><b>格式层</b><p>合法 HTML 单文件 · 清单 · 自定义元素</p></div>
+      <div class="ly-hier-node reveal"><b>播放器层</b><p>零依赖运行时 · 转场特效 · 编辑</p></div>
+      <div class="ly-hier-node reveal"><b>工具链层</b><p>lint / shot / build / MCP 闭环</p></div>
+    </div>
+  </div>
+    <div class="ly-tag">版式 · 层级架构 · 片段 examples/layouts/hierarchy.html</div>
+  </div>
+  <h4s-notes hidden>版式「层级架构」：组织 / 递进：顶层 + 子节点。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="表格页">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 17 · TABLE</p><h2 class="reveal">表格页</h2></div>
+<table class="ly-table">
+    <tr><th>里程碑</th><th>交付</th><th>状态</th></tr>
+    <tr><td>2026-11 上旬</td><td>P0 概念验证 · 规范 v0.1</td><td>✅ 完成</td></tr>
+    <tr><td>2026-11 中旬</td><td>P1 工具链 · P2 桌面壳</td><td>✅ 完成</td></tr>
+    <tr><td>2026-11 下旬</td><td>0.3.x 转场 / 编辑 / 发布工程</td><td>✅ 完成</td></tr>
+    <tr><td>下一步</td><td>0.4.0 图表与脚手架</td><td>🚧 进行中</td></tr>
+  </table>
+    <div class="ly-tag">版式 · 表格页 · 片段 examples/layouts/table.html</div>
+  </div>
+  <h4s-notes hidden>版式「表格页」：结构化数据：表头 + 数据行。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="双图并置">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 18 · DUAL</p><h2 class="reveal">双图并置</h2></div>
+<div class="ly-dual">
+    <figure class="ly-dual-item reveal"><div class="ly-dual-img">桌面版截图占位</div><figcaption>桌面版：全功能演播（写回 / 双屏 / kiosk）</figcaption></figure>
+    <figure class="ly-dual-item reveal"><div class="ly-dual-img">浏览器版截图占位</div><figcaption>浏览器版：自动降级，分享零门槛</figcaption></figure>
+  </div>
+    <div class="ly-tag">版式 · 双图并置 · 片段 examples/layouts/dual.html</div>
+  </div>
+  <h4s-notes hidden>版式「双图并置」：两张图 / 两种形态并排比较。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="附录页">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 19 · APPENDIX</p><h2 class="reveal">附录页</h2></div>
+<table class="ly-appx">
+    <tr><th>环境</th><th>能力</th><th>入口</th></tr>
+    <tr><td>桌面壳</td><td>双屏演讲者 / 排练写回 / kiosk / 文件写回</td><td>Ctrl+D 演示站 · Ctrl+R 最近</td></tr>
+    <tr><td>浏览器</td><td>放映 / 文字微调（降级）</td><td>拖入或 share.html 直开</td></tr>
+    <tr><td>AI Agent</td><td>lint / shot / build / scaffold</td><td>MCP 7 工具</td></tr>
+    <tr><td>CI</td><td>结构 lint + CDP 回归</td><td>push 自动</td></tr>
+  </table>
+    <div class="ly-tag">版式 · 附录页 · 片段 examples/layouts/appendix.html</div>
+  </div>
+  <h4s-notes hidden>版式「附录页」：备查数据 / 详细表格（正文讲完再翻）。复制片段文件后替换样例文案即可。</h4s-notes>
 </section>
 
 </h4s-deck>

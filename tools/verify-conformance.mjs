@@ -2,6 +2,7 @@
  * 对构建产物（conformance.html4s → 拷为 .html 避免 file:// 扩展名不渲染的坑）逐项断言。
  * 注意：querySelectorAll('h4s-slide') 会把侧栏/预览克隆也计入 —— 真页数用
  * .h4s-holder > h4s-slide（collectSlides 已把页面搬进舞台）。
+ * 0.4.0：26 页（新增声明式图表页）+ 图表渲染断言。
  * 运行：node tools/verify-conformance.mjs（任一断言失败 → 退出码 1）
  */
 import fs from 'node:fs';
@@ -45,8 +46,8 @@ await withPage(url, async ({ ev }) => {
     sidecells: document.querySelectorAll('.h4s-sidecell').length
   })`));
   ok('指纹一致（manifest.playerVersion === H4S.version）', ver.player === ver.manifest && !!ver.player);
-  ok('真页数 25（舞台持有，克隆不计）', ver.pages === 25);
-  ok('浏览模式接管 + 侧栏 25 格', ver.browse && ver.sidecells === 25);
+  ok('真页数 26（舞台持有，克隆不计）', ver.pages === 26);
+  ok('浏览模式接管 + 侧栏 26 格', ver.browse && ver.sidecells === 26);
 
   /* 编辑标记：进入文字微调模式后统计（舞台箱显示当前选中页=封面，≥1 即为标记生效） */
   await ev(`document.querySelector('[data-bact="edit"]').click()`);
@@ -59,17 +60,25 @@ await withPage(url, async ({ ev }) => {
     await ev(`document.querySelector('.h4s-counter').getAttribute('aria-live') === 'polite'
       && !!document.querySelector('.h4s-sidecell[aria-label]')`));
 
-  /* 放映 + fx 画布 + 全页导航（轮询等锁释放） */
+  /* 放映 + fx 画布 + 图表渲染 + 全页导航（轮询等锁释放） */
   await ev(`H4S.present(0)`);
   await sleep(400);
   ok('fx 背景画布存在（defaults.fx=stars）', await ev(`!!document.querySelector('canvas.h4s-fx')`));
 
   let navOk = true, where = '';
-  for (let i = 0; i < 25; i++) {
+  for (let i = 0; i < 26; i++) {
     const st = await goTo(ev, i);
     if (st.i !== i || st.presenting !== true) { navOk = false; where = '目标 ' + i + ' 实得 ' + JSON.stringify(st); break; }
   }
-  ok('全页导航 0→24（lock 正常释放、状态同步）', navOk && where === '');
+  ok('全页导航 0→25（lock 正常释放、状态同步）', navOk && where === '');
+
+  /* 图表断言（0.4.0）：声明式图表页的 SVG 已渲染（真身 + 克隆 ≥ 1） */
+  await goTo(ev, 24);
+  await sleep(200);
+  ok('声明式图表渲染（h4s-chart svg ≥ 1）',
+    (await ev(`document.querySelectorAll('.h4s-chart svg').length`)) >= 1);
+  ok('图表柱体元素存在（.bar ≥ 1）',
+    (await ev(`document.querySelectorAll('.h4s-chart .bar').length`)) >= 1);
 
   /* 碎片推进：jump 到碎片页前一页（none 页 i=17），next() 以 fwd 语义进入碎片页
      （f=-1），再 next() 揭示第一个碎片（jump/back 进碎片页会呈现最终状态，故用 fwd 链） */

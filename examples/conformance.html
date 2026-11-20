@@ -229,10 +229,21 @@
     <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
     <h4s-notes hidden>交互元素页：验证 data-h4s-noclick 与点击翻页的边界。</h4s-notes>
   </h4s-slide>
+  <h4s-slide data-h4s-title="声明式图表">
+    <p class="kicker">图表 · CHART</p>
+    <h1>声明式图表</h1>
+    <p class="desc">下方柱状图由 &lt;h4s-chart&gt; 声明式数据渲染——AI 写数据不写图，lint 可校验数据合法性，颜色随主题 CSS 变量。</p>
+    
+    <h4s-chart type="bar" style="height:520px">
+    [{"label":"营收","value":4200},{"label":"利润","value":3100},{"label":"现金流","value":5600},{"label":"海外","value":1800}]
+    </h4s-chart>
+    <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
+    <h4s-notes hidden>声明式图表页：数据写在元素内，零依赖 SVG 渲染，slide.visible 触发生长动画。</h4s-notes>
+  </h4s-slide>
   <h4s-slide data-h4s-title="基准结束">
     <p class="kicker">收束 · END</p>
     <h1>基准结束</h1>
-    <p class="desc">一致性基准走完：转场/碎片/特效/编辑/比例/交互全部覆盖。回浏览模式检查侧栏与页码指示器。</p>
+    <p class="desc">一致性基准走完：转场/碎片/特效/图表/编辑/比例/交互全部覆盖。回浏览模式检查侧栏与页码指示器。</p>
     
     <p class="meta-foot">html4s 一致性基准 · 覆盖格式与播放器的全部能力</p>
     <h4s-notes hidden>收束页。</h4s-notes>

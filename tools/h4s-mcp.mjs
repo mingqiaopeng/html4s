@@ -74,6 +74,19 @@ const TOOLS = {
       properties: { deck: { type: 'string' } },
     },
   },
+  h4s_scaffold: {
+    description: 'deck 脚手架：按主题（8 选 1）+ Markdown 大纲自动组装 starter deck（封面/目录/章节/内容页/收束，版式与主题内建）。之后用 h4s_lint/h4s_shot 微调，h4s_build 交付。',
+    inputSchema: {
+      type: 'object', required: ['theme', 'title', 'outline'],
+      properties: {
+        theme: { type: 'string', enum: ['darktech', 'swiss', 'partyred', 'magazine', 'ink', 'aurora', 'light', 'terminal'], description: '主题 id（决策依据见 docs/DECK-DESIGN.md）' },
+        title: { type: 'string', description: 'deck 主标题（封面）' },
+        outline: { type: 'string', description: 'Markdown 大纲：## 章节 / - 要点 / > 金句 / ```chart JSON``` / | 表格 | / 普通段落=观点页' },
+        author: { type: 'string' },
+        out: { type: 'string', description: '输出 .html 路径（可选，默认 examples/ 下按标题命名）' },
+      },
+    },
+  },
 };
 
 function runTool(name, args) {
@@ -115,6 +128,15 @@ function runTool(name, args) {
         args2.push('--build');
       }
       return runCapture(process.execPath, args2);
+    }
+    case 'h4s_scaffold': {
+      const tmp = path.join(os.tmpdir(), 'scaffold-outline-' + Date.now() + '.md');
+      fs.writeFileSync(tmp, String(args.outline || ''), 'utf8');
+      const a2 = [path.join(HERE, 'gen-deck.mjs'), '--theme', String(args.theme || 'darktech'),
+        '--title', String(args.title || '未命名 deck'), '--outline', tmp];
+      if (args.author) a2.push('--author', String(args.author));
+      if (args.out) a2.push('-o', path.resolve(args.out));
+      return runCapture(process.execPath, a2);
     }
     case 'h4s_review': {
       const tmp = path.join(os.tmpdir(), 'h4s-review-' + Date.now() + '.json');

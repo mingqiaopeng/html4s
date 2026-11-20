@@ -2,12 +2,12 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>html4s 版式图鉴 · 13 种典型页面版式</title>
+<title>html4s 版式图鉴 · 19 种典型页面版式</title>
 <script type="application/h4s+json">
 {
-  "h4s": "1.0", "playerVersion": "0.3.2",
+  "h4s": "1.0", "playerVersion": "0.4.0",
   "meta": {
-    "title": "html4s 版式图鉴 · 13 种典型页面版式",
+    "title": "html4s 版式图鉴 · ${LAYOUTS.length} 种典型页面版式",
     "lang": "zh-CN",
     "author": "Html4s Project"
   },
@@ -31,7 +31,7 @@
 <body>
 <h4s-deck>
 
-<!-- gen-layouts.mjs · 版式模板库图鉴：13 种典型页面版式（同内容样例 · CSS 变量主题化） -->
+<!-- gen-layouts.mjs · 版式模板库图鉴：19 种典型页面版式（同内容样例 · CSS 变量主题化） -->
 <style>
 :root { --bg:#0d1117; --tx:#e6edf3; --tx2:#c3cfe2; --dim:#8b949e; --ac:#38bdf8; --bad:#ff7b72; --bd:#30363d; --bd2:#21262d;
   --font:'Segoe UI','Microsoft YaHei',sans-serif; }
@@ -125,7 +125,39 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 .ly-close { height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; }
 .ly-close h2 { font-size: 110px; font-weight: 300; letter-spacing: -.03em; margin: 30px 0; }
 .ly-close .ly-close-sub { font-size: 28px; color: var(--tx2); margin: 0 0 30px; }
-.ly-close .ly-cta { font-size: 23px; color: var(--ac); letter-spacing: .14em; margin: 0; }</style>
+.ly-close .ly-cta { font-size: 23px; color: var(--ac); letter-spacing: .14em; margin: 0; }
+
+.ly-chart-points { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 26px; }
+.ly-chart-points p { font-size: 22px; color: var(--dim); margin: 0; }
+.ly-chart-points b { color: var(--ac); }
+h4s-chart { min-height: 540px; }
+
+.ly-quad { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 4px; background: var(--bd); border: 2px solid var(--bd); flex: 1; }
+.ly-q { background: var(--bg); padding: 40px 44px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+.ly-q b { font-size: 28px; color: var(--ac); }
+.ly-q p { font-size: 23px; color: var(--tx2); margin: 0; }
+.ly-q.is-do { background: rgba(56, 189, 248, .08); }
+
+.ly-hier { display: flex; flex-direction: column; flex: 1; gap: 0; }
+.ly-hier-top { align-self: center; border: 2px solid var(--ac); color: var(--ac); font-size: 30px; padding: 20px 60px; border-radius: 10px; }
+.ly-hier-link { align-self: center; width: 3px; height: 46px; background: var(--bd); }
+.ly-hier-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
+.ly-hier-node { border: 1px solid var(--bd); border-top: 5px solid var(--ac); padding: 30px 34px; box-sizing: border-box; }
+.ly-hier-node b { font-size: 26px; display: block; margin-bottom: 10px; }
+.ly-hier-node p { font-size: 21px; color: var(--dim); margin: 0; }
+
+.ly-table { width: 100%; border-collapse: collapse; font-size: 23px; line-height: 1.55; }
+.ly-table th { text-align: left; color: var(--ac); font-weight: 600; padding: 16px 22px; border-bottom: 2px solid var(--ac); }
+.ly-table td { padding: 15px 22px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }
+
+.ly-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; }
+.ly-dual-item { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.ly-dual-img { flex: 1; border: 2px dashed var(--bd); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 24px; min-height: 400px; }
+.ly-dual-item figcaption { font-size: 21px; color: var(--dim); text-align: center; }
+
+.ly-appx { width: 100%; border-collapse: collapse; font-size: 21px; line-height: 1.5; }
+.ly-appx th { text-align: left; color: var(--ac); padding: 12px 18px; border-bottom: 2px solid var(--ac); }
+.ly-appx td { padding: 11px 18px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }</style>
 
 <section class="slide" data-h4s-title="封面">
   <div class="ly-body">
@@ -290,11 +322,94 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
   </div>
   <h4s-notes hidden>版式「收束页」：收束 + 行动号召（居中构图）。复制片段文件后替换样例文案即可。</h4s-notes>
 </section>
+<section class="slide" data-h4s-title="图表页">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 14 · CHART</p><h2 class="reveal">图表页</h2></div>
+<h4s-chart type="bar" class="reveal" style="height:540px">
+    [{"label":"营收","value":4200},{"label":"利润","value":3100},{"label":"现金流","value":5600},{"label":"海外","value":1800}]
+  </h4s-chart>
+  <div class="ly-chart-points">
+    <p class="reveal"><b>42%</b> — 营收增速，三年新高</p>
+    <p class="reveal"><b>31%</b> — 利润率改善来自结构优化</p>
+    <p class="reveal"><b>1800万</b> — 海外市场首年突破</p>
+  </div>
+    <div class="ly-tag">版式 · 图表页 · 片段 examples/layouts/chart.html</div>
+  </div>
+  <h4s-notes hidden>版式「图表页」：数据可视化：声明式 h4s-chart（AI 写数据不写图）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="四象限">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 15 · QUADRANT</p><h2 class="reveal">四象限</h2></div>
+<div class="ly-quad">
+    <div class="ly-q is-do reveal"><b>高影响 · 低成本</b><p>立即做：AI 创作闭环</p></div>
+    <div class="ly-q reveal"><b>高影响 · 高成本</b><p>规划做：macOS 壳</p></div>
+    <div class="ly-q reveal"><b>低影响 · 低成本</b><p>顺手做：文档补齐</p></div>
+    <div class="ly-q reveal"><b>低影响 · 高成本</b><p>不做：实时协作</p></div>
+  </div>
+    <div class="ly-tag">版式 · 四象限 · 片段 examples/layouts/quadrant.html</div>
+  </div>
+  <h4s-notes hidden>版式「四象限」：定位 / 优先级：两轴四格。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="层级架构">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 16 · HIERARCHY</p><h2 class="reveal">层级架构</h2></div>
+<div class="ly-hier">
+    <div class="ly-hier-top reveal">html4s 双宿主架构</div>
+    <div class="ly-hier-link reveal"></div>
+    <div class="ly-hier-row">
+      <div class="ly-hier-node reveal"><b>格式层</b><p>合法 HTML 单文件 · 清单 · 自定义元素</p></div>
+      <div class="ly-hier-node reveal"><b>播放器层</b><p>零依赖运行时 · 转场特效 · 编辑</p></div>
+      <div class="ly-hier-node reveal"><b>工具链层</b><p>lint / shot / build / MCP 闭环</p></div>
+    </div>
+  </div>
+    <div class="ly-tag">版式 · 层级架构 · 片段 examples/layouts/hierarchy.html</div>
+  </div>
+  <h4s-notes hidden>版式「层级架构」：组织 / 递进：顶层 + 子节点。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="表格页">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 17 · TABLE</p><h2 class="reveal">表格页</h2></div>
+<table class="ly-table">
+    <tr><th>里程碑</th><th>交付</th><th>状态</th></tr>
+    <tr><td>2026-11 上旬</td><td>P0 概念验证 · 规范 v0.1</td><td>✅ 完成</td></tr>
+    <tr><td>2026-11 中旬</td><td>P1 工具链 · P2 桌面壳</td><td>✅ 完成</td></tr>
+    <tr><td>2026-11 下旬</td><td>0.3.x 转场 / 编辑 / 发布工程</td><td>✅ 完成</td></tr>
+    <tr><td>下一步</td><td>0.4.0 图表与脚手架</td><td>🚧 进行中</td></tr>
+  </table>
+    <div class="ly-tag">版式 · 表格页 · 片段 examples/layouts/table.html</div>
+  </div>
+  <h4s-notes hidden>版式「表格页」：结构化数据：表头 + 数据行。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="双图并置">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 18 · DUAL</p><h2 class="reveal">双图并置</h2></div>
+<div class="ly-dual">
+    <figure class="ly-dual-item reveal"><div class="ly-dual-img">桌面版截图占位</div><figcaption>桌面版：全功能演播（写回 / 双屏 / kiosk）</figcaption></figure>
+    <figure class="ly-dual-item reveal"><div class="ly-dual-img">浏览器版截图占位</div><figcaption>浏览器版：自动降级，分享零门槛</figcaption></figure>
+  </div>
+    <div class="ly-tag">版式 · 双图并置 · 片段 examples/layouts/dual.html</div>
+  </div>
+  <h4s-notes hidden>版式「双图并置」：两张图 / 两种形态并排比较。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
+<section class="slide" data-h4s-title="附录页">
+  <div class="ly-body">
+    <div class="ly-head"><p class="ly-kicker reveal">LAYOUT 19 · APPENDIX</p><h2 class="reveal">附录页</h2></div>
+<table class="ly-appx">
+    <tr><th>环境</th><th>能力</th><th>入口</th></tr>
+    <tr><td>桌面壳</td><td>双屏演讲者 / 排练写回 / kiosk / 文件写回</td><td>Ctrl+D 演示站 · Ctrl+R 最近</td></tr>
+    <tr><td>浏览器</td><td>放映 / 文字微调（降级）</td><td>拖入或 share.html 直开</td></tr>
+    <tr><td>AI Agent</td><td>lint / shot / build / scaffold</td><td>MCP 7 工具</td></tr>
+    <tr><td>CI</td><td>结构 lint + CDP 回归</td><td>push 自动</td></tr>
+  </table>
+    <div class="ly-tag">版式 · 附录页 · 片段 examples/layouts/appendix.html</div>
+  </div>
+  <h4s-notes hidden>版式「附录页」：备查数据 / 详细表格（正文讲完再翻）。复制片段文件后替换样例文案即可。</h4s-notes>
+</section>
 
 </h4s-deck>
 <script>
 /*!
- * h4s-core — html4s 播放器运行时 v0.3.2（转场特效引擎 · 增量编辑配套）
+ * h4s-core — html4s 播放器运行时 v0.4.0（转场特效 · 增量编辑 · 声明式图表）
  * ------------------------------------------------
  * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
  * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
@@ -312,7 +427,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
   if (window.__H4S_LOADED__) return;
   window.__H4S_LOADED__ = true;
 
-  var VERSION = '0.3.2';
+  var VERSION = '0.4.0';
   var PV_STALE = null; /* 清单 playerVersion ≠ 本播放器版本 → 旧版内嵌（build 注入指纹后检测） */
 
   /* ================================================================
@@ -710,7 +825,18 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
     '.h4s-splitbar:hover,.h4s-splitbar.is-drag{background:rgba(56,189,248,.25);}',
     '.h4s-sidebar{width:var(--h4s-sbw,232px);}',
     '.h4s-stagebox{left:var(--h4s-sbw,232px);}',
-    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}'
+    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}',
+
+    /* ---- 声明式图表（h4s-chart，零依赖 SVG） ---- */
+    'h4s-chart{display:block;width:100%;min-height:380px;}',
+    '.h4s-chart svg{width:100%;height:100%;display:block;}',
+    '.h4s-chart .bar{transform:scaleY(0);transform-origin:center bottom;transform-box:fill-box;',
+    '  transition:transform .9s cubic-bezier(.16,1,.3,1);}',
+    '.h4s-holder .slide.visible .h4s-chart .bar{transform:scaleY(1);}',
+    '.h4s-chart polyline{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.2s ease .15s;}',
+    '.h4s-holder .slide.visible .h4s-chart polyline{stroke-dashoffset:0;}',
+    '.h4s-chart .slice{opacity:0;transition:opacity .7s ease;}',
+    '.h4s-holder .slide.visible .h4s-chart .slice{opacity:1;}'
   ].join('\n');
 
   var PRESENTER_CSS = [
@@ -1248,6 +1374,154 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
       });
       if (alive) confettiRun();
       else { confetti.raf = 0; ctx.clearRect(0, 0, w, h); confetti.parts = []; }
+    });
+  }
+
+  /* ================================================================
+   * 声明式图表（h4s-chart，零依赖 SVG，阶段 0.4.0-M1）
+   * 用法：<h4s-chart type="bar|hbar|line|pie|donut">
+   *        [{"label":"…","value":42}, …]
+   *       </h4s-chart>
+   * 数据为元素内 JSON 数组；颜色走 CSS 变量（随主题换肤）；
+   * slide.visible 触发生长/描线/切片渐显动画。
+   * ================================================================ */
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function niceMax(v) {
+    if (!(v > 0)) return 1;
+    var p = Math.pow(10, Math.floor(Math.log(v) / Math.LN10));
+    var d = v / p;
+    return (d <= 1 ? 1 : d <= 2 ? 2 : d <= 5 ? 5 : 10) * p;
+  }
+  function fmtNum(v) {
+    return Math.abs(v) >= 10000 ? (v / 10000).toFixed(v % 10000 ? 1 : 0) + '万' : String(v);
+  }
+
+  function chartBar(data, W, H, horizontal) {
+    var padL = 24, padR = 24, padT = 46, padB = 64;
+    var max = niceMax(Math.max.apply(null, data.map(function (d) { return Math.abs(d.value); })) * 1.05);
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    svg.appendChild(svgEl('line', { x1: padL, y1: H - padB, x2: W - padR, y2: H - padB, stroke: 'var(--bd)', 'stroke-width': 2 }));
+    var n = data.length;
+    data.forEach(function (d, i) {
+      var frac = Math.min(1, Math.abs(d.value) / max);
+      if (!horizontal) {
+        var bw = (W - padL - padR) / n * 0.56;
+        var x = padL + (W - padL - padR) * (i + 0.5) / n - bw / 2;
+        var h = frac * (H - padT - padB);
+        svg.appendChild(svgEl('rect', { class: 'bar', x: x, y: H - padB - h, width: bw, height: h, rx: 5, fill: 'var(--ac)', 'transition-delay': (i * 70) + 'ms' }));
+        var vt = svgEl('text', { x: x + bw / 2, y: H - padB - h - 12, 'text-anchor': 'middle', fill: 'var(--tx2)', 'font-size': 24 });
+        vt.textContent = fmtNum(d.value);
+        svg.appendChild(vt);
+        var lt = svgEl('text', { x: x + bw / 2, y: H - padB + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 21 });
+        lt.textContent = d.label;
+        svg.appendChild(lt);
+      } else {
+        var labelW = 220, bh = (H - padT - padB) / n * 0.5;
+        var y = padT + (H - padT - padB) * (i + 0.5) / n - bh / 2;
+        var w2 = frac * (W - labelW - padR - 90);
+        svg.appendChild(svgEl('rect', { class: 'bar', x: labelW, y: y, width: w2, height: bh, rx: 5, fill: 'var(--ac)', 'transition-delay': (i * 70) + 'ms', 'transform-origin': 'left center' }));
+        svg.appendChild(svgEl('text', { x: labelW - 14, y: y + bh / 2 + 8, 'text-anchor': 'end', fill: 'var(--dim)', 'font-size': 21 }));
+        svg.lastChild.textContent = d.label;
+        svg.appendChild(svgEl('text', { x: labelW + w2 + 14, y: y + bh / 2 + 8, fill: 'var(--tx2)', 'font-size': 23 }));
+        svg.lastChild.textContent = fmtNum(d.value);
+      }
+    });
+    return svg;
+  }
+
+  function chartLine(data, W, H) {
+    var padL = 24, padR = 24, padT = 46, padB = 64;
+    var max = niceMax(Math.max.apply(null, data.map(function (d) { return Math.abs(d.value); })) * 1.1);
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    svg.appendChild(svgEl('line', { x1: padL, y1: H - padB, x2: W - padR, y2: H - padB, stroke: 'var(--bd)', 'stroke-width': 2 }));
+    var n = data.length;
+    var pts = data.map(function (d, i) {
+      var x = n === 1 ? padL + (W - padL - padR) / 2 : padL + (W - padL - padR) * i / (n - 1);
+      var y = H - padB - Math.min(1, Math.abs(d.value) / max) * (H - padT - padB);
+      return { x: x, y: y, d: d };
+    });
+    var poly = svgEl('polyline', {
+      points: pts.map(function (p) { return p.x + ',' + p.y; }).join(' '),
+      fill: 'none', stroke: 'var(--ac)', 'stroke-width': 5, 'stroke-linejoin': 'round',
+      'stroke-linecap': 'round', pathLength: 1
+    });
+    svg.appendChild(poly);
+    pts.forEach(function (p, i) {
+      svg.appendChild(svgEl('circle', { cx: p.x, cy: p.y, r: 8, fill: 'var(--bg)', stroke: 'var(--ac)', 'stroke-width': 4 }));
+      var v = svgEl('text', { x: p.x, y: p.y - 20, 'text-anchor': 'middle', fill: 'var(--tx2)', 'font-size': 23 });
+      v.textContent = fmtNum(p.d.value);
+      svg.appendChild(v);
+      var l = svgEl('text', { x: p.x, y: H - padB + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 21 });
+      l.textContent = p.d.label;
+      svg.appendChild(l);
+    });
+    return svg;
+  }
+
+  function chartPie(data, W, H, donut) {
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    var total = data.reduce(function (a, d) { return a + Math.abs(d.value); }, 0) || 1;
+    var cx = W * 0.30, cy = H / 2, r = Math.min(W * 0.30, H / 2) - 40;
+    var ang = -Math.PI / 2;
+    data.forEach(function (d, i) {
+      var frac = Math.abs(d.value) / total;
+      var a2 = ang + frac * Math.PI * 2;
+      var x1 = cx + r * Math.cos(ang), y1 = cy + r * Math.sin(ang);
+      var x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+      var large = frac > 0.5 ? 1 : 0;
+      var path = svgEl('path', {
+        class: 'slice', d: 'M' + cx + ',' + cy + ' L' + x1 + ',' + y1 + ' A' + r + ',' + r + ' 0 ' + large + ' 1 ' + x2 + ',' + y2 + ' Z',
+        fill: 'var(--ac)', 'fill-opacity': Math.max(0.32, 1 - i * 0.09).toFixed(2),
+        stroke: 'var(--bg)', 'stroke-width': 2, 'transition-delay': (i * 90) + 'ms'
+      });
+      svg.appendChild(path);
+      ang = a2;
+    });
+    if (donut) {
+      svg.appendChild(svgEl('circle', { cx: cx, cy: cy, r: r * 0.58, fill: 'var(--bg)' }));
+      var ct = svgEl('text', { x: cx, y: cy - 4, 'text-anchor': 'middle', fill: 'var(--tx)', 'font-size': 40, 'font-weight': 300 });
+      ct.textContent = fmtNum(total);
+      svg.appendChild(ct);
+      var cl = svgEl('text', { x: cx, y: cy + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 19 });
+      cl.textContent = '合计';
+      svg.appendChild(cl);
+    }
+    /* 图例 */
+    var lx = cx + r + 70, ly = cy - (data.length * 30) / 2 + 8;
+    data.forEach(function (d, i) {
+      svg.appendChild(svgEl('rect', { x: lx, y: ly + i * 30 - 12, width: 18, height: 18, rx: 4, fill: 'var(--ac)', 'fill-opacity': Math.max(0.32, 1 - i * 0.09).toFixed(2) }));
+      var t = svgEl('text', { x: lx + 30, y: ly + i * 30 + 3, fill: 'var(--tx2)', 'font-size': 22 });
+      t.textContent = d.label + ' · ' + fmtNum(d.value) + '（' + Math.round(Math.abs(d.value) / total * 100) + '%）';
+      svg.appendChild(t);
+    });
+    return svg;
+  }
+
+  var CHART_BUILDERS = { bar: chartBar, hbar: function (d, W, H) { return chartBar(d, W, H, true); }, line: chartLine, pie: function (d, W, H) { return chartPie(d, W, H, false); }, donut: function (d, W, H) { return chartPie(d, W, H, true); } };
+  var CHART_TYPES = Object.keys(CHART_BUILDERS);
+
+  function renderCharts() {
+    $$('h4s-chart').forEach(function (el) {
+      if (el.__chart) return;
+      var type = (el.getAttribute('type') || 'bar').toLowerCase();
+      var data = null;
+      try { data = JSON.parse(el.textContent); } catch (e) { }
+      if (CHART_TYPES.indexOf(type) === -1 || !Array.isArray(data) || !data.length) {
+        el.textContent = '[h4s] 图表无效：type 须为 ' + CHART_TYPES.join('/') + '，内容须为非空 JSON 数组';
+        return;
+      }
+      el.__chart = true;
+      el.classList.add('h4s-chart'); /* CSS/选择器按类匹配（元素本身是标签 h4s-chart） */
+      el.textContent = '';
+      var W = el.clientWidth || 900, H = el.clientHeight || 460;
+      var svg = CHART_BUILDERS[type](data, W, H);
+      svg.setAttribute('class', 'h4s-chart-svg');
+      el.appendChild(svg);
     });
   }
 
@@ -2193,6 +2467,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
     var n = slides.length;
     /* deckId() 依赖 S.slides —— 填充以保证与舞台窗口同频道 */
     S.slides = slides; S.n = n;
+    renderCharts(); /* 演讲者窗预览也要带图 */
 
     var ui = el('div', 'h4s-pres');
     ui.innerHTML =
@@ -2587,6 +2862,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
     try { ED.snap = document.documentElement.outerHTML; } catch (err) {}
     S.slides = collectSlides();
     S.n = S.slides.length;
+    renderCharts(); /* 图表先渲染成 SVG——浏览侧栏/预览克隆才能带着图 */
     if (!S.n) {
       console.info('[h4s] 未发现幻灯片结构，启用网页放映模式');
       initWebPresent();

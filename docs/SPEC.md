@@ -1,6 +1,6 @@
-# html4s 格式规范 v1.0-rc1
+# html4s 格式规范 v1.0（正式冻结）
 
-状态：**发布候选（冻结）**——L1/L2 字段与 §5/§6 枚举自本版起冻结，1.0 正式版仅允许勘误与实现澄清 · 对应实现：h4s-core 0.3.2 · 在线参考实现：**https://mingqiaopeng.github.io/html4s/** · 日期：2026-11-20
+状态：**1.0 正式冻结**——L1/L2 字段与 §5/§6/§4.5 枚举冻结，此后仅允许勘误与扩展性新增（新层级/新枚举需提案） · 对应实现：h4s-core 0.4.0 · 在线参考实现：**https://mingqiaopeng.github.io/html4s/** · 日期：2026-11-21
 父文档：[ARCHITECTURE.md](../ARCHITECTURE.md)（架构与 ADR）。本文件是**格式与运行时行为**的规范文本；与实现不一致处以实现为准并在变更记录中说明。
 
 ## 1. 能力分级
@@ -65,8 +65,27 @@
 | `<h4s-deck>` | deck 容器（可省——兼容 `.slides` 容器 / body 直接子 `section`/`.slide`） |
 | `<h4s-slide>` | 页（自定义元素）；兼容别名：`<section>`、`.slide` |
 | `<h4s-notes hidden>` | 页备注；兼容别名：`aside.notes`/`.notes` |
+| `<h4s-chart type="…">` | 声明式图表（内容 = JSON 数组，见 §4.5）；颜色随主题 CSS 变量 |
 
 页采集顺序：优先全部 `<h4s-slide>`；否则取容器（`h4s-deck`→`.slides`→body）的直接 `section`/`.slide` 子元素。
+
+### 4.1.1 声明式图表（L2）
+
+```html
+<h4s-chart type="bar">
+[{"label":"营收","value":4200},{"label":"利润","value":3100}]
+</h4s-chart>
+```
+
+| 属性 | 枚举 | 说明 |
+|---|---|---|
+| `type` | `bar` `hbar` `line` `pie` `donut` | 未支持类型回退 `bar` 并告警（`W-CHART`） |
+
+- 内容：元素内直接书写**非空 JSON 数组**，每项 `{label: string, value: number}`
+- 渲染：零依赖 SVG；颜色取主题 CSS 变量（`--ac`/`--tx2`/`--dim`/`--bd`/`--bg`）
+- 动画：`slide.visible` 触发（柱体生长 / 折线描线 / 切片渐显）
+- lint：`E-CHART-DATA`（数据非法）、`W-CHART`（未知 type / 项数 >12）
+- 实现要求（第三方）：五类型全支持或明确降级；克隆（缩略图/预览）中的图表必须同步呈现
 
 ### 4.2 页级属性（`h4s-slide` / `section`）
 
@@ -134,10 +153,11 @@
 4. **宽容原则**：未知字段忽略、未知枚举回退默认；不得因清单超前字段拒绝加载（§8.2）。
 5. **版本互通**：第三方运行时复用 `playerVersion` 字段语义（或并列 `runtimeVersion`）暴露自身版本，供 stale 检测生态互通。
 6. **准入流程**：PR 附 conformance 运行日志 + 截图 → 维护者验收 → 在本节"已准入实现"登记。
-7. **已准入实现**：h4s-core（官方参考实现，0.3.2，2026-11-20）。
+7. **已准入实现**：h4s-core（官方参考实现，0.4.0，2026-11-21）。
 
 ## 变更记录
 
-- **v1.0-rc1（2026-11-20）**：**冻结候选**——L1/L2 字段与全部枚举冻结；新增 §9 第三方运行时准入规则；在线参考实现上线（mingqiaopeng.github.io/html4s）。
+- **v1.0（2026-11-21）**：**正式冻结**——新增 §4.1.1 声明式图表（`h4s-chart`，L2：五类型/JSON 数据/主题变量配色/可见性动画，第三方须全支持或降级）；版本号与 `playerVersion` 语义随 0.4.0 实现。
+- v1.0-rc1（2026-11-20）：冻结候选——L1/L2 字段与全部枚举冻结；新增 §9 第三方运行时准入规则；在线参考实现上线（mingqiaopeng.github.io/html4s）。
 - v0.9（2026-11-19）：从 ARCHITECTURE.md §3 独立成文并对齐 0.3.1 实现：转场 6→20 种、fx 层、页面礼花、文字微调（L3）、媒体控制、网页放映、i18n（含壳语言覆盖）、WebHID、`playerVersion`/`fontSubsetChars`/`fontsEmbedded` 字段、深链完整语法。
 - v0.1（2026-11-10）：初版（ARCHITECTURE.md §3）。

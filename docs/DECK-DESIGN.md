@@ -142,6 +142,14 @@ cover → agenda → versus(现状 vs 提案) → statement(核心主张) → kp
 4. 质量闭环：`h4s-lint → h4s-shot → h4s-build --subset --share`
 5. 交付：`.html4s` 双击即演 + `.share.html` 浏览器直开副本
 
+**脚手架（0.4.0）**：五步决策可直接交给命令——
+
+```bash
+node tools/gen-deck.mjs --theme partyred --title "季度经营汇报" --outline outline.md
+```
+
+主题 + 骨架 + 版式 + 主题配色全部内建，AI 只需把内容写进大纲（`## 章节`/`- 要点`/`> 金句`/` ```chart 数据``` `/段落）。MCP 工具 `h4s_scaffold` 同能力。
+
 ---
 
 *变更：v1（2026-11-21）— 首版：五步决策 / 8 主题矩阵 / 4 骨架 / 版式映射 / 密度与特效规则 / 双决策示例。*

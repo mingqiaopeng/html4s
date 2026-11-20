@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /* gen-layouts.mjs — 版式模板库生成器（单一事实源）
- * 13 种典型页面版式（封面/目录/章节页/大字观点/双栏/对比图/流程/时间线/数据看板/引用/图文/清单/收束）
+ * ${LAYOUTS.length} 种典型页面版式（封面/目录/章节页/大字观点/双栏/对比图/流程/时间线/数据看板/引用/图文/清单/收束）
  * → 一键生成：① 版式图鉴 deck（examples/layouts.html）② 逐版式可复制片段（examples/layouts/<id>.html）
  *   ③ 版式样式表（examples/layouts/layouts.css）④ 生成指南（docs/LAYOUTS.md）
  *
@@ -11,14 +11,14 @@
  */
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const SNIP_DIR = path.join(ROOT, 'examples', 'layouts');
 
 /* ---------- 版式 CSS（变量化基础层） ---------- */
-const BASE_CSS = `
+export const BASE_CSS = `
 :root { --bg:#0d1117; --tx:#e6edf3; --tx2:#c3cfe2; --dim:#8b949e; --ac:#38bdf8; --bad:#ff7b72; --bd:#30363d; --bd2:#21262d;
   --font:'Segoe UI','Microsoft YaHei',sans-serif; }
 html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
@@ -35,7 +35,7 @@ html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background:
 `;
 
 /* ---------- 13 种版式（SSOT） ---------- */
-const LAYOUTS = [
+export const LAYOUTS = [
   {
     id: 'cover', name: '封面', use: '开场定调：产品名 / 一句话价值 / 日期作者',
     css: `
@@ -226,9 +226,101 @@ const LAYOUTS = [
     <p class="ly-cta reveal">STAR · FORK · ISSUE · CONTRIBUTION WELCOME</p>
   </div>`,
   },
+  {
+    id: 'chart', name: '图表页', use: '数据可视化：声明式 h4s-chart（AI 写数据不写图）',
+    css: `
+.ly-chart-points { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; margin-top: 26px; }
+.ly-chart-points p { font-size: 22px; color: var(--dim); margin: 0; }
+.ly-chart-points b { color: var(--ac); }
+h4s-chart { min-height: 540px; }`,
+    html: `<h4s-chart type="bar" class="reveal" style="height:540px">
+    [{"label":"营收","value":4200},{"label":"利润","value":3100},{"label":"现金流","value":5600},{"label":"海外","value":1800}]
+  </h4s-chart>
+  <div class="ly-chart-points">
+    <p class="reveal"><b>42%</b> — 营收增速，三年新高</p>
+    <p class="reveal"><b>31%</b> — 利润率改善来自结构优化</p>
+    <p class="reveal"><b>1800万</b> — 海外市场首年突破</p>
+  </div>`,
+  },
+  {
+    id: 'quadrant', name: '四象限', use: '定位 / 优先级：两轴四格',
+    css: `
+.ly-quad { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 4px; background: var(--bd); border: 2px solid var(--bd); flex: 1; }
+.ly-q { background: var(--bg); padding: 40px 44px; box-sizing: border-box; display: flex; flex-direction: column; gap: 12px; }
+.ly-q b { font-size: 28px; color: var(--ac); }
+.ly-q p { font-size: 23px; color: var(--tx2); margin: 0; }
+.ly-q.is-do { background: rgba(56, 189, 248, .08); }`,
+    html: `<div class="ly-quad">
+    <div class="ly-q is-do reveal"><b>高影响 · 低成本</b><p>立即做：AI 创作闭环</p></div>
+    <div class="ly-q reveal"><b>高影响 · 高成本</b><p>规划做：macOS 壳</p></div>
+    <div class="ly-q reveal"><b>低影响 · 低成本</b><p>顺手做：文档补齐</p></div>
+    <div class="ly-q reveal"><b>低影响 · 高成本</b><p>不做：实时协作</p></div>
+  </div>`,
+  },
+  {
+    id: 'hierarchy', name: '层级架构', use: '组织 / 递进：顶层 + 子节点',
+    css: `
+.ly-hier { display: flex; flex-direction: column; flex: 1; gap: 0; }
+.ly-hier-top { align-self: center; border: 2px solid var(--ac); color: var(--ac); font-size: 30px; padding: 20px 60px; border-radius: 10px; }
+.ly-hier-link { align-self: center; width: 3px; height: 46px; background: var(--bd); }
+.ly-hier-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; }
+.ly-hier-node { border: 1px solid var(--bd); border-top: 5px solid var(--ac); padding: 30px 34px; box-sizing: border-box; }
+.ly-hier-node b { font-size: 26px; display: block; margin-bottom: 10px; }
+.ly-hier-node p { font-size: 21px; color: var(--dim); margin: 0; }`,
+    html: `<div class="ly-hier">
+    <div class="ly-hier-top reveal">html4s 双宿主架构</div>
+    <div class="ly-hier-link reveal"></div>
+    <div class="ly-hier-row">
+      <div class="ly-hier-node reveal"><b>格式层</b><p>合法 HTML 单文件 · 清单 · 自定义元素</p></div>
+      <div class="ly-hier-node reveal"><b>播放器层</b><p>零依赖运行时 · 转场特效 · 编辑</p></div>
+      <div class="ly-hier-node reveal"><b>工具链层</b><p>lint / shot / build / MCP 闭环</p></div>
+    </div>
+  </div>`,
+  },
+  {
+    id: 'table', name: '表格页', use: '结构化数据：表头 + 数据行',
+    css: `
+.ly-table { width: 100%; border-collapse: collapse; font-size: 23px; line-height: 1.55; }
+.ly-table th { text-align: left; color: var(--ac); font-weight: 600; padding: 16px 22px; border-bottom: 2px solid var(--ac); }
+.ly-table td { padding: 15px 22px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }`,
+    html: `<table class="ly-table">
+    <tr><th>里程碑</th><th>交付</th><th>状态</th></tr>
+    <tr><td>2026-11 上旬</td><td>P0 概念验证 · 规范 v0.1</td><td>✅ 完成</td></tr>
+    <tr><td>2026-11 中旬</td><td>P1 工具链 · P2 桌面壳</td><td>✅ 完成</td></tr>
+    <tr><td>2026-11 下旬</td><td>0.3.x 转场 / 编辑 / 发布工程</td><td>✅ 完成</td></tr>
+    <tr><td>下一步</td><td>0.4.0 图表与脚手架</td><td>🚧 进行中</td></tr>
+  </table>`,
+  },
+  {
+    id: 'dual', name: '双图并置', use: '两张图 / 两种形态并排比较',
+    css: `
+.ly-dual { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1; }
+.ly-dual-item { margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.ly-dual-img { flex: 1; border: 2px dashed var(--bd); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 24px; min-height: 400px; }
+.ly-dual-item figcaption { font-size: 21px; color: var(--dim); text-align: center; }`,
+    html: `<div class="ly-dual">
+    <figure class="ly-dual-item reveal"><div class="ly-dual-img">桌面版截图占位</div><figcaption>桌面版：全功能演播（写回 / 双屏 / kiosk）</figcaption></figure>
+    <figure class="ly-dual-item reveal"><div class="ly-dual-img">浏览器版截图占位</div><figcaption>浏览器版：自动降级，分享零门槛</figcaption></figure>
+  </div>`,
+  },
+  {
+    id: 'appendix', name: '附录页', use: '备查数据 / 详细表格（正文讲完再翻）',
+    css: `
+.ly-appx { width: 100%; border-collapse: collapse; font-size: 21px; line-height: 1.5; }
+.ly-appx th { text-align: left; color: var(--ac); padding: 12px 18px; border-bottom: 2px solid var(--ac); }
+.ly-appx td { padding: 11px 18px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }`,
+    html: `<table class="ly-appx">
+    <tr><th>环境</th><th>能力</th><th>入口</th></tr>
+    <tr><td>桌面壳</td><td>双屏演讲者 / 排练写回 / kiosk / 文件写回</td><td>Ctrl+D 演示站 · Ctrl+R 最近</td></tr>
+    <tr><td>浏览器</td><td>放映 / 文字微调（降级）</td><td>拖入或 share.html 直开</td></tr>
+    <tr><td>AI Agent</td><td>lint / shot / build / scaffold</td><td>MCP 7 工具</td></tr>
+    <tr><td>CI</td><td>结构 lint + CDP 回归</td><td>push 自动</td></tr>
+  </table>`,
+  },
 ];
 
 /* ---------- 组装版式图鉴 deck ---------- */
+function main() {
 const page = (L, i) => `<section class="slide" data-h4s-title="${L.name}">
   <div class="ly-body">
     <div class="ly-head"><p class="ly-kicker reveal">LAYOUT ${String(i + 1).padStart(2, '0')} · ${L.id.toUpperCase()}</p><h2 class="reveal">${L.name}</h2></div>
@@ -241,7 +333,7 @@ ${L.html}
 
 const manifest = {
   h4s: '1.0',
-  meta: { title: 'html4s 版式图鉴 · 13 种典型页面版式', lang: 'zh-CN', author: 'Html4s Project' },
+  meta: { title: 'html4s 版式图鉴 · ${LAYOUTS.length} 种典型页面版式', lang: 'zh-CN', author: 'Html4s Project' },
   id: 'layouts',
   stage: { width: 1920, height: 1080, fit: 'contain', background: '#0d1117' },
   defaults: { transition: { name: 'fade', duration: 400 } },
@@ -252,7 +344,7 @@ const deck = `<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<title>html4s 版式图鉴 · 13 种典型页面版式</title>
+<title>html4s 版式图鉴 · ${LAYOUTS.length} 种典型页面版式</title>
 <script type="application/h4s+json">
 ${JSON.stringify(manifest, null, 2)}
 </script>
@@ -260,7 +352,7 @@ ${JSON.stringify(manifest, null, 2)}
 <body>
 <h4s-deck>
 
-<!-- gen-layouts.mjs · 版式模板库图鉴：13 种典型页面版式（同内容样例 · CSS 变量主题化） -->
+<!-- gen-layouts.mjs · 版式模板库图鉴：${LAYOUTS.length} 种典型页面版式（同内容样例 · CSS 变量主题化） -->
 <style>${BASE_CSS}
 ${LAYOUTS.map((L) => L.css).join('\n')}</style>
 
@@ -298,7 +390,7 @@ const catalog = LAYOUTS.map((L, i) =>
 
 const guide = `# html4s 版式模板库 · 生成指南
 
-13 种典型页面版式（对标常见 deck 设计软件的内置版式），由 \`tools/gen-layouts.mjs\` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
+${LAYOUTS.length} 种典型页面版式（对标常见 deck 设计软件的内置版式），由 \`tools/gen-layouts.mjs\` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
 
 ## 版式目录
 
@@ -347,3 +439,7 @@ console.log('生成完成:');
 console.log('  图鉴 deck: examples/layouts.html（' + LAYOUTS.length + ' 页）');
 console.log('  片段+样式: examples/layouts/（' + (LAYOUTS.length + 1) + ' 个文件）');
 console.log('  生成指南: docs/LAYOUTS.md');
+}
+
+/* 直接运行时才生成；被 gen-deck 导入时只取 LAYOUTS/BASE_CSS */
+if (import.meta.url === pathToFileURL(process.argv[1] || '').href) main();

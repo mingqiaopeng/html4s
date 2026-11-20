@@ -4,7 +4,7 @@
 
 > AI 写得准，人演得稳，格式永远可版本化。
 
-[![Version](https://img.shields.io/badge/version-0.3.2-blue)]() [![License](https://img.shields.io/badge/license-AGPL--3.0-orange)]() [![Platform](https://img.shields.io/badge/platform-Windows%20%2B%20Web-green)]()
+[![Version](https://img.shields.io/badge/version-0.4.0-blue)]() [![License](https://img.shields.io/badge/license-AGPL--3.0-orange)]() [![Platform](https://img.shields.io/badge/platform-Windows%20%2B%20Web-green)]()
 
 设计规范与路线图见 [ARCHITECTURE.md](ARCHITECTURE.md)（格式规范正式文本见 [docs/SPEC.md](docs/SPEC.md)）· 许可归属见 [docs/NOTICE.md](docs/NOTICE.md)
 
@@ -109,9 +109,9 @@ MCP server 把 lint/shot/outline/build/pdf/slides 增量编辑与 **h4s_review�
 
 ### 安装（Windows 10/11）
 
-1. 下载 [release/html4s-0.3.2-setup.exe](release/html4s-0.3.2-setup.exe) 运行（用户级安装，无需管理员）
+1. 下载 [release/html4s-0.4.0-setup.exe](release/html4s-0.4.0-setup.exe) 运行（用户级安装，无需管理员）
    - 自动注册 `.html4s` 双击关联 + 桌面/开始菜单快捷方式
-2. 或用免安装版 [html4s-0.3.2.zip](release/html4s-0.3.2.zip)，运行 `Html4sPlayer/Html4sPlayer.exe`
+2. 或用免安装版 [html4s-0.4.0.zip](release/html4s-0.4.0.zip)，运行 `Html4sPlayer/Html4sPlayer.exe`
 
 需要 WebView2 运行时（Windows 10/11 系统自带）。
 
@@ -146,6 +146,26 @@ node tools/h4s-shot.mjs  my-deck.html            # 逐页 PNG 视觉自审
 node tools/h4s-build.mjs my-deck.html --subset   # 字体子集内嵌 → my-deck.html4s
 # 3. 双击 my-deck.html4s 验收
 ```
+
+### 📊 声明式图表（0.4.0 新增）
+
+```html
+<h4s-chart type="bar">
+[{"label":"营收","value":4200},{"label":"利润","value":3100}]
+</h4s-chart>
+```
+
+元素内写 JSON 数据 → 零依赖 SVG 渲染，颜色随主题换肤，放映时数据生长动画。AI 写数据不写图——lint 可校验数据合法性。支持 bar / hbar / line / pie / donut 五种类型。
+
+### 🧩 版式模板库与脚手架（0.4.0 新增）
+
+13 种典型页面版式（封面/目录/章节页/大字观点/对比图/流程图/时间线/数据看板/引用/图文/清单/收束等）——每个版式一个可复制片段，全部走 CSS 变量与 8 主题正交组合。**一条命令生成 starter deck**：
+
+```bash
+node tools/gen-deck.mjs --theme partyred --title "季度经营汇报" --outline outline.md
+```
+
+决策依据见 [docs/DECK-DESIGN.md](docs/DECK-DESIGN.md)（AI 先读：场景 → 主题 → 骨架 → 版式 → 特效）。
 
 增量编辑、字体与迁移：
 
