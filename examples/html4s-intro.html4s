@@ -2826,13 +2826,8 @@ if (window.lucide) lucide.createIcons();
     'body[data-ui="light"] .h4s-pres .cap{color:#64748b;}',
     'body[data-ui="light"] .h4s-pres .notes .body{color:#0f172a;}',
 
-    /* ---- 可拖拽分割条 ---- */
-    '.h4s-splitbar{position:fixed;top:52px;left:calc(var(--h4s-sbw,232px) - 3px);width:7px;bottom:0;',
-    '  z-index:66;cursor:col-resize;}',
-    '.h4s-splitbar:hover,.h4s-splitbar.is-drag{background:rgba(56,189,248,.25);}',
-    '.h4s-sidebar{width:var(--h4s-sbw,232px);}',
-    '.h4s-stagebox{left:var(--h4s-sbw,232px);}',
-    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}',
+    '.h4s-sidebar{width:232px;}',
+    '.h4s-stagebox{left:232px;}',
 
     /* ---- 声明式图表（h4s-chart，零依赖 SVG） ---- */
     'h4s-chart{display:block;width:100%;min-height:380px;}',
@@ -4985,13 +4980,6 @@ if (window.lucide) lucide.createIcons();
   /* ================================================================
    * 启动
    * ================================================================ */
-  function fontsReady() {
-    return Promise.race([
-      (document.fonts && document.fonts.ready) || Promise.resolve(),
-      sleep(3000)
-    ]);
-  }
-
   function initStage(hash) {
     isStage = true;
     buildApp();

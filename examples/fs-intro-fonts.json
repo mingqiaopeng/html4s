@@ -1,6 +1,0 @@
-[
-  { "family": "Space Grotesk", "file": "fonts/space-grotesk-latin-300-normal.woff2", "weight": 300 },
-  { "family": "Space Grotesk", "file": "fonts/space-grotesk-latin-500-normal.woff2", "weight": 500 },
-  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-chinese-simplified-300-normal.woff2", "weight": 300 },
-  { "family": "Noto Sans SC", "file": "fonts/noto-sans-sc-chinese-simplified-400-normal.woff2", "weight": 400 }
-]

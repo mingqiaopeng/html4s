@@ -190,7 +190,7 @@ function runCapture(cmd, args) {
 }
 
 /* ---------- MCP stdio 协议 ---------- */
-const SERVER = { name: 'html4s', version: '0.1.0' };
+const SERVER = { name: 'html4s', version: '0.4.1' };
 let buf = '';
 
 process.stdin.setEncoding('utf8');
