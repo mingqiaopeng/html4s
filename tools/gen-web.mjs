@@ -114,4 +114,4 @@ ${cards.join('\n')}
 </div></body></html>`;
 
 fs.writeFileSync(path.join(OUT, 'index.html'), html, 'utf8');
-console.log('生成: docs/web/index.html（' + cards.length + ' deck · ' + themes.length + ' 主题）');
+console.log('生成: docs/index.html（' + cards.length + ' deck · ' + themes.length + ' 主题）');
