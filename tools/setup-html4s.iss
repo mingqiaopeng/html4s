@@ -4,9 +4,9 @@
 ;       完成页可直接打开示例演示 · 卸载器自动清理关联与快捷方式
 
 #define MyAppName "html4s 播放器"
-#define MyAppVersion "0.5.0"
+#define MyAppVersion "0.6.0"
 #define MyAppExeName "Player\Html4sPlayer.exe"
-#define SrcDir "D:\MyProjects\Html4s\release\html4s-0.5.0"
+#define SrcDir "D:\MyProjects\Html4s\release\html4s-0.6.0"
 
 [Setup]
 AppId={{C4A91E77-6B2D-4F18-9E03-2A5C8D7B14F0}
@@ -18,7 +18,7 @@ DefaultDirName={localappdata}\Html4s
 DefaultGroupName=html4s
 PrivilegesRequired=lowest
 OutputDir=D:\MyProjects\Html4s\release
-OutputBaseFilename=html4s-0.5.0-setup
+OutputBaseFilename=html4s-0.6.0-setup
 SetupIconFile=D:\MyProjects\Html4s\tools\html4s-app.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/max

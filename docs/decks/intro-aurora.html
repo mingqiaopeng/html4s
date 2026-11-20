@@ -5,7 +5,7 @@
 <title>html4s · 项目介绍 · 极光渐变主题</title>
 <script type="application/h4s+json">
 {
-  "h4s": "1.0", "playerVersion": "0.5.0",
+  "h4s": "1.0", "playerVersion": "0.6.0",
   "meta": { "title": "html4s · 项目介绍 · 极光渐变主题", "lang": "zh-CN", "author": "Html4s Project" },
   "id": "intro-aurora",
   "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "#0b1020" },
@@ -217,7 +217,7 @@
 </h4s-deck>
 <script>
 /*!
- * h4s-core — html4s 播放器运行时 v0.5.0（转场特效 · 增量编辑 · 声明式图表）
+ * h4s-core — html4s 播放器运行时 v0.6.0（转场特效 · 增量编辑 · 声明式图表）
  * ------------------------------------------------
  * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
  * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
@@ -235,7 +235,7 @@
   if (window.__H4S_LOADED__) return;
   window.__H4S_LOADED__ = true;
 
-  var VERSION = '0.5.0';
+  var VERSION = '0.6.0';
   var PV_STALE = null; /* 清单 playerVersion ≠ 本播放器版本 → 旧版内嵌（build 注入指纹后检测） */
 
   /* ================================================================
@@ -1281,24 +1281,49 @@
 
   function chartBar(norm, W, H, el) {
     var unit = el.getAttribute('unit') || '';
+    var stacked = el.hasAttribute('stack');
     var padL = 24, padR = 92, padT = 46, padB = 64;
     var labels = norm.labels, series = norm.series, n = labels.length, m = series.length;
     var vals = [];
     series.forEach(function (s) { s.values.forEach(function (v) { vals.push(v); }); });
-    var max = niceMax(Math.max.apply(null, vals.map(Math.abs)) * 1.05);
-    var min = Math.min(0, Math.min.apply(null, vals));
+    var max, min;
+    if (stacked) {
+      /* 堆叠：y 轴上限 = 各柱列系列值之和的最大值 */
+      var colSums = labels.map(function (_, i) {
+        return series.reduce(function (a, s) { return a + Math.max(0, s.values[i]); }, 0);
+      });
+      max = niceMax(Math.max.apply(null, colSums) * 1.05);
+      min = 0;
+    } else {
+      max = niceMax(Math.max.apply(null, vals.map(Math.abs)) * 1.05);
+      min = Math.min(0, Math.min.apply(null, vals));
+    }
     var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
     var g = gridAndScale(W, H, min, max, padL, padR, padT, padB, svg, unit);
     var groupW = (W - padL - padR) / n;
-    var bw = Math.min(120, groupW / m * 0.62);
+    var bw = stacked ? Math.min(120, groupW * 0.5) : Math.min(120, groupW / m * 0.62);
     labels.forEach(function (label, i) {
+      var cum = 0;
       series.forEach(function (s, si) {
         var v = s.values[i];
-        var h = Math.abs(v) / (max - min) * (g.plotB - g.plotT);
-        var y = v >= 0 ? g.zeroY - h : g.zeroY;
-        var x = padL + groupW * i + groupW / 2 - (m * bw + (m - 1) * 8) / 2 + si * (bw + 8);
-        svg.appendChild(svgEl('rect', { class: 'bar', x: x, y: y, width: bw, height: Math.max(1, h), rx: 4,
-          fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' }));
+        if (stacked) {
+          var h = Math.max(0, v) / (max - min) * (g.plotB - g.plotT);
+          var y = g.zeroY - cum - h;
+          var x = padL + groupW * i + groupW / 2 - bw / 2;
+          var bar = svgEl('rect', { class: 'bar', x: x, y: y, width: bw, height: Math.max(1, h), rx: stacked && si === 0 ? 4 : 0,
+            fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' });
+          if (el.hasAttribute('data-frag') && m > 1) bar.setAttribute('data-si', si);
+          svg.appendChild(bar);
+          cum += Math.max(0, v);
+        } else {
+          var h2 = Math.abs(v) / (max - min) * (g.plotB - g.plotT);
+          var y2 = v >= 0 ? g.zeroY - h2 : g.zeroY;
+          var x2 = padL + groupW * i + groupW / 2 - (m * bw + (m - 1) * 8) / 2 + si * (bw + 8);
+          var bar2 = svgEl('rect', { class: 'bar', x: x2, y: y2, width: bw, height: Math.max(1, h2), rx: 4,
+            fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' });
+          if (el.hasAttribute('data-frag') && m > 1) bar2.setAttribute('data-si', si);
+          svg.appendChild(bar2);
+        }
       });
       var lt = svgEl('text', { x: padL + groupW * i + groupW / 2, y: H - padB + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 21 });
       lt.textContent = label;
@@ -1339,8 +1364,10 @@
         var bh = Math.min(32, rowH / m * 0.6);
         var y = padT + rowH * (i + 0.5) - (m * bh + (m - 1) * 6) / 2 + si * (bh + 6);
         var w2 = v / max * plotW;
-        svg.appendChild(svgEl('rect', { class: 'bar', x: plotL, y: y, width: Math.max(1, w2), height: bh, rx: 4,
-          fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' }));
+        var bar = svgEl('rect', { class: 'bar', x: plotL, y: y, width: Math.max(1, w2), height: bh, rx: 4,
+          fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' });
+        if (el.hasAttribute('data-frag') && m > 1) bar.setAttribute('data-si', si);
+        svg.appendChild(bar);
         var vt = svgEl('text', { x: plotL + w2 + 12, y: y + bh / 2 + 7, fill: 'var(--tx2)', 'font-size': 21 });
         vt.textContent = fmtNum(v) + (unit || '');
         svg.appendChild(vt);
@@ -1363,19 +1390,21 @@
     var xs = labels.map(function (_l, i) { return n === 1 ? padL + (W - padL - padR) / 2 : padL + (W - padL - padR) * i / (n - 1); });
     series.forEach(function (s, si) {
       var pts = s.values.map(function (v, i) { return xs[i] + ',' + g.yOf(v); });
+      var fragMark = el.hasAttribute('data-frag') ? { 'data-si': si } : {};
       if (area) {
-        svg.appendChild(svgEl('polygon', { class: 'slice', points: pts.join(' ') + ' ' + xs[n - 1] + ',' + g.zeroY + ' ' + xs[0] + ',' + g.zeroY,
-          fill: 'var(--ac)', 'fill-opacity': 0.13, stroke: 'none', 'transition-delay': (si * 120) + 'ms' }));
+        svg.appendChild(svgEl('polygon', Object.assign({ class: 'slice', points: pts.join(' ') + ' ' + xs[n - 1] + ',' + g.zeroY + ' ' + xs[0] + ',' + g.zeroY,
+          fill: 'var(--ac)', 'fill-opacity': 0.13, stroke: 'none', 'transition-delay': (si * 120) + 'ms' }, fragMark)));
       }
-      svg.appendChild(svgEl('polyline', {
+      var line = svgEl('polyline', Object.assign({
         points: pts.join(' '), fill: 'none', stroke: 'var(--ac)',
         'stroke-opacity': SERIES_OP[si % SERIES_OP.length], 'stroke-width': 5,
         'stroke-linejoin': 'round', 'stroke-linecap': 'round', pathLength: 1,
         'stroke-dasharray': SERIES_DASH[si % SERIES_DASH.length] || '1', 'transition-delay': (si * 150) + 'ms'
-      }));
+      }, fragMark));
+      svg.appendChild(line);
       s.values.forEach(function (v, i) {
-        svg.appendChild(svgEl('circle', { cx: xs[i], cy: g.yOf(v), r: 7, fill: 'var(--bg)', stroke: 'var(--ac)', 'stroke-width': 4 }));
-        var vt = svgEl('text', { x: xs[i], y: g.yOf(v) - 18, 'text-anchor': 'middle', fill: 'var(--tx2)', 'font-size': 22 });
+        svg.appendChild(svgEl('circle', Object.assign({ cx: xs[i], cy: g.yOf(v), r: 7, fill: 'var(--bg)', stroke: 'var(--ac)', 'stroke-width': 4 }, fragMark)));
+        var vt = svgEl('text', Object.assign({ x: xs[i], y: g.yOf(v) - 18, 'text-anchor': 'middle', fill: 'var(--tx2)', 'font-size': 22 }, fragMark));
         vt.textContent = fmtNum(v) + (unit || '');
         svg.appendChild(vt);
       });
@@ -2316,11 +2345,22 @@
     idleT = setTimeout(function () { document.body.classList.add('h4s-idle'); }, 2600);
   }
 
+  /* 图表碎片联动：data-frag 图表的系列/数据点按 S.f 阈值显隐（0.5.0-M2） */
+  function updateChartReveal() {
+    $$('h4s-chart[data-frag]').forEach(function (el) {
+      var vis = S.f + 1; /* S.f=-1 → 0；S.f=0 → 第 1 系列 */
+      $$('[data-si]', el).forEach(function (g) {
+        g.style.opacity = (+g.getAttribute('data-si') < vis) ? '' : '0';
+      });
+    });
+  }
+
   function updateChrome() {
     $('#h4s-cur').textContent = numBuf || String(S.i + 1);
     $('#h4s-total').textContent = String(S.n);
     $('#h4s-timer').textContent = fmt(totalSec());
     progress.style.width = ((S.i + 1) / S.n * 100) + '%';
+    updateChartReveal();
   }
 
   /* ================================================================
@@ -2372,10 +2412,38 @@
       toast(t('rehearseStart'));
     } else {
       if (T.slideAt) RH.log.push({ page: S.i + 1, seconds: +dwell().toFixed(1), frags: S.f + 1 });
-      shellAction('timings', { log: RH.log, total: Math.round(totalSec()) });
+      var total = Math.round(totalSec());
+      var target = Math.round(total / Math.max(1, S.n));
+      var pace = RH.log.map(function (r) {
+        return { page: r.page, target: target, actual: r.seconds, over: r.seconds > target * 1.5 };
+      });
+      shellAction('timings', { log: RH.log, total: total, pace: pace });
       toast(tf('rehearseEnd', fmt(totalSec())));
+      /* 排练洞察：抽屉渲染逐页停留时间图（自家图表引擎，dogfooding） */
+      if (drawerOn) renderRehearsalReport(pace, target);
       console.table(RH.log);
-      emit('h4s:rehearse', { log: RH.log, total: totalSec() });
+      emit('h4s:rehearse', { log: RH.log, total: totalSec(), pace: pace });
+    }
+  }
+
+  /* 排练报告：抽屉内用 chartHBar 渲染逐页停留时间（0.5.0-M3 之前仅写文件无人读） */
+  function renderRehearsalReport(pace, target) {
+    var overPages = pace.filter(function (p) { return p.over; });
+    var labels = pace.map(function (p) { return 'P' + p.page; });
+    var values = pace.map(function (p) { return p.actual; });
+    var norm = { labels: labels, series: [{ name: '实际秒', values: values }] };
+    var fake = { getAttribute: function () { return ''; }, hasAttribute: function () { return false; } };
+    var box = $('#h4s-draw-notes', drawer);
+    box.innerHTML = '<p style="font-size:20px;color:var(--ac);margin:0 0 14px;font-weight:600">排练报告 · 目标 ' + target + 's/页</p>';
+    var wrap = document.createElement('div');
+    wrap.style.cssText = 'width:100%;height:340px;';
+    box.appendChild(wrap);
+    wrap.appendChild(chartHBar(norm, wrap.clientWidth || 340, 340, fake));
+    if (overPages.length) {
+      var over = document.createElement('p');
+      over.style.cssText = 'font-size:19px;color:var(--bad);margin:10px 0 0;';
+      over.textContent = '⏱ 超时页: ' + overPages.map(function (p) { return 'P' + p.page + '(' + p.actual + 's)'; }).join(' ');
+      box.appendChild(over);
     }
   }
 

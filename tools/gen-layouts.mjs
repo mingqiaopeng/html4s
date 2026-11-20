@@ -331,6 +331,319 @@ h4s-chart { min-height: 540px; }`,
     <tr><td>CI</td><td>结构 lint + CDP 回归</td><td>push 自动</td></tr>
   </table>`,
   },
+  {
+    id: 'subtitle', name: '副标题页', use: '主标题 + 副标题分层定调（比封面信息多一层）',
+    css: `
+.ly-sub-main { height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0 150px; }
+.ly-sub-main h1 { font-size: 110px; font-weight: 300; margin: 0 0 30px; }
+.ly-sub-tag { font-size: 36px; color: var(--ac); margin: 0 0 20px; }
+.ly-sub-meta { font-size: 20px; color: var(--dim); letter-spacing: .1em; }`,
+    html: `<div class="ly-sub-main">
+    <h1 class="reveal">重新发明演示文稿</h1>
+    <p class="ly-sub-tag reveal">一个合法 HTML 文件，一个专职播放器。</p>
+    <p class="ly-sub-meta reveal">HTML4S PROJECT · 2026</p>
+  </div>`,
+  },
+  {
+    id: 'transitional', name: '过渡问句', use: '章节间抛出问题，制造悬念',
+    css: `
+.ly-trans-main { height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; text-align: center; padding: 0 150px; }
+.ly-trans-main h2 { font-size: 88px; font-weight: 300; margin: 26px 0; }
+.ly-trans-sub { font-size: 26px; color: var(--dim); margin: 0; }`,
+    html: `<div class="ly-trans-main">
+    <p class="ly-kicker reveal">QUESTION</p>
+    <h2 class="reveal">为什么现有路线走不通？</h2>
+    <p class="ly-trans-sub reveal">答案在下一章。</p>
+  </div>`,
+  },
+  {
+    id: 'threecol', name: '三列卡片', use: '三个并列要点（特性/路线/支柱）',
+    css: `
+.ly-three { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 44px; flex: 1; align-content: start; }
+.ly-three-card { background: color-mix(in srgb, var(--ac) 5%, var(--bg)); border-radius: 12px; padding: 40px 38px; box-sizing: border-box; }
+.ly-three-card h3 { font-size: 28px; color: var(--ac); margin: 0 0 18px; }
+.ly-three-card p { font-size: 23px; line-height: 1.7; color: var(--tx2); margin: 0; }`,
+    html: `<div class="ly-three">
+    <div class="ly-three-card reveal"><h3>给 AI</h3><p>纯文本生成、排版确定、逐行可 diff。</p></div>
+    <div class="ly-three-card reveal"><h3>给讲者</h3><p>PowerPoint 式演播、双屏、排练、kiosk。</p></div>
+    <div class="ly-three-card reveal"><h3>给观众</h3><p>单文件即开、离线可用、20 种转场。</p></div>
+  </div>`,
+  },
+  {
+    id: 'dense-text', name: '密集文字页', use: '长文阅读页：多段正文（法规/方案原文等）',
+    css: `
+.ly-dense { flex: 1; display: flex; flex-direction: column; gap: 26px; }
+.ly-dense p { font-size: 24px; line-height: 1.85; color: var(--tx2); margin: 0; max-width: 1450px; }
+.ly-dense p b { color: var(--tx); }`,
+    html: `<div class="ly-dense">
+    <p class="reveal"><b>定位。</b>html4s 把演示文稿做成"一个合法 HTML 文件 + 一个专职播放器"——格式面向 AI 与版本控制，播放器面向现场演播。</p>
+    <p class="reveal"><b>分发。</b>播放器运行时、图标、字体子集全部内嵌进单文件，拷贝即用、离线可用；浏览器打开同文件自动降级兜底。</p>
+    <p class="reveal"><b>生态。</b>lint/shot/build 工具链与 MCP 接口把创作闭环交给 AI，主题库与版式库让表达有章可循。</p>
+  </div>`,
+  },
+  {
+    id: 'definition', name: '定义页', use: '术语解释：词头 + 释义 + 注解',
+    css: `
+.ly-def { flex: 1; display: flex; flex-direction: column; justify-content: center; }
+.ly-def h2 { font-size: 84px; margin: 0 0 30px; color: var(--ac); }
+.ly-def-body { font-size: 30px; line-height: 1.7; color: var(--tx2); margin: 0 0 40px; max-width: 1300px; }
+.ly-def-note { border-left: 4px solid var(--bd); padding-left: 26px; }
+.ly-def-note b { font-size: 20px; color: var(--dim); letter-spacing: .1em; }
+.ly-def-note p { font-size: 22px; color: var(--dim); margin: 8px 0 0; }`,
+    html: `<div class="ly-def">
+    <p class="ly-kicker reveal">DEFINITION</p>
+    <h2 class="reveal">html4s</h2>
+    <p class="ly-def-body reveal">HyperText Markup Language For Slides——用超文本标记语言承载演示文稿的开放格式。</p>
+    <div class="ly-def-note reveal"><b>词源</b><p>html = 载体，4s = slides 的四个关键：single 文件、stable 稳定、stage 舞台、story 叙事。</p></div>
+  </div>`,
+  },
+  {
+    id: 'faq', name: '问答页', use: '常见问题：Q/A 成对排版',
+    css: `
+.ly-faq { display: flex; flex-direction: column; gap: 30px; }
+.ly-faq-item { border-bottom: 1px solid var(--bd2); padding-bottom: 26px; }
+.ly-faq-item h3 { font-size: 27px; margin: 0 0 12px; color: var(--ac); }
+.ly-faq-item h3::before { content: 'Q '; }
+.ly-faq-item p { font-size: 23px; line-height: 1.65; color: var(--tx2); margin: 0; }
+.ly-faq-item p::before { content: 'A '; color: var(--dim); }`,
+    html: `<div class="ly-faq">
+    <div class="ly-faq-item reveal"><h3>离线能用吗？</h3><p>能——播放器/图标/字体全部内嵌进单文件。</p></div>
+    <div class="ly-faq-item reveal"><h3>能进 PowerPoint 再编辑吗？</h3><p>不能——html4s 是终点格式，不是 pptx 的替代输入。</p></div>
+    <div class="ly-faq-item reveal"><h3>跨平台吗？</h3><p>浏览器全平台；桌面壳目前 Windows。</p></div>
+  </div>`,
+  },
+  {
+    id: 'kpi-row', name: '横向数据条', use: '4-6 个关键数字横排（一屏扫完）',
+    css: `
+.ly-kpirow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; flex: 1; align-content: center; }
+.ly-kpirow-item { display: flex; flex-direction: column; gap: 10px; border-left: 4px solid var(--ac); padding-left: 26px; }
+.ly-kpirow-item .n { font-size: 84px; font-weight: 300; color: var(--tx); line-height: 1.05; }
+.ly-kpirow-item .l { font-size: 20px; letter-spacing: .12em; color: var(--dim); }`,
+    html: `<div class="ly-kpirow">
+    <div class="ly-kpirow-item reveal"><span class="n">20</span><span class="l">种转场</span></div>
+    <div class="ly-kpirow-item reveal"><span class="n">46</span><span class="l">枚内置图标</span></div>
+    <div class="ly-kpirow-item reveal"><span class="n">10</span><span class="l">套主题</span></div>
+    <div class="ly-kpirow-item reveal"><span class="n">1</span><span class="l">个文件交付</span></div>
+  </div>`,
+  },
+  {
+    id: 'progress', name: '进度页', use: '完成度/达成率：进度条组',
+    css: `
+.ly-progress { display: flex; flex-direction: column; gap: 44px; flex: 1; justify-content: center; }
+.ly-progress-item { display: flex; flex-direction: column; gap: 14px; }
+.ly-pbar { height: 18px; background: var(--bd2); border-radius: 9px; overflow: hidden; }
+.ly-pfill { height: 100%; background: var(--ac); border-radius: 9px; }
+.ly-progress-item b { font-size: 26px; }
+.ly-progress-item span { font-size: 20px; color: var(--dim); margin-left: 14px; }`,
+    html: `<div class="ly-progress">
+    <div class="ly-progress-item reveal"><div><b>72%</b><span>里程碑完成度</span></div><div class="ly-pbar"><div class="ly-pfill" style="width:72%"></div></div></div>
+    <div class="ly-progress-item reveal"><div><b>45%</b><span>生态准入进度</span></div><div class="ly-pbar"><div class="ly-pfill" style="width:45%"></div></div></div>
+    <div class="ly-progress-item reveal"><div><b>100%</b><span>质量门禁覆盖</span></div><div class="ly-pbar"><div class="ly-pfill" style="width:100%"></div></div></div>
+  </div>`,
+  },
+  {
+    id: 'stats-compare', name: '数据对比', use: '两组大数字对照（前后/内外/目标实际）',
+    css: `
+.ly-scomp { flex: 1; display: flex; align-items: center; justify-content: center; gap: 70px; }
+.ly-scomp-col { display: flex; flex-direction: column; gap: 12px; align-items: center; text-align: center; }
+.ly-scomp-col .n { font-size: 130px; font-weight: 300; color: var(--ac); line-height: 1.05; }
+.ly-scomp-col .l { font-size: 21px; color: var(--dim); letter-spacing: .1em; }
+.ly-scomp-div { width: 2px; height: 220px; background: var(--bd); }`,
+    html: `<div class="ly-scomp">
+    <div class="ly-scomp-col reveal"><span class="n">12s</span><span class="l">改造前 · 单页制作</span></div>
+    <div class="ly-scomp-div reveal"></div>
+    <div class="ly-scomp-col reveal"><span class="n">3s</span><span class="l">改造后 · AI 生成闭环</span></div>
+  </div>`,
+  },
+  {
+    id: 'cycle', name: '循环图', use: '闭环流程：四步循环回到起点',
+    css: `
+.ly-cycle { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0; }
+.ly-cycle li { position: relative; padding: 30px 30px 30px 0; }
+.ly-cycle li:not(:last-child)::after { content: '→'; position: absolute; right: 8px; top: 40px; font-size: 30px; color: var(--ac); }
+.ly-cycle .ly-cycle-n { display: inline-block; font-size: 20px; color: var(--bg); background: var(--ac); border-radius: 8px; padding: 4px 14px; margin-bottom: 16px; font-weight: 700; }
+.ly-cycle h3 { font-size: 26px; margin: 0 0 10px; }
+.ly-cycle p { font-size: 21px; color: var(--dim); margin: 0; }
+.ly-cycle-loop { text-align: center; font-size: 32px; color: var(--ac); margin-top: 26px; }`,
+    html: `<ol class="ly-cycle">
+    <li class="reveal"><span class="ly-cycle-n">写</span><h3>AI 生成</h3><p>按版式产出 HTML</p></li>
+    <li class="reveal"><span class="ly-cycle-n">查</span><h3>门禁校验</h3><p>lint + 截图自审</p></li>
+    <li class="reveal"><span class="ly-cycle-n">演</span><h3>现场交付</h3><p>单文件双击即演</p></li>
+    <li class="reveal"><span class="ly-cycle-n">改</span><h3>文字微调</h3><p>现场修改写回源文件</p></li>
+  </ol>
+  <p class="ly-cycle-loop reveal">↺ 闭环回到"写"——持续迭代</p>`,
+  },
+  {
+    id: 'pyramid', name: '金字塔', use: '层级递进：战略/需求/组织的分层',
+    css: `
+.ly-pyr { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 14px; }
+.ly-pyr-level { height: 96px; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--bg); font-size: 26px; font-weight: 600; box-sizing: border-box; }
+.ly-pyr-l1 { background: var(--ac); }
+.ly-pyr-l2 { background: var(--ac); opacity: .72; }
+.ly-pyr-l3 { background: var(--ac); opacity: .46; }`,
+    html: `<div class="ly-pyr">
+    <div class="ly-pyr-level ly-pyr-l1 reveal" style="width:36%">价值</div>
+    <div class="ly-pyr-level ly-pyr-l2 reveal" style="width:56%">体验 · 交付</div>
+    <div class="ly-pyr-level ly-pyr-l3 reveal" style="width:76%">格式 · 工具 · 生态</div>
+  </div>`,
+  },
+  {
+    id: 'venn', name: '交集图', use: '两域交叉：各自特点 + 交集价值',
+    css: `
+.ly-venn { position: relative; flex: 1; min-height: 540px; }
+.ly-venn-c { position: absolute; top: 30px; width: 470px; height: 470px; border-radius: 50%; border: 2px solid var(--ac); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 40px; box-sizing: border-box; }
+.ly-venn-c1 { left: 10%; }
+.ly-venn-c2 { right: 10%; border-color: var(--bad); }
+.ly-venn-c b { font-size: 28px; color: var(--ac); }
+.ly-venn-c2 b { color: var(--bad); }
+.ly-venn-c p { font-size: 22px; color: var(--tx2); margin: 0; text-align: center; }
+.ly-venn-mid { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); text-align: center; width: 220px; }
+.ly-venn-mid b { font-size: 25px; color: var(--ac); display: block; margin-bottom: 8px; }`,
+    html: `<div class="ly-venn">
+    <div class="ly-venn-c ly-venn-c1 reveal"><b>AI 写</b><p>纯文本<br>排版确定<br>逐行 diff</p></div>
+    <div class="ly-venn-c ly-venn-c2 reveal"><b>人演</b><p>双击即演<br>双屏提词<br>离线可用</p></div>
+    <div class="ly-venn-mid reveal"><b>一个文件</b><p>两个世界<br>的接口</p></div>
+  </div>`,
+  },
+  {
+    id: 'swot', name: 'SWOT 四格', use: '优势/劣势/机会/威胁四格分析',
+    css: `
+.ly-swot { display: grid; grid-template-columns: 1fr 1fr; grid-auto-rows: 1fr; gap: 4px; background: var(--bd); border: 2px solid var(--bd); flex: 1; }
+.ly-swot > div { background: var(--bg); padding: 34px 38px; box-sizing: border-box; display: flex; flex-direction: column; gap: 10px; }
+.ly-swot b { font-size: 26px; }
+.ly-swot p { font-size: 22px; line-height: 1.6; color: var(--tx2); margin: 0; }
+.ly-swot .ly-s b { color: var(--ac); } .ly-swot .ly-w b { color: var(--bad); }
+.ly-swot .ly-o b { color: var(--ac); } .ly-swot .ly-t b { color: var(--bad); }
+.ly-swot .ly-s, .ly-swot .ly-o { background: color-mix(in srgb, var(--ac) 6%, var(--bg)); }`,
+    html: `<div class="ly-swot">
+    <div class="ly-s reveal"><b>S · 优势</b><p>单文件分发、AI 原生、排版确定、中文优先</p></div>
+    <div class="ly-w reveal"><b>W · 劣势</b><p>终点格式不可回 pptx、动画非可视化编辑</p></div>
+    <div class="ly-o reveal"><b>O · 机会</b><p>AI 生成演示的刚需快速增长</p></div>
+    <div class="ly-t reveal"><b>T · 威胁</b><p>Web 演示框架也在拥抱 AI</p></div>
+  </div>`,
+  },
+  {
+    id: 'gallery', name: '图集', use: '2×2 图片网格（作品/界面/场景）',
+    css: `
+.ly-gallery { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; flex: 1; }
+.ly-gallery figure { margin: 0; display: flex; flex-direction: column; gap: 10px; }
+.ly-gallery-img { flex: 1; min-height: 200px; border: 2px dashed var(--bd); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 22px; }
+.ly-gallery figcaption { font-size: 20px; color: var(--dim); text-align: center; }`,
+    html: `<div class="ly-gallery">
+    <figure class="reveal"><div class="ly-gallery-img">图片占位 1</div><figcaption>浏览界面</figcaption></figure>
+    <figure class="reveal"><div class="ly-gallery-img">图片占位 2</div><figcaption>全屏放映</figcaption></figure>
+    <figure class="reveal"><div class="ly-gallery-img">图片占位 3</div><figcaption>文字微调</figcaption></figure>
+    <figure class="reveal"><div class="ly-gallery-img">图片占位 4</div><figcaption>背景特效</figcaption></figure>
+  </div>`,
+  },
+  {
+    id: 'fullbleed', name: '全幅图', use: '整页大图 + 角注（氛围页/封面底图）',
+    css: `
+.ly-full { position: absolute; inset: 0 0 50px; border: 2px dashed var(--bd); display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 28px; }
+.ly-full-cap { position: absolute; left: 60px; bottom: 44px; font-size: 22px; color: var(--tx2); background: color-mix(in srgb, var(--bg) 72%, transparent); padding: 10px 20px; border-radius: 8px; }`,
+    html: `<div class="ly-full reveal">全幅图片占位——构建时自动内嵌为 data URI，单文件分发不断图</div>
+  <div class="ly-full-cap reveal">图注：替换为 &lt;img src="…"&gt;，构建时自动内嵌</div>`,
+  },
+  {
+    id: 'video-page', name: '视频页', use: '视频展示：内嵌音频视频策略见构建报告',
+    css: `
+.ly-video { flex: 1; display: flex; flex-direction: column; gap: 20px; }
+.ly-video-demo { flex: 1; border: 2px dashed var(--bd); border-radius: 12px; display: flex; align-items: center; justify-content: center; color: var(--dim); font-size: 26px; }
+.ly-video-cap { font-size: 21px; color: var(--dim); margin: 0; }`,
+    html: `<div class="ly-video">
+    <div class="ly-video-demo reveal">视频占位——替换为 &lt;video src="…"&gt;（大视频随目录交付）</div>
+    <p class="ly-video-cap reveal">构建时小音频内嵌、视频保持外部引用并在报告中列出交付清单。</p>
+  </div>`,
+  },
+  {
+    id: 'team', name: '团队页', use: '成员卡片：头像首字 + 姓名 + 角色',
+    css: `
+.ly-team { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; flex: 1; align-content: center; }
+.ly-member { display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.ly-avatar { width: 130px; height: 130px; border-radius: 50%; background: color-mix(in srgb, var(--ac) 16%, var(--bg)); color: var(--ac); font-size: 52px; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+.ly-member b { font-size: 25px; }
+.ly-member span { font-size: 19px; color: var(--dim); }`,
+    html: `<div class="ly-team">
+    <div class="ly-member reveal"><div class="ly-avatar">林</div><b>林一</b><span>架构 · 播放器</span></div>
+    <div class="ly-member reveal"><div class="ly-avatar">陈</div><b>陈二</b><span>工具链 · CI</span></div>
+    <div class="ly-member reveal"><div class="ly-avatar">张</div><b>张三</b><span>主题 · 版式</span></div>
+    <div class="ly-member reveal"><div class="ly-avatar">王</div><b>王五</b><span>生态 · 文档</span></div>
+  </div>`,
+  },
+  {
+    id: 'profile', name: '人物页', use: '单人介绍：头像 + 定位 + 履历要点',
+    css: `
+.ly-profile { display: grid; grid-template-columns: 420px 1fr; gap: 70px; align-items: center; flex: 1; }
+.ly-avatar-big { width: 340px; height: 340px; border-radius: 50%; background: color-mix(in srgb, var(--ac) 14%, var(--bg)); color: var(--ac); font-size: 130px; display: flex; align-items: center; justify-content: center; font-weight: 600; }
+.ly-profile-txt h3 { font-size: 44px; margin: 0 0 20px; }
+.ly-profile-txt > p { font-size: 25px; line-height: 1.7; color: var(--tx2); margin: 0 0 26px; }
+.ly-profile-txt ul { margin: 0; padding-left: 26px; }
+.ly-profile-txt li { font-size: 22px; line-height: 1.9; color: var(--tx2); }`,
+    html: `<div class="ly-profile">
+    <div class="ly-avatar-big reveal">明</div>
+    <div class="ly-profile-txt reveal">
+      <h3>项目负责人</h3>
+      <p>把"AI 写得准，人演得稳"变成一个可运行的格式标准。</p>
+      <ul><li>主导 html4s 格式与播放器设计</li><li>构建 AI 创作闭环工具链</li><li>维护开放主题与版式生态</li></ul>
+    </div>
+  </div>`,
+  },
+  {
+    id: 'testimonial', name: '证言页', use: '用户证言 2-3 条（ credibility ）',
+    css: `
+.ly-testi { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-content: start; }
+.ly-testi-card { border: 1px solid var(--bd); border-radius: 12px; padding: 36px 40px; box-sizing: border-box; }
+.ly-testi-card p { font-size: 25px; line-height: 1.7; color: var(--tx2); margin: 0 0 20px; }
+.ly-testi-card p::before { content: '“'; color: var(--ac); font-size: 34px; }
+.ly-testi-card span { font-size: 19px; color: var(--dim); }`,
+    html: `<div class="ly-testi">
+    <div class="ly-testi-card reveal"><p>把三天的汇报材料压缩成了一下午——AI 出初稿，我只改数据。</p><span>—— 某国企 · 经营分析岗</span></div>
+    <div class="ly-testi-card reveal"><p>现场网络挂了，U 盘里的单文件照样演完。这是选它的决定性理由。</p><span>—— 某技术大会 · 讲者</span></div>
+  </div>`,
+  },
+  {
+    id: 'schedule', name: '日程页', use: '时间 + 事项 + 时长的会议议程',
+    css: `
+.ly-sched { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 22px; }
+.ly-sched li { display: flex; gap: 34px; align-items: baseline; border-bottom: 1px solid var(--bd2); padding-bottom: 20px; }
+.ly-sched b { font-size: 27px; color: var(--ac); min-width: 130px; font-variant-numeric: tabular-nums; }
+.ly-sched h3 { font-size: 26px; margin: 0 0 6px; display: inline; }
+.ly-sched span { font-size: 20px; color: var(--dim); margin-left: 16px; }`,
+    html: `<ol class="ly-sched">
+    <li class="reveal"><b>09:00</b><div><h3>开场与全景</h3><span>20 分钟</span></div></li>
+    <li class="reveal"><b>09:20</b><div><h3> live 演示</h3><span>15 分钟</span></div></li>
+    <li class="reveal"><b>09:35</b><div><h3>架构与生态</h3><span>20 分钟</span></div></li>
+    <li class="reveal"><b>09:55</b><div><h3>Q&amp;A</h3><span>15 分钟</span></div></li>
+  </ol>`,
+  },
+  {
+    id: 'roadmap', name: '路线图', use: '三阶段横向推进（现在/中期/远期）',
+    css: `
+.ly-road { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 40px; flex: 1; align-content: start; }
+.ly-road-phase { border-top: 5px solid var(--ac); padding-top: 22px; }
+.ly-road-phase.is-now { border-top-color: var(--ac); }
+.ly-road-phase.is-mid { border-top-color: color-mix(in srgb, var(--ac) 55%, var(--bd)); }
+.ly-road-phase.is-next { border-top-color: var(--bd); }
+.ly-road-phase b { font-size: 25px; display: block; margin-bottom: 14px; }
+.ly-road-phase p { font-size: 22px; line-height: 1.7; color: var(--tx2); margin: 0; }`,
+    html: `<div class="ly-road">
+    <div class="ly-road-phase is-now reveal"><b>现在 · 0.5</b><p>提词模式、主题生态、性能基准全达标。</p></div>
+    <div class="ly-road-phase is-mid reveal"><b>中期 · 0.6</b><p>媒体内嵌、图表叙事联动、排练洞察。</p></div>
+    <div class="ly-road-phase is-next reveal"><b>远期 · 1.x</b><p>社区主题征集、更多准入实现。</p></div>
+  </div>`,
+  },
+  {
+    id: 'contact', name: '联系页', use: '联系方式 + 入口（图标引擎）',
+    css: `
+.ly-contact { display: flex; flex-direction: column; gap: 34px; max-width: 1200px; }
+.ly-contact-row { display: flex; gap: 20px; align-items: center; font-size: 26px; color: var(--tx2); }
+.ly-contact-row .ly-ico { color: var(--ac); font-size: 30px; }`,
+    html: `<div class="ly-contact">
+    <div class="ly-contact-row reveal"><span class="ly-ico" data-h4s-icon="globe"></span>mingqiaopeng.github.io/html4s</div>
+    <div class="ly-contact-row reveal"><span class="ly-ico" data-h4s-icon="mail"></span>issues · discussions · PR welcome</div>
+    <div class="ly-contact-row reveal"><span class="ly-ico" data-h4s-icon="map-pin"></span>themes/ 欢迎你的主题投稿</div>
+  </div>`,
+  },
 ];
 
 /* ---------- 组装版式图鉴 deck ---------- */

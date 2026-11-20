@@ -1,6 +1,6 @@
 # html4s 版式模板库 · 生成指南
 
-20 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
+42 种典型页面版式（对标常见 deck 设计软件的内置版式），由 `tools/gen-layouts.mjs` 单一事实源生成。**主题 × 版式正交**：版式只用 CSS 变量（与[主题库](LAYOUTS.md)同一套变量），粘进任何主题 deck 自动适配配色。
 
 > **决策前置**：生成 deck 前先读 [DECK-DESIGN.md](DECK-DESIGN.md)——"场景 → 主题 → 叙事骨架 → 版式分配 → 特效强度"五步决策；本文档只负责版式层。
 
@@ -28,6 +28,28 @@
 | 18 | [`table`](../examples/layouts/table.html) | 表格页 | 结构化数据：表头 + 数据行 |
 | 19 | [`dual`](../examples/layouts/dual.html) | 双图并置 | 两张图 / 两种形态并排比较 |
 | 20 | [`appendix`](../examples/layouts/appendix.html) | 附录页 | 备查数据 / 详细表格（正文讲完再翻） |
+| 21 | [`subtitle`](../examples/layouts/subtitle.html) | 副标题页 | 主标题 + 副标题分层定调（比封面信息多一层） |
+| 22 | [`transitional`](../examples/layouts/transitional.html) | 过渡问句 | 章节间抛出问题，制造悬念 |
+| 23 | [`threecol`](../examples/layouts/threecol.html) | 三列卡片 | 三个并列要点（特性/路线/支柱） |
+| 24 | [`dense-text`](../examples/layouts/dense-text.html) | 密集文字页 | 长文阅读页：多段正文（法规/方案原文等） |
+| 25 | [`definition`](../examples/layouts/definition.html) | 定义页 | 术语解释：词头 + 释义 + 注解 |
+| 26 | [`faq`](../examples/layouts/faq.html) | 问答页 | 常见问题：Q/A 成对排版 |
+| 27 | [`kpi-row`](../examples/layouts/kpi-row.html) | 横向数据条 | 4-6 个关键数字横排（一屏扫完） |
+| 28 | [`progress`](../examples/layouts/progress.html) | 进度页 | 完成度/达成率：进度条组 |
+| 29 | [`stats-compare`](../examples/layouts/stats-compare.html) | 数据对比 | 两组大数字对照（前后/内外/目标实际） |
+| 30 | [`cycle`](../examples/layouts/cycle.html) | 循环图 | 闭环流程：四步循环回到起点 |
+| 31 | [`pyramid`](../examples/layouts/pyramid.html) | 金字塔 | 层级递进：战略/需求/组织的分层 |
+| 32 | [`venn`](../examples/layouts/venn.html) | 交集图 | 两域交叉：各自特点 + 交集价值 |
+| 33 | [`swot`](../examples/layouts/swot.html) | SWOT 四格 | 优势/劣势/机会/威胁四格分析 |
+| 34 | [`gallery`](../examples/layouts/gallery.html) | 图集 | 2×2 图片网格（作品/界面/场景） |
+| 35 | [`fullbleed`](../examples/layouts/fullbleed.html) | 全幅图 | 整页大图 + 角注（氛围页/封面底图） |
+| 36 | [`video-page`](../examples/layouts/video-page.html) | 视频页 | 视频展示：内嵌音频视频策略见构建报告 |
+| 37 | [`team`](../examples/layouts/team.html) | 团队页 | 成员卡片：头像首字 + 姓名 + 角色 |
+| 38 | [`profile`](../examples/layouts/profile.html) | 人物页 | 单人介绍：头像 + 定位 + 履历要点 |
+| 39 | [`testimonial`](../examples/layouts/testimonial.html) | 证言页 | 用户证言 2-3 条（ credibility ） |
+| 40 | [`schedule`](../examples/layouts/schedule.html) | 日程页 | 时间 + 事项 + 时长的会议议程 |
+| 41 | [`roadmap`](../examples/layouts/roadmap.html) | 路线图 | 三阶段横向推进（现在/中期/远期） |
+| 42 | [`contact`](../examples/layouts/contact.html) | 联系页 | 联系方式 + 入口（图标引擎） |
 
 在线预览：**https://mingqiaopeng.github.io/html4s/decks/layouts.html**（版式图鉴 deck，每页右下角标注片段文件名）。
 

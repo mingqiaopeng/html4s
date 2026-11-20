@@ -247,6 +247,52 @@ if (playerVersion && /application\/h4s\+json/.test(html)) {
   ok('playerVersion 指纹: ' + playerVersion);
 }
 
+/* ---------- 4c. 媒体资产内嵌（图片/小音频 → data URI，完成"一个文件"承诺） ----------
+   视频：体积不可控，不内嵌——构建报告列出外部依赖清单，交付时随目录。
+   预算：单文件 ≤2MB、总预算 --max-media-mb（默认 8MB），超限跳过并警告。 */
+{
+  const maxMediaMB = parseFloat(getOpt('--max-media-mb', '8'));
+  const MIME = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif',
+    webp: 'image/webp', svg: 'image/svg+xml', bmp: 'image/bmp',
+    wav: 'audio/wav', mp3: 'audio/mpeg', ogg: 'audio/ogg', m4a: 'audio/mp4', flac: 'audio/flac' };
+  let inlinedN = 0, inlinedBytes = 0;
+  const skipList = [], externals = [];
+  const mediaRe = /<(img|audio|video)\b[^>]*?\bsrc="([^"]+)"[^>]*>/gi;
+  const mediaJobs = [];
+  let mm;
+  while ((mm = mediaRe.exec(html))) {
+    const tag = mm[1].toLowerCase(), src = mm[2];
+    if (/^(https?:|data:|\/\/)/i.test(src)) continue;
+    mediaJobs.push({ tag, src, full: mm[0] });
+  }
+  for (const job of mediaJobs) {
+    const p = path.resolve(deckDir, job.src.split('?')[0]);
+    if (!fs.existsSync(p)) { warn('媒体文件不存在: ' + job.src); continue; }
+    const ext = path.extname(p).slice(1).toLowerCase();
+    const mime = MIME[ext];
+    if (!mime) { warn('未知媒体类型，跳过: ' + job.src); continue; }
+    const sz = fs.statSync(p).size;
+    if (job.tag === 'video') { externals.push(job.src + '（' + (sz / 1048576).toFixed(1) + 'MB，视频不内嵌）'); continue; }
+    const capMB = job.tag === 'audio' ? 1 : 2;
+    if (sz / 1048576 > capMB) { skipList.push(job.src + '（' + (sz / 1048576).toFixed(1) + 'MB 超 ' + capMB + 'MB 上限）'); continue; }
+    if ((inlinedBytes + sz) / 1048576 > maxMediaMB) { skipList.push(job.src + '（总预算 ' + maxMediaMB + 'MB 已满）'); continue; }
+    inlinedBytes += sz;
+    mediaJobs._ok = mediaJobs._ok || [];
+    mediaJobs._ok.push({ full: job.full, src: job.src, uri: 'data:' + mime + ';base64,' + fs.readFileSync(p).toString('base64') });
+    inlinedN++;
+  }
+  /* 用函数替换器逐个替换（base64 无 $ 模式风险，但保持函数替换惯例） */
+  for (const ok2 of (mediaJobs._ok || [])) {
+    html = html.replace(ok2.src, () => ok2.uri);
+  }
+  if (inlinedN) ok('媒体内嵌: ' + inlinedN + ' 个（' + (inlinedBytes / 1048576).toFixed(1) + 'MB）');
+  for (const s of skipList) warn('媒体跳过: ' + s);
+  if (externals.length) {
+    console.log('外部依赖（视频随目录交付）:');
+    for (const e of externals) console.log('  ' + e);
+  }
+}
+
 /* ---------- 5. 输出 ---------- */
 const out = outFile || path.join(deckDir, base + '.html4s');
 fs.writeFileSync(out, html);
