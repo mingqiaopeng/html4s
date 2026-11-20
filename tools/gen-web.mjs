@@ -1,7 +1,6 @@
 #!/usr/bin/env node
-/* gen-web.mjs — 生成 GitHub Pages 默认参考站（docs/web/）
+/* gen-web.mjs — 生成 GitHub Pages 默认参考站（docs/ 根——Pages 源路径只支持 /docs）
  * 定位：html4s 的在线默认参考——项目简介 + 主题库画廊（在线播放）+ 键位速查 + 文档导航。
- * Pages 从 master 分支 /docs 目录服务；share.html 是浏览器直开形态。
  * 用法: node tools/gen-web.mjs（新 deck 上线前先 h4s-build --share）
  */
 import fs from 'node:fs';
@@ -10,7 +9,7 @@ import { fileURLToPath } from 'node:url';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
-const OUT = path.join(ROOT, 'docs', 'web');
+const OUT = path.join(ROOT, 'docs');
 const GH = 'https://github.com/mingqiaopeng/html4s';
 
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
