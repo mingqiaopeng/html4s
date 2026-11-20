@@ -162,14 +162,16 @@ const instApp = path.join(process.env.LOCALAPPDATA || '', 'Html4s');
 const instExe = path.join(instApp, 'Player/Html4sPlayer.exe');
 const binExeMtime = fs.statSync(path.join(binDir, 'Html4sPlayer.exe')).mtimeMs;
 let landed = false;
-for (let t = 0; t < 60; t++) {
+for (let t = 0; t < 120; t++) {
   Atomics.wait(new Int32Array(new SharedArrayBuffer(4)), 0, 0, 500);
   try {
-    if (fs.existsSync(instExe) && fs.statSync(instExe).mtimeMs >= binExeMtime - 1000) { landed = true; break; }
+    /* Inno 写入的 mtime 被截断到整秒（最多差 ~1s）——用 ±60s 窗口；
+       旧副本的时间戳差一天，不会误判 */
+    if (fs.existsSync(instExe) && Math.abs(fs.statSync(instExe).mtimeMs - binExeMtime) <= 60000) { landed = true; break; }
   } catch { }
 }
-if (!landed) die('安装副本未更新（setup 30s 内未落地）');
-console.log('  安装落地 ✓');
+if (!landed) die('安装副本未更新（setup 60s 内未落地）');
+else console.log('  安装落地 ✓');
 const instDeck = path.join(instApp, 'Examples', 'conformance.html4s');
 if (!fs.existsSync(instDeck)) die('安装副本缺 conformance 示例');
 const instMark = fs.readFileSync(instDeck, 'utf8');

@@ -8,6 +8,8 @@
 
 设计规范与路线图见 [ARCHITECTURE.md](ARCHITECTURE.md)（格式规范正式文本见 [docs/SPEC.md](docs/SPEC.md)）· 许可归属见 [docs/NOTICE.md](docs/NOTICE.md)
 
+> 🌐 **在线演示与默认参考：<https://mingqiaopeng.github.io/html4s/>** —— 主题库画廊（6 主题 · 8 个在线播放 deck）+ 键位速查 + 文档导航，浏览器直接打开；桌面客户端内按 **Ctrl+D** 或右键标题栏 →"在线演示站…"同样直达。
+
 ---
 
 ## 为什么做这个：AI 生成演示文稿的三重困境

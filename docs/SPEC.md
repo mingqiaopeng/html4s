@@ -1,6 +1,6 @@
-# html4s 格式规范 v0.9
+# html4s 格式规范 v1.0-rc1
 
-状态：**草案冻结候选**（v1.0 冻结前最后版本） · 对应实现：h4s-core 0.3.1 · 日期：2026-11-19
+状态：**发布候选（冻结）**——L1/L2 字段与 §5/§6 枚举自本版起冻结，1.0 正式版仅允许勘误与实现澄清 · 对应实现：h4s-core 0.3.2 · 在线参考实现：**https://mingqiaopeng.github.io/html4s/** · 日期：2026-11-20
 父文档：[ARCHITECTURE.md](../ARCHITECTURE.md)（架构与 ADR）。本文件是**格式与运行时行为**的规范文本；与实现不一致处以实现为准并在变更记录中说明。
 
 ## 1. 能力分级
@@ -126,7 +126,18 @@
 4. **playerVersion 语义**：构建产物必含；播放器 `H4S.version ≠ playerVersion` 时功能可能缺失（重建以升级），lint 报 `W-STALE-PLAYER`。该字段是"deck 内嵌能力级别"的权威依据。
 5. 构建产物额外约定：单文件（播放器/lucide/字体子集全部内联）；`*.share.html` 为同内容的浏览器直开副本；壳写回（文字微调 save）保持 UTF-8 无 BOM 并同步 shim。
 
+## 9. 第三方运行时准入规则
+
+1. **层级声明**：实现方须声明支持层级（L0/L1/L2/L3），并提交枚举支持矩阵（§5 转场 20 种 / §6 碎片 6 效果 / fx 4 种）——未支持项必须降级不得报错（§8.3）。
+2. **一致性套件**：须对官方 conformance deck（`examples/conformance.html` 构建产物）运行 [docs/CONFORMANCE.md](CONFORMANCE.md) 定义的套件：13 项行为断言全过 + 结构 lint 0 错误。
+3. **渲染抽查**：提交 ≥3 页（封面/内容/收束）与参考实现的并排截图，由维护者人工验收——固定舞台等比缩放不得变形，Letterbox 色由清单控制。
+4. **宽容原则**：未知字段忽略、未知枚举回退默认；不得因清单超前字段拒绝加载（§8.2）。
+5. **版本互通**：第三方运行时复用 `playerVersion` 字段语义（或并列 `runtimeVersion`）暴露自身版本，供 stale 检测生态互通。
+6. **准入流程**：PR 附 conformance 运行日志 + 截图 → 维护者验收 → 在本节"已准入实现"登记。
+7. **已准入实现**：h4s-core（官方参考实现，0.3.2，2026-11-20）。
+
 ## 变更记录
 
-- **v0.9（2026-11-19）**：从 ARCHITECTURE.md §3 独立成文并对齐 0.3.1 实现：转场 6→20 种、fx 层、页面礼花、文字微调（L3）、媒体控制、网页放映、i18n（含壳语言覆盖）、WebHID、`playerVersion`/`fontSubsetChars`/`fontsEmbedded` 字段、深链完整语法。
+- **v1.0-rc1（2026-11-20）**：**冻结候选**——L1/L2 字段与全部枚举冻结；新增 §9 第三方运行时准入规则；在线参考实现上线（mingqiaopeng.github.io/html4s）。
+- v0.9（2026-11-19）：从 ARCHITECTURE.md §3 独立成文并对齐 0.3.1 实现：转场 6→20 种、fx 层、页面礼花、文字微调（L3）、媒体控制、网页放映、i18n（含壳语言覆盖）、WebHID、`playerVersion`/`fontSubsetChars`/`fontsEmbedded` 字段、深链完整语法。
 - v0.1（2026-11-10）：初版（ARCHITECTURE.md §3）。

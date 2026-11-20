@@ -497,6 +497,7 @@ internal class StageWindow : Form
             if (e.Control && e.KeyCode == Keys.O) OpenFileViaDialog();
             if (e.Control && e.KeyCode == Keys.R) ShowRecent();
             if (e.Control && e.KeyCode == Keys.Oemcomma) ShowSettings();
+            if (e.Control && e.KeyCode == Keys.D) OpenDemoSite();
             if (e.Control && e.KeyCode == Keys.W) Close();
         };
 
@@ -542,17 +543,33 @@ internal class StageWindow : Form
         }
     }
 
-    /* 标题栏右键 → 上下文菜单（最近打开 / 设置 / 关于） */
+    /* 标题栏右键 → 上下文菜单（最近打开 / 在线演示站 / 设置 / 关于） */
     private void TitleBarRightClick(object? sender, MouseEventArgs e)
     {
         if (e.Button != MouseButtons.Right) return;
         var menu = new ContextMenuStrip();
         menu.Items.Add("最近打开", null, (_, _) => ShowRecent());
+        menu.Items.Add("在线演示站…", null, (_, _) => OpenDemoSite());
         menu.Items.Add("设置…", null, (_, _) => ShowSettings());
         menu.Items.Add("关于", null, (_, _) => MessageBox.Show(
             "html4s 播放器 " + Application.ProductVersion + "\nhtml4s 格式 + PowerPoint 习惯的播放器\nhttps://github.com/mingqiaopeng/html4s",
             "关于 html4s", MessageBoxButtons.OK, MessageBoxIcon.Information));
         menu.Show(_titleBar, e.Location);
+    }
+
+    /* 在线演示站（默认参考）：主题库画廊 + 键位速查 + 文档导航 */
+    internal const string DemoSiteUrl = "https://mingqiaopeng.github.io/html4s/";
+    private void OpenDemoSite()
+    {
+        try
+        {
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(DemoSiteUrl) { UseShellExecute = true });
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show("打开浏览器失败：" + ex.Message + "\n网址：" + DemoSiteUrl, "在线演示站",
+                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+        }
     }
 
     /* 语言注入：在页面脚本运行前写/清 localStorage（player boot 读取 h4s-lang-override）。

@@ -1,7 +1,8 @@
 #!/usr/bin/env node
-/* gen-web.mjs — 生成 GitHub Pages 在线演示页（docs/web/）
+/* gen-web.mjs — 生成 GitHub Pages 默认参考站（docs/web/）
+ * 定位：html4s 的在线默认参考——项目简介 + 主题库画廊（在线播放）+ 键位速查 + 文档导航。
  * Pages 从 master 分支 /docs 目录服务；share.html 是浏览器直开形态。
- * 用法: node tools/gen-web.mjs
+ * 用法: node tools/gen-web.mjs（新 deck 上线前先 h4s-build --share）
  */
 import fs from 'node:fs';
 import path from 'node:path';
@@ -10,15 +11,20 @@ import { fileURLToPath } from 'node:url';
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const OUT = path.join(ROOT, 'docs', 'web');
+const GH = 'https://github.com/mingqiaopeng/html4s';
+
+const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
 const DECKS = [
-  { id: 'html4s-intro-fs', title: 'html4s 项目介绍', desc: '8 页深色科技风（frontend-slides 技能生成）——本项目的自述 deck' },
-  { id: 'conformance', title: '一致性基准', desc: '25 页覆盖全部转场/碎片/特效/编辑能力' },
-  { id: 'fx-showcase', title: '转场特效演示', desc: '14 页全转场轨迹 + 遮罩转场 + 背景特效' },
-  { id: 'html4s-intro', title: '项目介绍（瑞士风）', desc: 'guizang 技能 · 克莱因蓝瑞士风格' },
-  { id: 'huashu-intro', title: '项目介绍（编辑风）', desc: '花叔技能 · 反差编辑风格' },
-  { id: 'fs-intro', title: '项目介绍（极简深色）', desc: 'frontend-slides 技能早期版本' },
+  { id: 'html4s-intro-fs', title: 'html4s 项目介绍', theme: '深色科技', skill: 'frontend-slides', desc: '8 页自述 deck：三重困境 / 竞品对比 / 键位与能力——推荐从这里开始' },
+  { id: 'conformance', title: '一致性基准', theme: '深色科技', skill: '官方', desc: '25 页覆盖全部转场 / 碎片 / 特效 / 混合内容编辑——第三方实现的验收对照' },
+  { id: 'fx-showcase', title: '转场特效演示', theme: '深色科技', skill: '官方', desc: '14 页全转场轨迹：动画 12 种 + 遮罩 4 种 + 背景特效层与礼花' },
+  { id: '2027-dangjian', title: '党建工作务实会发言', theme: '党建红', skill: 'guizang 适配', desc: '真实政务实战示例：红色品牌主题（gz-theme 生成）+ KPI 塔 + 闭环图' },
+  { id: 'html4s-intro', title: '项目介绍', theme: '瑞士克莱因蓝', skill: 'guizang', desc: '瑞士国际主义风格：大字标题 + 网格排版' },
+  { id: 'style-a-pilot', title: 'Style A 试点', theme: '电子杂志', skill: 'guizang Style A', desc: '杂志风试点：Hero / 章节页 / 大数字 / 流水线版式' },
+  { id: 'huashu-intro', title: '项目介绍', theme: '编辑风', skill: '花叔三稿', desc: '反差编辑风格：衬线中文排版' },
+  { id: 'fs-intro', title: '项目介绍（早期版）', theme: '极简深色', skill: 'frontend-slides', desc: 'frontend-slides 技能的首个自述版本' },
 ];
-const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 fs.mkdirSync(path.join(OUT, 'decks'), { recursive: true });
 const cards = [];
@@ -27,30 +33,86 @@ for (const d of DECKS) {
   if (!fs.existsSync(share)) { console.log('跳过（无 share 版）: ' + d.id); continue; }
   fs.copyFileSync(share, path.join(OUT, 'decks', d.id + '.html'));
   cards.push(`<a class="card" href="decks/${d.id}.html">
-    <b>${esc(d.title)}</b><span>${esc(d.desc)}</span><em>在线播放 →</em></a>`);
+    <span class="theme">${esc(d.theme)}</span>
+    <b>${esc(d.title)}</b>
+    <span class="desc">${esc(d.desc)}</span>
+    <span class="meta">${esc(d.skill)} · 在线播放 →</span></a>`);
 }
+const themes = [...new Set(DECKS.map((d) => d.theme))];
 
 const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>html4s 在线演示</title>
+<meta name="description" content="html4s 在线演示与默认参考——一个合法 HTML 文件 + 一个播放器 = 演示文稿；AI 写得准，人演得稳，格式永远可版本化。">
+<title>html4s — 在线演示与参考</title>
 <style>
-body{margin:0;background:#0d1117;color:#e6edf3;font:16px/1.6 system-ui,'Microsoft YaHei',sans-serif;}
-.wrap{max-width:960px;margin:0 auto;padding:60px 24px;}
-h1{font-weight:200;font-size:42px;margin:0 0 8px;} .sub{color:#7d8590;margin:0 0 40px;}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;}
-.card{display:flex;flex-direction:column;gap:6px;background:#161b22;border:1px solid #30363d;border-radius:12px;padding:20px 22px;color:#e6edf3;text-decoration:none;transition:border-color .15s;}
-.card:hover{border-color:#38bdf8;}
-.card b{font-size:19px;} .card span{color:#8b949e;font-size:14px;} .card em{color:#38bdf8;font-style:normal;font-size:13px;}
-footer{margin-top:48px;color:#7d8590;font-size:13px;}
-a{color:#38bdf8;}
+:root{--bg:#0d1117;--bg2:#161b22;--bd:#30363d;--tx:#e6edf3;--dim:#8b949e;--ac:#38bdf8;}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.65 system-ui,'Microsoft YaHei',sans-serif;}
+.wrap{max-width:1020px;margin:0 auto;padding:64px 24px 48px;}
+.badge{display:inline-block;font-size:13px;color:var(--ac);border:1px solid #38bdf855;border-radius:20px;padding:3px 14px;margin-bottom:14px;}
+h1{font-weight:200;font-size:46px;letter-spacing:-.02em;margin:0 0 10px;}
+.sub{color:var(--dim);font-size:18px;margin:0 0 26px;max-width:760px;}
+.sub b{color:var(--tx);font-weight:600;}
+.cta{display:flex;gap:14px;flex-wrap:wrap;margin:0 0 14px;}
+.cta a{display:inline-block;padding:11px 26px;border-radius:10px;font-weight:600;text-decoration:none;font-size:15px;}
+.cta .go{background:#2563eb;color:#fff;} .cta .go:hover{background:#1d4ed8;}
+.cta .gh{border:1px solid var(--bd);color:var(--tx);} .cta .gh:hover{background:var(--bg2);}
+.note{color:var(--dim);font-size:13px;margin:0 0 46px;}
+h2{font-size:22px;font-weight:600;margin:52px 0 6px;}
+.h2d{color:var(--dim);font-size:14px;margin:0 0 20px;}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.card{display:flex;flex-direction:column;gap:7px;background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:18px 20px;color:var(--tx);text-decoration:none;transition:border-color .15s,transform .15s;}
+.card:hover{border-color:var(--ac);transform:translateY(-2px);}
+.theme{align-self:flex-start;font-size:12px;color:#0d1117;background:var(--ac);border-radius:12px;padding:2px 12px;font-weight:700;}
+.card b{font-size:18px;} .desc{color:var(--dim);font-size:14px;} .meta{color:var(--ac);font-size:12px;margin-top:auto;}
+.kbd{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:18px 22px;}
+.kbd table{width:100%;border-collapse:collapse;font-size:14.5px;}
+.kbd td{padding:7px 10px;border-bottom:1px solid #21262d;}
+.kbd td:first-child{width:46%;color:var(--ac);white-space:nowrap;}
+.kbd kbd{background:#21262d;padding:2px 9px;border-radius:5px;font:12.5px ui-monospace,Consolas,monospace;color:#e2e8f0;}
+.docs{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.docs a{display:block;background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;color:var(--tx);text-decoration:none;font-size:14.5px;}
+.docs a:hover{border-color:var(--ac);} .docs b{color:var(--ac);display:block;margin-bottom:3px;} .docs span{color:var(--dim);font-size:13px;}
+footer{margin-top:56px;color:var(--dim);font-size:13px;border-top:1px solid #21262d;padding-top:20px;}
+footer a{color:var(--ac);}
+@media (max-width:760px){.grid,.docs{grid-template-columns:1fr;}h1{font-size:34px;}}
 </style></head><body><div class="wrap">
-<h1>html4s 在线演示</h1>
-<p class="sub">一个合法 HTML 文件 + 一个播放器 = 演示文稿。以下 deck 是标准 .html4s 构建产物的浏览器直开副本（浏览器版自动降级，播放/文字微调可用）。</p>
+<span class="badge">v0.3.2 · AGPL-3.0 · Windows + Web</span>
+<h1>html4s</h1>
+<p class="sub"><b>HyperText Markup Language For Slides</b>——用"一个合法 HTML 文件 + 一个播放器"做演示文稿。<b>AI 写得准</b>（纯文本、排版确定性、git 可版本化），<b>人演得稳</b>（双击即演、20 种转场、演讲者双屏、排练写回、kiosk）。</p>
+<div class="cta">
+  <a class="go" href="decks/html4s-intro-fs.html">▶ 在线播放项目介绍</a>
+  <a class="gh" href="${GH}">⬇ Windows 桌面版（全功能）</a>
+</div>
+<p class="note">在线版是浏览器降级形态：F5 放映 · → 翻页 · ✎ 文字微调可用；双屏演讲者 / 排练写回 / 文件写回 / kiosk 请用桌面版。</p>
+
+<h2>主题库画廊 <span style="font-size:14px;color:var(--dim);font-weight:400">（v1 · ${themes.length} 主题 · 点击在线播放）</span></h2>
+<p class="h2d">每个主题都是技能生成 + h4s-build 构建的真实 deck——即 AI 可复现的样板。</p>
 <div class="grid">
 ${cards.join('\n')}
 </div>
-<footer>桌面版全功能（双屏演讲者/排练写回/kiosk/文件写回）请使用 <a href="https://github.com/mingqiaopeng/html4s">Windows 播放器</a>。 · 在线版键盘：F5 放映 · → 翻页 · Esc 退出</footer>
+
+<h2>在线版键位速查</h2>
+<div class="kbd"><table>
+<tr><td><kbd>F5</kbd> / <kbd>Shift+F5</kbd></td><td>从头放映 / 从当前页放映</td></tr>
+<tr><td><kbd>→ ↓ 空格</kbd> / <kbd>← ↑</kbd></td><td>翻页与碎片推进 / 回退</td></tr>
+<tr><td><kbd>G</kbd> 总览 · <kbd>B</kbd>/<kbd>W</kbd> 黑白屏 · <kbd>L</kbd> 激光笔</td><td>放映辅助</td></tr>
+<tr><td><kbd>S</kbd> 演讲者抽屉 · <kbd>T</kbd> 计时暂停 · <kbd>R</kbd> 排练</td><td>讲者工具</td></tr>
+<tr><td><kbd>✎ 编辑</kbd>（浏览栏）· <kbd>Esc</kbd></td><td>文字微调（改字可直接导出） / 退出</td></tr>
+</table></div>
+
+<h2>文档与规范</h2>
+<div class="docs">
+<a href="${GH}/blob/master/docs/SPEC.md"><b>格式规范 v1.0-rc1</b><span>清单 Schema · 元素与属性注册表 · 转场/fx/碎片枚举 · 版本化与第三方准入</span></a>
+<a href="${GH}/blob/master/ARCHITECTURE.md"><b>架构与路线图</b><span>核心设计决策（ADR）· P0-P4 里程碑 · 风险清单</span></a>
+<a href="${GH}/blob/master/docs/CONFORMANCE.md"><b>一致性认证</b><span>第三方运行时如何跑 conformance 套件并过审</span></a>
+<a href="${GH}/blob/master/docs/CAPABILITIES.md"><b>能力矩阵</b><span>桌面壳 / 浏览器版能力差异一览</span></a>
+<a href="${GH}/blob/master/docs/MCP-SETUP.md"><b>MCP 接入</b><span>把 lint/shot/build/review 暴露给 AI Agent</span></a>
+<a href="${GH}/blob/master/README.md"><b>README</b><span>完整说明 · 创作工作流 · 三技能矩阵</span></a>
+</div>
+
+<footer>html4s · AGPL-3.0 · 视觉体系派生自 <a href="https://github.com/op7418/guizang-ppt-skill">guizang-ppt-skill</a> 等（<a href="${GH}/blob/master/docs/NOTICE.md">归属与许可</a>）· 本页由 <a href="${GH}/blob/master/tools/gen-web.mjs">tools/gen-web.mjs</a> 生成</footer>
 </div></body></html>`;
 
 fs.writeFileSync(path.join(OUT, 'index.html'), html, 'utf8');
-console.log('生成: docs/web/index.html（' + cards.length + ' 个 deck）');
+console.log('生成: docs/web/index.html（' + cards.length + ' deck · ' + themes.length + ' 主题）');

@@ -60,13 +60,17 @@ const decode = (s) => s
   .replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&quot;/g, '"')
   .replace(/&apos;/g, "'").replace(/&amp;/g, '&');
 /* 段落文本：<a:p> 内所有 <a:t> 拼接 */
-const paragraphs = (xml) => {
+const paragraphs = (xml) => paragraphsLvl(xml).map((p) => p.t);
+/* 带缩进层级：a:pPr lvl="N" → lvl（0-3，导入版式映射为 margin-left 层级） */
+const paragraphsLvl = (xml) => {
   const out = [];
   const re = /<a:p\b[^>]*>([\s\S]*?)<\/a:p>/g;
   let m;
   while ((m = re.exec(xml))) {
     const ts = [...m[1].matchAll(/<a:t>([\s\S]*?)<\/a:t>/g)].map((x) => decode(x[1])).join('');
-    if (ts.trim()) out.push(ts.trim());
+    if (!ts.trim()) continue;
+    const lv = /<a:pPr[^>]*\blvl="(\d+)"/.exec(m[1]);
+    out.push({ t: ts.trim(), lvl: lv ? Math.min(3, +lv[1]) : 0 });
   }
   return out;
 };
@@ -104,34 +108,44 @@ function mediaDataUri(rels, rid) {
 
 function slideToHtml(xml, idx) {
   const rels = relOf('ppt/slides/slide' + (idx + 1) + '.xml');
-  let title = '', body = [];
-  /* 逐形状（p:sp）：标题占位符 → title；其余 → 正文段落 */
+  /* 逐形状提取：标题占位符 → title；其余形状+图片按版面位置（y,x）排序输出=阅读序；
+     段落缩进层级（a:pPr lvl）→ margin-left */
+  let title = '';
+  const shapes = [];
   const spRe = /<p:sp>([\s\S]*?)<\/p:sp>/g;
   let sp;
   while ((sp = spRe.exec(xml))) {
     const block = sp[1];
+    const off = /<a:off x="(-?\d+)" y="(-?\d+)"/.exec(block);
+    const y = off ? +off[2] : 0, x = off ? +off[1] : 0;
     const isTitle = /<p:ph[^>]*type="(ctrTitle|title)"/.test(block);
-    const paras = paragraphs(block);
-    if (isTitle && !title) title = paras.join(' ');
-    else body.push(...paras);
+    const paras = paragraphsLvl(block);
+    if (isTitle && !title) { title = paras.map((p) => p.t).join(' '); continue; }
+    if (paras.length) shapes.push({ y, x, kind: 'text', paras });
   }
-  /* 图片（p:pic 的 blip r:embed） */
-  const imgs = [];
-  const picRe = /<p:pic>[\s\S]*?<\/p:pic>/g;
+  const picRe = /<p:pic>([\s\S]*?)<\/p:pic>/g;
   let pic;
   while ((pic = picRe.exec(xml))) {
+    const off = /<a:off x="(-?\d+)" y="(-?\d+)"/.exec(pic[1]);
     const rid = /r:embed="(rId\d+)"/.exec(pic[0]);
-    if (rid) { const uri = mediaDataUri(rels, rid[1]); if (uri) imgs.push(uri); }
+    if (!rid) continue;
+    const uri = mediaDataUri(rels, rid[1]);
+    if (uri) shapes.push({ y: off ? +off[2] : 0, x: off ? +off[1] : 0, kind: 'img', uri });
   }
+  shapes.sort((a, b) => a.y - b.y || a.x - b.x);
   /* 备注（notesSlideN 与 slideN 同序对应） */
   const notesXml = zip['ppt/notesSlides/notesSlide' + (idx + 1) + '.xml'];
   const notes = notesXml ? paragraphs(notesXml.toString('utf8')).join(' ') : '';
   const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   const t = title || ('第 ' + (idx + 1) + ' 页');
+  const bodyHtml = shapes.map((s) => s.kind === 'img'
+    ? `    <img src="${s.uri}" alt="">`
+    : s.paras.map((p) => p.lvl
+      ? `    <p class="pt" style="margin-left:${(p.lvl * 1.2).toFixed(1)}em">– ${esc(p.t)}</p>`
+      : `    <p class="pt">${esc(p.t)}</p>`).join('\n')).join('\n');
   return `  <h4s-slide data-h4s-title="${esc(t).slice(0, 60).replace(/"/g, '&quot;')}">
     <h1>${esc(t)}</h1>
-${body.map((p) => `    <p class="pt">${esc(p)}</p>`).join('\n')}
-${imgs.map((u) => `    <img src="${u}" alt="">`).join('\n')}
+${bodyHtml}
     <h4s-notes hidden>${esc(notes)}</h4s-notes>
   </h4s-slide>
 `;
