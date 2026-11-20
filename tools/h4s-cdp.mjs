@@ -63,7 +63,7 @@ export async function withPage(url, fn, { width = 1920, height = 1080, extraArgs
   try {
   // 1. 等待 DevTools 端口就绪（CI 冷启动首启较慢，给足 30s）
   const devtools = await (async () => {
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 150; i++) {
       try {
         const r = await fetch(`http://127.0.0.1:${port}/json/list`);
         const targets = await r.json();
@@ -115,7 +115,7 @@ export async function withPage(url, fn, { width = 1920, height = 1080, extraArgs
     });
 
     // 3. 等待文档加载完成 + 字体就绪
-    for (let i = 0; i < 100; i++) {
+    for (let i = 0; i < 150; i++) {
       if ((await ev('document.readyState')) === 'complete') break;
       await sleep(150);
     }
