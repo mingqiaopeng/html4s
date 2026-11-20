@@ -15,7 +15,8 @@ const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(HERE, '..');
 const SRC = path.join(ROOT, 'examples', 'html4s-intro-fs.html');
 
-/* ---------- 提取最新版介绍内容（sections）并把内联色值变量化 ---------- */
+/* ---------- 提取最新版介绍内容（剥掉 h4s-deck 外壳，只留各页——模板统一再包一层，
+   否则嵌套 h4s-deck 会让 collectSlides 采到 0 页、整个 deck 走进网页放映分支） ---------- */
 const src = fs.readFileSync(SRC, 'utf8');
 const deckChunk = src.slice(src.indexOf('<h4s-deck>'), src.lastIndexOf('</h4s-deck>') + 11);
 const COLOR_MAP = [
@@ -24,6 +25,8 @@ const COLOR_MAP = [
   ['color:#ff6b72', 'color:var(--bad)'],
 ];
 const sections = deckChunk
+  .replace(/^\s*<h4s-deck>/, '')
+  .replace(/<\/h4s-deck>\s*$/, '')
   .replace(/<style>[\s\S]*?<\/style>/, '')
   .replace(/v0\.3\.1/g, 'v0.3.2');
 const substituted = (chunk) => COLOR_MAP.reduce((s, [a, b]) => s.split(a).join(b), chunk);

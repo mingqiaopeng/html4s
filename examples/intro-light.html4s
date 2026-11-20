@@ -52,7 +52,7 @@
     .card.good { border-left-color: var(--ac); }
     .card.bad { border-left-color: var(--bad); }</style>
 
-<h4s-deck>
+
 
 <!-- frontend-slides-html4s · 项目介绍 deck · 8 页 · 深色科技风（Space Grotesk + 单色锚点） -->
 
@@ -214,7 +214,7 @@
   </h4s-notes>
 </section>
 
-</h4s-deck>
+
 </h4s-deck>
 <script>
 /*!
