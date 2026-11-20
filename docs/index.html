@@ -23,6 +23,10 @@ h2{font-size:22px;font-weight:600;margin:52px 0 6px;}
 .card:hover{border-color:var(--ac);transform:translateY(-2px);}
 .theme{align-self:flex-start;font-size:12px;color:#0d1117;background:var(--ac);border-radius:12px;padding:2px 12px;font-weight:700;}
 .card b{font-size:18px;} .desc{color:var(--dim);font-size:14px;} .meta{color:var(--ac);font-size:12px;margin-top:auto;}
+.alt{color:#6e7681;font-size:10.5px;word-break:break-all;}
+.altbox{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin:0 0 26px;font-size:13.5px;color:var(--dim);}
+.altbox b{color:var(--tx);} .altbox kbd{background:#21262d;padding:1px 7px;border-radius:4px;font:12px ui-monospace,monospace;color:#e2e8f0;}
+.altbox a{color:var(--ac);}
 .kbd{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:18px 22px;}
 .kbd table{width:100%;border-collapse:collapse;font-size:14.5px;}
 .kbd td{padding:7px 10px;border-bottom:1px solid #21262d;}
@@ -46,47 +50,48 @@ footer a{color:var(--ac);}
 
 <h2>主题库画廊 <span style="font-size:14px;color:var(--dim);font-weight:400">（v1.1 · 8 主题 · 同一最新版项目介绍 × 8 种表达 · 点击在线播放）</span></h2>
 <p class="h2d">全部 deck 使用同一份最新版项目介绍（gen-themes.mjs 生成）——内容完全一致，主题即独立 CSS 层，横向对比即见"内容 / 表现分离"的 html4s 核心设计。工程与验收 deck（一致性基准 conformance · 转场特效 fx-showcase）见 <a href="https://github.com/mingqiaopeng/html4s/tree/master/examples" style="color:var(--ac)">GitHub examples/</a>。</p>
+<div class="altbox"><b>打不开？</b>①先硬刷新（<kbd>Ctrl+F5</kbd>）——部署后 CDN 可能缓存了旧 404；②github.io 在部分网络间歇性不稳，稍候再试；③每张卡下方有 <b>jsDelivr CDN 备用地址</b>（浏览器直接打开即可播放，deck 是零依赖自包含文件）；④彻底离线的兜底：从 <a href="https://github.com/mingqiaopeng/html4s/tree/master/examples" style="color:var(--ac)">examples/</a> 下载 .html4s 文件双击播放（桌面客户端）或拖入浏览器。</div>
 <div class="grid">
 <a class="card" href="decks/html4s-intro-fs.html">
     <span class="theme">深色科技</span>
     <b>html4s 项目介绍</b>
     <span class="desc">8 页最新版介绍：三重困境 / 竞品对比 / 键位与能力——推荐从这里开始</span>
-    <span class="meta">frontend-slides · 在线播放 →</span></a>
+    <span class="meta">frontend-slides · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/html4s-intro-fs.html</span></a>
 <a class="card" href="decks/intro-swiss.html">
     <span class="theme">瑞士克莱因蓝</span>
     <b>html4s 项目介绍</b>
     <span class="desc">白底蓝竖条 + 重磅黑体标题 + 页题水印，国际主义网格感</span>
-    <span class="meta">guizang 风格 · 在线播放 →</span></a>
+    <span class="meta">guizang 风格 · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-swiss.html</span></a>
 <a class="card" href="decks/intro-partyred.html">
     <span class="theme">党建红</span>
     <b>html4s 项目介绍</b>
     <span class="desc">米纸底 + 红色条带 + 衬线标题 + 金色点缀，政务实战风格</span>
-    <span class="meta">guizang + gz-theme · 在线播放 →</span></a>
+    <span class="meta">guizang + gz-theme · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-partyred.html</span></a>
 <a class="card" href="decks/intro-magazine.html">
     <span class="theme">电子杂志</span>
     <b>html4s 项目介绍</b>
     <span class="desc">黑底黄标段落符 + 衬线斜体大标题 + 块状卡</span>
-    <span class="meta">guizang Style A · 在线播放 →</span></a>
+    <span class="meta">guizang Style A · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-magazine.html</span></a>
 <a class="card" href="decks/intro-ink.html">
     <span class="theme">水墨编辑</span>
     <b>html4s 项目介绍</b>
     <span class="desc">暖纸底 + 墨黑衬线 + 右上朱砂印章，编辑排版气质</span>
-    <span class="meta">花叔风格 · 在线播放 →</span></a>
+    <span class="meta">花叔风格 · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-ink.html</span></a>
 <a class="card" href="decks/intro-aurora.html">
     <span class="theme">极光渐变</span>
     <b>html4s 项目介绍</b>
     <span class="desc">深蓝紫双色径向渐变底 + 霓虹描边卡，星空特效层</span>
-    <span class="meta">官方 · 在线播放 →</span></a>
+    <span class="meta">官方 · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-aurora.html</span></a>
 <a class="card" href="decks/intro-light.html">
     <span class="theme">晨雾浅色</span>
     <b>html4s 项目介绍</b>
     <span class="desc">浅灰白极简：无框左线卡 + 大量留白</span>
-    <span class="meta">官方 · 在线播放 →</span></a>
+    <span class="meta">官方 · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-light.html</span></a>
 <a class="card" href="decks/intro-terminal.html">
     <span class="theme">终端绿</span>
     <b>html4s 项目介绍</b>
     <span class="desc">黑底等宽字体 + $ 提示符 + 扫描线，程序员浪漫</span>
-    <span class="meta">官方 · 在线播放 →</span></a>
+    <span class="meta">官方 · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/intro-terminal.html</span></a>
 </div>
 
 <h2>在线版键位速查</h2>

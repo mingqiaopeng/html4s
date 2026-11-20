@@ -37,7 +37,7 @@ for (const d of DECKS) {
     <span class="theme">${esc(d.title)}</span>
     <b>html4s 项目介绍</b>
     <span class="desc">${esc(d.desc)}</span>
-    <span class="meta">${esc(d.skill)} · 在线播放 →</span></a>`);
+    <span class="meta">${esc(d.skill)} · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/${d.id}.html</span></a>`);
 }
 /* 清理画廊里已下线的 deck 副本（画廊只保留当前 DECKS 集合） */
 for (const f of fs.readdirSync(path.join(OUT, 'decks'))) {
@@ -70,6 +70,10 @@ h2{font-size:22px;font-weight:600;margin:52px 0 6px;}
 .card:hover{border-color:var(--ac);transform:translateY(-2px);}
 .theme{align-self:flex-start;font-size:12px;color:#0d1117;background:var(--ac);border-radius:12px;padding:2px 12px;font-weight:700;}
 .card b{font-size:18px;} .desc{color:var(--dim);font-size:14px;} .meta{color:var(--ac);font-size:12px;margin-top:auto;}
+.alt{color:#6e7681;font-size:10.5px;word-break:break-all;}
+.altbox{background:var(--bg2);border:1px solid var(--bd);border-radius:10px;padding:14px 18px;margin:0 0 26px;font-size:13.5px;color:var(--dim);}
+.altbox b{color:var(--tx);} .altbox kbd{background:#21262d;padding:1px 7px;border-radius:4px;font:12px ui-monospace,monospace;color:#e2e8f0;}
+.altbox a{color:var(--ac);}
 .kbd{background:var(--bg2);border:1px solid var(--bd);border-radius:12px;padding:18px 22px;}
 .kbd table{width:100%;border-collapse:collapse;font-size:14.5px;}
 .kbd td{padding:7px 10px;border-bottom:1px solid #21262d;}
@@ -93,6 +97,7 @@ footer a{color:var(--ac);}
 
 <h2>主题库画廊 <span style="font-size:14px;color:var(--dim);font-weight:400">（v1.1 · ${themes.length} 主题 · 同一最新版项目介绍 × ${themes.length} 种表达 · 点击在线播放）</span></h2>
 <p class="h2d">全部 deck 使用同一份最新版项目介绍（gen-themes.mjs 生成）——内容完全一致，主题即独立 CSS 层，横向对比即见"内容 / 表现分离"的 html4s 核心设计。工程与验收 deck（一致性基准 conformance · 转场特效 fx-showcase）见 <a href="${GH}/tree/master/examples" style="color:var(--ac)">GitHub examples/</a>。</p>
+<div class="altbox"><b>打不开？</b>①先硬刷新（<kbd>Ctrl+F5</kbd>）——部署后 CDN 可能缓存了旧 404；②github.io 在部分网络间歇性不稳，稍候再试；③每张卡下方有 <b>jsDelivr CDN 备用地址</b>（浏览器直接打开即可播放，deck 是零依赖自包含文件）；④彻底离线的兜底：从 <a href="${GH}/tree/master/examples" style="color:var(--ac)">examples/</a> 下载 .html4s 文件双击播放（桌面客户端）或拖入浏览器。</div>
 <div class="grid">
 ${cards.join('\n')}
 </div>
