@@ -57,6 +57,8 @@ const DECKS = [
   'fs-intro', 'huashu-intro', 'fx-showcase', 'html4s-intro', 'html4s-intro-fs',
   '2027-dangjian', 'style-a-pilot', 'fs-bridge', 'huashu-bridge', 'conformance',
   'media-test/media-deck',
+  'intro-swiss', 'intro-partyred', 'intro-magazine', 'intro-ink',
+  'intro-aurora', 'intro-light', 'intro-terminal',
 ];
 for (const d of DECKS) {
   const src = path.join(ROOT, 'examples', d + '.html');

@@ -15,29 +15,35 @@ const GH = 'https://github.com/mingqiaopeng/html4s';
 const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
 
 const DECKS = [
-  { id: 'html4s-intro-fs', title: 'html4s 项目介绍', theme: '深色科技', skill: 'frontend-slides', desc: '8 页自述 deck：三重困境 / 竞品对比 / 键位与能力——推荐从这里开始' },
-  { id: 'conformance', title: '一致性基准', theme: '深色科技', skill: '官方', desc: '25 页覆盖全部转场 / 碎片 / 特效 / 混合内容编辑——第三方实现的验收对照' },
-  { id: 'fx-showcase', title: '转场特效演示', theme: '深色科技', skill: '官方', desc: '14 页全转场轨迹：动画 12 种 + 遮罩 4 种 + 背景特效层与礼花' },
-  { id: '2027-dangjian', title: '党建工作务实会发言', theme: '党建红', skill: 'guizang 适配', desc: '真实政务实战示例：红色品牌主题（gz-theme 生成）+ KPI 塔 + 闭环图' },
-  { id: 'html4s-intro', title: '项目介绍', theme: '瑞士克莱因蓝', skill: 'guizang', desc: '瑞士国际主义风格：大字标题 + 网格排版' },
-  { id: 'style-a-pilot', title: 'Style A 试点', theme: '电子杂志', skill: 'guizang Style A', desc: '杂志风试点：Hero / 章节页 / 大数字 / 流水线版式' },
-  { id: 'huashu-intro', title: '项目介绍', theme: '编辑风', skill: '花叔三稿', desc: '反差编辑风格：衬线中文排版' },
-  { id: 'fs-intro', title: '项目介绍（早期版）', theme: '极简深色', skill: 'frontend-slides', desc: 'frontend-slides 技能的首个自述版本' },
+  { id: 'html4s-intro-fs', title: '深色科技', skill: 'frontend-slides', desc: '8 页最新版介绍：三重困境 / 竞品对比 / 键位与能力——推荐从这里开始' },
+  { id: 'intro-swiss', title: '瑞士克莱因蓝', skill: 'guizang 风格', desc: '白底蓝竖条 + 重磅黑体标题 + 页题水印，国际主义网格感' },
+  { id: 'intro-partyred', title: '党建红', skill: 'guizang + gz-theme', desc: '米纸底 + 红色条带 + 衬线标题 + 金色点缀，政务实战风格' },
+  { id: 'intro-magazine', title: '电子杂志', skill: 'guizang Style A', desc: '黑底黄标段落符 + 衬线斜体大标题 + 块状卡' },
+  { id: 'intro-ink', title: '水墨编辑', skill: '花叔风格', desc: '暖纸底 + 墨黑衬线 + 右上朱砂印章，编辑排版气质' },
+  { id: 'intro-aurora', title: '极光渐变', skill: '官方', desc: '深蓝紫双色径向渐变底 + 霓虹描边卡，星空特效层' },
+  { id: 'intro-light', title: '晨雾浅色', skill: '官方', desc: '浅灰白极简：无框左线卡 + 大量留白' },
+  { id: 'intro-terminal', title: '终端绿', skill: '官方', desc: '黑底等宽字体 + $ 提示符 + 扫描线，程序员浪漫' },
 ];
 
 fs.mkdirSync(path.join(OUT, 'decks'), { recursive: true });
 const cards = [];
+const wanted = new Set();
 for (const d of DECKS) {
   const share = path.join(ROOT, 'examples', d.id + '.share.html');
   if (!fs.existsSync(share)) { console.log('跳过（无 share 版）: ' + d.id); continue; }
   fs.copyFileSync(share, path.join(OUT, 'decks', d.id + '.html'));
+  wanted.add(d.id + '.html');
   cards.push(`<a class="card" href="decks/${d.id}.html">
-    <span class="theme">${esc(d.theme)}</span>
-    <b>${esc(d.title)}</b>
+    <span class="theme">${esc(d.title)}</span>
+    <b>html4s 项目介绍</b>
     <span class="desc">${esc(d.desc)}</span>
     <span class="meta">${esc(d.skill)} · 在线播放 →</span></a>`);
 }
-const themes = [...new Set(DECKS.map((d) => d.theme))];
+/* 清理画廊里已下线的 deck 副本（画廊只保留当前 DECKS 集合） */
+for (const f of fs.readdirSync(path.join(OUT, 'decks'))) {
+  if (!wanted.has(f)) { fs.rmSync(path.join(OUT, 'decks', f)); console.log('清理下线副本: ' + f); }
+}
+const themes = ['深色科技', '瑞士克莱因蓝', '党建红', '电子杂志', '水墨编辑', '极光渐变', '晨雾浅色', '终端绿'];
 
 const html = `<!DOCTYPE html><html lang="zh-CN"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -85,8 +91,8 @@ footer a{color:var(--ac);}
 </div>
 <p class="note">在线版是浏览器降级形态：F5 放映 · → 翻页 · ✎ 文字微调可用；双屏演讲者 / 排练写回 / 文件写回 / kiosk 请用桌面版。</p>
 
-<h2>主题库画廊 <span style="font-size:14px;color:var(--dim);font-weight:400">（v1 · ${themes.length} 主题 · 点击在线播放）</span></h2>
-<p class="h2d">每个主题都是技能生成 + h4s-build 构建的真实 deck——即 AI 可复现的样板。</p>
+<h2>主题库画廊 <span style="font-size:14px;color:var(--dim);font-weight:400">（v1.1 · ${themes.length} 主题 · 同一最新版项目介绍 × ${themes.length} 种表达 · 点击在线播放）</span></h2>
+<p class="h2d">全部 deck 使用同一份最新版项目介绍（gen-themes.mjs 生成）——内容完全一致，主题即独立 CSS 层，横向对比即见"内容 / 表现分离"的 html4s 核心设计。工程与验收 deck（一致性基准 conformance · 转场特效 fx-showcase）见 <a href="${GH}/tree/master/examples" style="color:var(--ac)">GitHub examples/</a>。</p>
 <div class="grid">
 ${cards.join('\n')}
 </div>

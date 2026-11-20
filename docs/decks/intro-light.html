@@ -1,0 +1,2545 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>html4s · 项目介绍 · 晨雾浅色主题</title>
+<script type="application/h4s+json">
+{
+  "h4s": "1.0", "playerVersion": "0.3.2",
+  "meta": { "title": "html4s · 项目介绍 · 晨雾浅色主题", "lang": "zh-CN", "author": "Html4s Project" },
+  "id": "intro-light",
+  "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "#f8fafc" },
+  "defaults": { "transition": { "name": "wipe", "duration": 450 }, "fx": "none", "autoslide": 0, "loop": false },
+  "fonts": []
+}
+</script>
+</head>
+<body>
+<h4s-deck>
+
+<!-- gen-themes.mjs · 项目介绍（最新版内容）× 晨雾浅色主题 · 签名转场 wipe · fx none -->
+<style>:root { --bg:#f8fafc;--tx:#0f172a;--tx2:#334155;--dim:#64748b;--ac:#0369a1;--bad:#b91c1c;--bd:#dbe2ea;--bd2:#e9eef4; --font:'Segoe UI','Microsoft YaHei',sans-serif; }
+
+  html, body { width: 100%; height: 100%; margin: 0; overflow: hidden; background: var(--bg); }
+  .slide {
+    position: absolute; inset: 0; width: 1920px; height: 1080px;
+    overflow: hidden; display: block;
+    background: var(--bg); color: var(--tx);
+    font-family: var(--font);
+  }
+  .h4s-holder > .slide { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; position: absolute !important; inset: 0 !important; }
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1); }
+  .slide.visible .reveal { opacity: 1; transform: translateY(0); }
+  .kicker { font-size: 20px; letter-spacing: .3em; color: var(--ac); text-transform: uppercase; }
+  .slide-content { display: flex; flex-direction: column; justify-content: center; padding: 120px; height: 100%; box-sizing: border-box; position: relative; }
+  .stat { display: flex; flex-direction: column; gap: 8px; border-left: 4px solid var(--ac); padding-left: 28px; }
+  .stat .n { font-size: 96px; font-weight: 300; letter-spacing: -.02em; }
+  .stat .l { font-size: 18px; letter-spacing: .18em; color: var(--dim); text-transform: uppercase; }
+  .card { border: 1px solid var(--bd); padding: 40px; box-sizing: border-box; }
+  .card.good { border-color: var(--ac); }
+  .card.bad { border-color: var(--bad); }
+  .card .h { font-size: 20px; letter-spacing: .2em; margin-bottom: 24px; }
+  .card p { font-size: 24px; line-height: 1.7; color: var(--tx2); margin: 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 22px; line-height: 1.5; }
+  th { text-align: left; color: var(--ac); font-weight: 500; padding: 12px 20px; border-bottom: 1px solid var(--bd); letter-spacing: .08em; }
+  td { padding: 12px 20px; color: var(--tx2); border-bottom: 1px solid var(--bd2); }
+  td:first-child { color: var(--dim); }
+
+
+    /* 晨雾：大量留白 + 无框左线卡 */
+    .slide-content { padding: 140px 160px; }
+    .card { border: none; border-left: 4px solid var(--bd); background: #fff; }
+    .card.good { border-left-color: var(--ac); }
+    .card.bad { border-left-color: var(--bad); }</style>
+
+<h4s-deck>
+
+<!-- frontend-slides-html4s · 项目介绍 deck · 8 页 · 深色科技风（Space Grotesk + 单色锚点） -->
+
+
+<section class="slide" data-h4s-title="html4s · cover">
+  <div class="slide-content">
+    <div class="kicker reveal">HYPERTEXT MARKUP FOR SLIDES · OPEN FORMAT · v0.3.2</div>
+    <h1 class="reveal" style="font-size:150px;font-weight:300;letter-spacing:-.03em;margin:32px 0">html4s</h1>
+    <p class="reveal" style="font-size:32px;color:var(--dim);max-width:56ch">用"一个合法 HTML 文件 + 一个播放器"做演示文稿——AI 写得准，人演得稳，格式永远可版本化。</p>
+    <p class="reveal" style="font-size:24px;color:var(--ac);margin-top:40px;letter-spacing:.1em">HTML4S PROJECT · AGPL-3.0 · GITHUB.COM/MINGQIAOPENG/HTML4S</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】30 秒定调：html4s = 合法 HTML 单文件 + 专职播放器。</p>
+    <p>【要点】强调分层——格式面向 AI 与版本控制，播放器面向现场演播。</p>
+    <p>【转场】下一页给出三条路的痛点。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="三重困境">
+  <div class="slide-content">
+    <div class="kicker reveal">WHY · 三重困境</div>
+    <h2 class="reveal" style="font-size:80px;font-weight:300;margin:24px 0 60px">用 AI 做 PPT，三条路都走不通</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:48px">
+      <div class="card bad reveal">
+        <div class="h" style="color:var(--bad)">PPTX · 摸黑生成</div>
+        <p>AI 借脚本逐个操作 XML 对象，看不到排出来的版面；autofit 是黑盒，版式经常崩坏；二进制进 git，diff 无从读起。</p>
+      </div>
+      <div class="card bad reveal">
+        <div class="h" style="color:var(--bad)">HTML 演示 · 演不起来</div>
+        <p>reveal.js / Slidev 生成容易，但没有 PowerPoint 式的浏览界面、缩略图侧栏、排练计时、kiosk——现场演示靠浏览器裸奔。</p>
+      </div>
+      <div class="card bad reveal">
+        <div class="h" style="color:var(--bad)">分发 · 各有各的沉</div>
+        <p>reveal 要整个框架目录或 CDN；Slidev 要 Node 工程 + Playwright 导出；想发一个"双击就能放"的东西，三条路都别扭。</p>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】三张卡片把三条路的痛点钉在同一画面。</p>
+    <p>【要点】pptx 摸黑生成、HTML 演播缺位、分发各有各的沉——每张一张卡，逐条点。</p>
+    <p>【转场】下一页给对照表：四条路线逐维度比。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="竞品对比">
+  <div class="slide-content">
+    <div class="kicker reveal">COMPARISON · 8 DIMENSIONS</div>
+    <h2 class="reveal" style="font-size:72px;font-weight:300;margin:24px 0 40px">四条路线，八个维度</h2>
+    <table class="reveal">
+      <tr><th>维度</th><th>PowerPoint</th><th>reveal.js</th><th>Slidev</th><th style="color:var(--ac)">html4s</th></tr>
+      <tr><td>AI 直接生成</td><td>⚠️ 脚本摸黑 XML</td><td>✅ 需框架目录</td><td>✅ 需 Vue 工程</td><td style="color:var(--ac)">✅ 零依赖单文件</td></tr>
+      <tr><td>演播体验（缩略图/演讲者/计时）</td><td>✅ 原生</td><td>⚠️ 插件配置</td><td>✅ 较全</td><td style="color:var(--ac)">✅ 原生全功能 + 双屏副屏</td></tr>
+      <tr><td>排版确定性</td><td>❌ autofit 黑盒</td><td>⚠️ 滚动风险</td><td>⚠️ 可能溢出</td><td style="color:var(--ac)">✅ 固定舞台 1920×1080</td></tr>
+      <tr><td>字体离线内嵌</td><td>⚠️ 手动嵌入</td><td>❌ 需自配</td><td>⚠️ 需配置</td><td style="color:var(--ac)">✅ 构建期子集（1116KB→34KB）</td></tr>
+      <tr><td>版本控制友好</td><td>❌ 二进制</td><td>✅</td><td>✅✅ Markdown</td><td style="color:var(--ac)">✅ 纯文本逐行 diff</td></tr>
+      <tr><td>分发形态</td><td>✅ 单文件 zip</td><td>❌ 目录/CDN</td><td>❌ 需构建导出</td><td style="color:var(--ac)">✅ 单文件双击即演</td></tr>
+      <tr><td>非开发者门槛</td><td>低</td><td>中</td><td>高（Node）</td><td style="color:var(--ac)">低（安装后双击）</td></tr>
+      <tr><td>AI 质量闭环</td><td>❌</td><td>❌</td><td>⚠️ 部分</td><td style="color:var(--ac)">✅ lint+截图+构建指纹</td></tr>
+    </table>
+    <p class="reveal" style="font-size:24px;color:var(--dim);margin-top:36px">一句话：pptx 演得动但 AI 写不好；reveal/Slidev 写得好但分发与演播沉重——html4s 把"AI 写"和"人演"放在两个都做到位的层上。</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】用 8 个维度客观对比，不贬低竞品——每格都是事实。</p>
+    <p>【要点】逐行扫；强调 html4s 列无 ❌。台词收在"两个层都做到位"。</p>
+    <p>【转场】下一页展开主要优点。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="主要优点">
+  <div class="slide-content">
+    <div class="kicker reveal">STRENGTHS · 主要优点</div>
+    <h2 class="reveal" style="font-size:80px;font-weight:300;margin:24px 0 60px">六个"做到了"</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:36px">
+      <div class="card good reveal"><div class="h" style="color:var(--ac)">📦 一个文件，双击即演</div><p>播放器运行时、图标库、字体子集全部内嵌——拷 U 盘、发邮件，演示机上零依赖、离线可用。</p></div>
+      <div class="card good reveal"><div class="h" style="color:var(--ac)">🎬 播放器专职演播</div><p>20 种转场（含幕布/百叶窗/棋盘/像素溶解）、星空/雪花背景特效、演讲者双窗 + 抽屉、排练写回、kiosk。</p></div>
+      <div class="card good reveal"><div class="h" style="color:var(--ac)">🤖 AI 创作闭环</div><p>lint 7 类检查 + 逐页截图自审 + 字体子集指纹——MCP server 把全部能力暴露给 AI Agent。</p></div>
+      <div class="card good reveal"><div class="h" style="color:var(--ac)">🇨🇳 中文演示优先</div><p>正文 26px 下限适配层、字体子集 1116KB→34KB、党政/政务品牌色与示例 deck。</p></div>
+      <div class="card good reveal"><div class="h" style="color:var(--ac)">✏️ 演讲前文字微调</div><p>浏览模式 ✎ 编辑，预览中直接改字——子集缺字实时预警，壳内写回源文件。</p></div>
+      <div class="card good reveal"><div class="h" style="color:var(--ac)">🖥️ 双宿主</div><p>壳版（Windows/WebView2）全功能演播；浏览器版拖进 Edge/Chrome 也能播，发给别人预演零门槛。</p></div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】六个"做到了"对应六类用户关切。</p>
+    <p>【要点】2×3 网格逐个点；重点讲 AI 闭环与文字微调（独有能力）。</p>
+    <p>【转场】诚实说明不适用场景。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="不适用场景">
+  <div class="slide-content">
+    <div class="kicker reveal">HONESTY · 诚实说明</div>
+    <h2 class="reveal" style="font-size:80px;font-weight:300;margin:24px 0 60px">这些场景请继续用 PPT</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px;font-size:26px;line-height:1.7">
+      <div class="card reveal"><p>🏢 <b>Office 协作流程</b>——批注、审阅、修订追踪，html4s 没有</p></div>
+      <div class="card reveal"><p>🎨 <b>可视化动画编辑</b>——有碎片与转场，但不是动画编辑器</p></div>
+      <div class="card reveal"><p>📊 <b>数据联动/实时图表</b>——图表请预先生成或用截图</p></div>
+      <div class="card reveal"><p>↩️ <b>回 pptx 继续编辑</b>——html4s 是"终点格式"，不是 pptx 的替代输入</p></div>
+      <div class="card reveal"><p>💻 <b>低端设备 + 重特效</b>——WebGL 背景与粒子层可能掉帧（fx 可关闭）</p></div>
+      <div class="card reveal"><p>🍎 <b>跨平台桌面壳</b>——目前 Windows；macOS 计划走 Tauri/WKWebView</p></div>
+    </div>
+    <p class="reveal" style="font-size:24px;color:var(--dim);margin-top:40px">工具选型的诚实边界，比"万能"更有说服力。</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】诚实列出六条不适用——建立可信度。</p>
+    <p>【要点】"工具选型的诚实边界，比万能更有说服力"是本页台词。</p>
+    <p>【转场】下一页给出使用说明。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="使用说明">
+  <div class="slide-content">
+    <div class="kicker reveal">GETTING STARTED · 使用说明</div>
+    <h2 class="reveal" style="font-size:72px;font-weight:300;margin:24px 0 48px">安装 · 播放 · 创作</h2>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px">
+      <div style="display:grid;gap:24px">
+        <div class="stat reveal"><span class="n" style="font-size:56px">⬇</span><span class="l">setup.exe 用户级安装（无需管理员），自动注册 .html4s 关联 + 快捷方式</span></div>
+        <div class="stat reveal"><span class="n" style="font-size:56px">▶</span><span class="l">F5 放映 · S 演讲者抽屉 · R 排练写回 · Ctrl+R 最近打开 · ✎ 文字微调</span></div>
+        <div class="stat reveal"><span class="n" style="font-size:56px">🖥</span><span class="l">双屏时演讲者视图自动放置副屏；kiosk 参数循环放映</span></div>
+      </div>
+      <div style="display:grid;gap:24px">
+        <div class="stat reveal"><span class="n" style="font-size:56px">🤖</span><span class="l">AI Agent 按 skill 写 deck → lint 7 类检查 → 逐页截图自审 → build 单文件</span></div>
+        <div class="stat reveal"><span class="n" style="font-size:56px">🔌</span><span class="l">MCP server 把 lint/shot/outline/build/pdf 暴露给 AI 工具链</span></div>
+        <div class="stat reveal"><span class="n" style="font-size:56px">✎</span><span class="l">演讲前文字微调：预览中直接改字，壳内写回源文件，缺字实时预警</span></div>
+      </div>
+    </div>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】左右分栏：左边"装好就能演"，右边"AI 创作工作流"。</p>
+    <p>【要点】强调 MCP——AI Agent 打开项目即自动连接。</p>
+    <p>【转场】下一页演示背景特效（stars）。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="背景特效演示">
+  <div class="slide-content">
+    <div class="kicker reveal">FX · 背景特效层</div>
+    <h1 class="reveal" style="font-size:110px;font-weight:300;letter-spacing:-.02em;margin:24px 0">留白，即是舞台。</h1>
+    <p class="reveal" style="font-size:30px;color:var(--dim);max-width:56ch">本主题清单 defaults.fx 未启用——零依赖 canvas 特效层（stars / snow / dust）在清单中一行开启，仅放映时渲染，离开自动暂停。另有页面级 confetti 礼花。</p>
+    <p class="reveal" style="font-size:24px;color:var(--ac);margin-top:32px">data-h4s-fx="confetti" · defaults.fx="stars|snow|dust" · 转场 20 种</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】展示背景特效层——本页全局 stars 生效中。</p>
+    <p>【要点】零依赖 canvas、仅放映渲染、后台自动暂停。</p>
+    <p>【转场】收束页。</p>
+  </h4s-notes>
+</section>
+
+<section class="slide" data-h4s-title="收束">
+  <div class="slide-content" style="align-items:center;text-align:center">
+    <div class="kicker reveal">CLOSING · GITHUB</div>
+    <h2 class="reveal" style="font-size:120px;font-weight:300;letter-spacing:-.03em;margin:36px 0">一个文件，<br>双击即演。</h2>
+    <p class="reveal" style="font-size:30px;color:var(--dim);max-width:56ch">github.com/mingqiaopeng/html4s · AGPL-3.0 · 播放器 + 工具链 + 三创作技能 + 8 个示例 deck</p>
+    <p class="reveal" style="font-size:24px;color:var(--ac);margin-top:32px;letter-spacing:.1em">STAR · FORK · ISSUE · CONTRIBUTION WELCOME</p>
+  </div>
+  <h4s-notes hidden>
+    <p>【目的】收束 + 引导 GitHub 互动。</p>
+    <p>【要点】"一个文件，双击即演"是全场唯一要记住的话。</p>
+    <p>【转场】Q&amp;A。</p>
+  </h4s-notes>
+</section>
+
+</h4s-deck>
+</h4s-deck>
+<script>
+/*!
+ * h4s-core — html4s 播放器运行时 v0.3.2（转场特效引擎 · 增量编辑配套）
+ * ------------------------------------------------
+ * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
+ * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
+ *
+ * 支持的页面约定（适配器）:
+ *   - 规范元素: <h4s-deck> / <h4s-slide> / <h4s-notes hidden>
+ *   - 通用约定: body/deck/.slides 容器下的直接 <section> 子元素或 .slide 元素
+ *   - 碎片: [data-h4s-frag] 或 reveal.js 兼容的 .fragment
+ *   - 清单: <script type="application/h4s+json">（可选，缺省用内置默认值）
+ *
+ * 规范: ../ARCHITECTURE.md §3
+ */
+(function () {
+  'use strict';
+  if (window.__H4S_LOADED__) return;
+  window.__H4S_LOADED__ = true;
+
+  var VERSION = '0.3.2';
+  var PV_STALE = null; /* 清单 playerVersion ≠ 本播放器版本 → 旧版内嵌（build 注入指纹后检测） */
+
+  /* ================================================================
+   * 工具
+   * ================================================================ */
+  var clamp = function (v, a, b) { return Math.max(a, Math.min(b, v)); };
+  var sleep = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+  function $(sel, root) { return (root || document).querySelector(sel); }
+  function $$(sel, root) { return Array.prototype.slice.call((root || document).querySelectorAll(sel)); }
+  function el(tag, cls, html) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html != null) e.innerHTML = html;
+    return e;
+  }
+  function esc(s) {
+    return String(s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function fmt(sec) {
+    sec = Math.max(0, Math.floor(sec));
+    var m = Math.floor(sec / 60), s = sec % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  function on(target, ev, fn, opt) { target.addEventListener(ev, fn, opt); }
+  /* 转发壳级快捷键给桌面壳（WebView2 宿主下有效；浏览器中无 chrome.webview，静默跳过） */
+  function shellAction(a, data) {
+    try {
+      if (window.chrome && window.chrome.webview) {
+        var msg = data ? { h4sShell: a, data: data } : { h4sShell: a };
+        window.chrome.webview.postMessage(JSON.stringify(msg));
+      }
+    } catch (e) {}
+  }
+
+  /* ---- UI 多语言（i18n）：壳语言覆盖（localStorage h4s-lang-override）>
+     清单 meta.lang > 浏览器语言 ---- */
+  var UI_STR = {
+    zh: { open: '打开', openT: '打开本地 .html4s 文件 (Ctrl+O)', url: '网址', urlT: '打开网址播放 (Ctrl+L)',
+      toLight: '☀ 浅色', toDark: '🌙 深色', themeT: '深色/浅色切换',
+      playcur: '从当前放映', playcurT: '从当前选中页放映 (Shift+F5)', play: '▶ 放映', playT: '从头放映 (F5)',
+      presenter: '演讲者视图', notes: '备注', thisPage: '本页', total: '总计', fragN: '碎片 ', noFrags: '无碎片',
+      nextFrag: '下一状态 · 碎片 ', nextSlide: '下一页 · 最终状态', lastPage: '已是最后一页', firstPage: '已是第一页',
+      noNotes: '（本页无备注）', nextCap: '下一状态', nextCapFinal: '下一页 · 最终状态', endMark: '— END —',
+      prevT: '上一页 (← / PgUp)', nextT: '下一页 (→ / 空格)', timerT: '总时长 (T 暂停)',
+      rehearseT: '排练录制 (R)', laserT: '激光笔 (L)', blackT: '黑屏 (B)', overviewT: '总览 (G)',
+      drawerT: '演讲者视图 (S)', preswinT: '独立演讲者窗口（需 http 访问）', fullscreenT: '全屏 (F)', helpT: '帮助 (?)',
+      helpTitle: '键盘帮助', numEnter: '数字 + Enter',
+      hNext: '下一步（碎片内推进 → 翻页）', hPrev: '上一步', hHome: '首页 / 末页', hNum: '跳页（显示最终碎片状态）',
+      hBlack: '黑屏 / 白屏', hGrid: '总览网格 / 演讲者抽屉', hTime: '计时暂停 / 排练录制', hLaser: '激光笔',
+      hRemote: '连接翻页笔（实验性；多数翻页笔为键盘设备，直接可用）', hFull: '全屏切换', hEsc: '退出浮层 / 全屏',
+      drawerOn: '演讲者抽屉已开启（同屏练习模式）', drawerOff: '演讲者抽屉已关闭',
+      rehearseStart: '排练开始（R 结束）', rehearseEnd: '排练结束：共 {0}，明细已写回 .timings.json',
+      paused: '计时已暂停', resumed: '计时继续', numRange: '页码超出范围 1-{0}',
+      editHint: '文字微调模式：单击预览中的文字直接修改，Esc 退出', editOff: '文字微调模式已关闭',
+      edited: '✓ 已修改（第 {0} 页）', editedLack: ' · ⚠ 子集缺字: {0}（导出后该处回退系统字体）',
+      exporting: '正在写回源文件…', writeBackOk: '已写回源文件 ✓ 建议运行 h4s-build --subset 重建以更新字体子集',
+      writeBackFail: '写回失败（{0}），已改为导出下载', exported: '已导出包含文字修改的 .html4s',
+      snapFail: '快照不可用（deck 过早修改？）',
+      stalePlayer: '检测到旧版内嵌播放器（{0} → {1}）：功能可能缺失，建议 h4s-build 重建',
+      webHint: '未检测到幻灯片结构 · <b>F5</b> 网页放映（全屏按屏翻页） · Esc 退出',
+      webBadge: '{0} / {1} 屏 · → 翻页 · Esc 退出', webToast: '网页放映：方向键/空格按屏翻页，Esc 退出',
+      presPrev: '◀ 上一页', presNext: '下一页 ▶', presBlack: '黑屏 B', presWhite: '白屏 W', presGrid: '总览 G',
+      presTitle: '[演讲者] ',
+      presWarnNoStage: '未检测到舞台窗口（BroadcastChannel 需 http:// 访问），已切换本地练习模式',
+      presWarnLost: '信号中断：请确认舞台窗口仍开着',
+      kioskUnlock: 'kiosk 已解锁（Ctrl+Alt+Q 重新锁定）',
+      popupBlocked: '弹窗被浏览器拦截，请允许弹窗后重试', presWinOpened: '演讲者窗口已打开（双屏时拖到副屏）',
+      remoteUnsupported: '此环境不支持 WebHID（需 Chrome/Edge 与安全上下文）', remoteConnected: '翻页笔已连接: ',
+      remoteFail: '翻页笔连接失败' },
+    en: { open: 'Open', openT: 'Open local .html4s file (Ctrl+O)', url: 'URL', urlT: 'Play from URL (Ctrl+L)',
+      toLight: '☀ Light', toDark: '🌙 Dark', themeT: 'Toggle light/dark',
+      playcur: 'From current', playcurT: 'Present from selected slide (Shift+F5)', play: '▶ Present', playT: 'Present from start (F5)',
+      presenter: 'Presenter', notes: 'Notes', thisPage: 'Slide', total: 'Total', fragN: 'Frag ', noFrags: 'No fragments',
+      nextFrag: 'Next state · frag ', nextSlide: 'Next slide · final', lastPage: 'Last page', firstPage: 'First page',
+      noNotes: '(no notes)', nextCap: 'Next state', nextCapFinal: 'Next slide · final', endMark: '— END —',
+      prevT: 'Previous (← / PgUp)', nextT: 'Next (→ / Space)', timerT: 'Total time (T to pause)',
+      rehearseT: 'Rehearse (R)', laserT: 'Laser pointer (L)', blackT: 'Black screen (B)', overviewT: 'Overview (G)',
+      drawerT: 'Presenter drawer (S)', preswinT: 'Presenter window (needs http)', fullscreenT: 'Fullscreen (F)', helpT: 'Help (?)',
+      helpTitle: 'Keyboard help', numEnter: 'Number + Enter',
+      hNext: 'Next step (fragments first, then slides)', hPrev: 'Previous step', hHome: 'First / last slide', hNum: 'Jump to slide (final fragment state)',
+      hBlack: 'Black / white screen', hGrid: 'Overview grid / presenter drawer', hTime: 'Pause timer / rehearse', hLaser: 'Laser pointer',
+      hRemote: 'Connect presenter remote (experimental; most remotes are keyboard devices)', hFull: 'Toggle fullscreen', hEsc: 'Exit overlay / fullscreen',
+      drawerOn: 'Presenter drawer opened (same-screen practice)', drawerOff: 'Presenter drawer closed',
+      rehearseStart: 'Rehearsal started (R to stop)', rehearseEnd: 'Rehearsal done: {0}, timings written to .timings.json',
+      paused: 'Timer paused', resumed: 'Timer resumed', numRange: 'Slide number out of range 1-{0}',
+      editHint: 'Text touch-up: click text in the preview to edit, Esc to exit', editOff: 'Text touch-up off',
+      edited: '✓ Modified (slide {0})', editedLack: ' · ⚠ subset missing: {0} (falls back to system font after export)',
+      exporting: 'Writing back to source file…', writeBackOk: 'Written back to source ✓ run h4s-build --subset to refresh font subset',
+      writeBackFail: 'Write-back failed ({0}), exported as download instead', exported: 'Exported .html4s with text edits',
+      snapFail: 'Snapshot unavailable (deck modified too early?)',
+      stalePlayer: 'Stale embedded player ({0} → {1}): features may be missing, rebuild with h4s-build',
+      webHint: 'No slide structure found · <b>F5</b> web present (fullscreen page-by-page) · Esc exits',
+      webBadge: '{0} / {1} screens · → next · Esc exits', webToast: 'Web present: arrows/space page through, Esc exits',
+      presPrev: '◀ Prev', presNext: 'Next ▶', presBlack: 'Black B', presWhite: 'White W', presGrid: 'Grid G',
+      presTitle: '[Presenter] ',
+      presWarnNoStage: 'No stage window detected (BroadcastChannel needs http://), switched to local practice mode',
+      presWarnLost: 'Signal lost: make sure the stage window is still open',
+      kioskUnlock: 'kiosk unlocked (Ctrl+Alt+Q to re-lock)',
+      popupBlocked: 'Popup blocked — allow popups and retry', presWinOpened: 'Presenter window opened (drag to second screen)',
+      remoteUnsupported: 'WebHID not supported here (needs Chrome/Edge and a secure context)', remoteConnected: 'Remote connected: ',
+      remoteFail: 'Remote connection failed' }
+  };
+  var UILANG = 'zh';
+  try {
+    var _ovr = localStorage.getItem('h4s-lang-override'); /* 壳设置对话框写入 */
+    var _mlang = ((JSON.parse(($('script[type="application/h4s+json"]') || { textContent: '{}' }).textContent) || {}).meta || {}).lang || '';
+    var _nav = (navigator.language || 'zh');
+    UILANG = (_ovr === 'zh' || _ovr === 'en') ? _ovr : (/^zh/i.test(_mlang || _nav) ? 'zh' : 'en');
+  } catch (err) {}
+  function t(k) { return (UI_STR[UILANG] && UI_STR[UILANG][k]) || UI_STR.zh[k] || k; }
+  /* 占位符版本：t 的键值里 {0}/{1} 依次替换为后续参数 */
+  function tf(k) {
+    var s = t(k);
+    for (var i = 1; i < arguments.length; i++) s = s.split('{' + (i - 1) + '}').join(String(arguments[i]));
+    return s;
+  }
+
+  /* 浏览模式 UI 深浅色 */
+  var uiTheme = 'dark';
+  function applyUiTheme(t) {
+    uiTheme = t;
+    document.body.setAttribute('data-ui', t);
+    try { localStorage.setItem('h4s-ui-theme', t); } catch (err) {}
+    shellAction('theme', t);  /* 桌面壳同步标题栏深浅色 */
+  }
+  function updateThemeBtn() {
+    if (!browseBar) return;
+    var b = browseBar.querySelector('[data-bact="theme"]');
+    if (b) b.textContent = uiTheme === 'light' ? t('toDark') : t('toLight');
+  }
+  try { uiTheme = localStorage.getItem('h4s-ui-theme') || 'dark'; } catch (err) {}
+
+  /* 壳握手：postMessage 'hello' → 壳回 'hello' 才认定 shell 可用。
+     应用内浏览器等 WebView2 宿主虽存在 chrome.webview 但不处理 h4sShell —— 按钮保持隐藏。 */
+  var shellReady = false;
+  var fileInput = null;
+  var pendingSave = null; /* 壳内导出写回：等待 h4sSaved 回执期间的导出 HTML
+    （此前从未声明赋值——回执分支是死代码，写回失败时用户无从得知） */
+  try {
+    if (window.chrome && window.chrome.webview) {
+      window.chrome.webview.addEventListener('message', function (e) {
+        try {
+          var m = typeof e.data === 'string' ? JSON.parse(e.data) : e.data;
+          if (m && m.h4sSaved !== undefined && pendingSave) {
+            var out = pendingSave; pendingSave = null;
+            if (m.h4sSaved) {
+              toast(t('writeBackOk'));
+            } else {
+              toast(tf('writeBackFail', m.reason || '-'));
+              downloadEdited(out, true); /* 失败提示已在前面，下载不再抢 toast */
+            }
+            return;
+          }
+          if (m && m.h4sShellHello && !shellReady) {
+            shellReady = true;
+            shellAction('theme', uiTheme);  /* 握手即同步当前主题（localStorage 恢复的场景） */
+          }
+        } catch (err) {}
+      });
+      window.chrome.webview.postMessage(JSON.stringify({ h4sShell: 'hello' }));
+    }
+  } catch (e) {}
+  function emit(type, detail) { document.dispatchEvent(new CustomEvent(type, { detail: detail })); }
+
+  /* ================================================================
+   * 样式（内嵌，注入一次）
+   * ================================================================ */
+  var CSS = [
+    '/* h4s-core injected */',
+    'body.h4s-live{overflow:hidden!important;}',
+    '.h4s-live h4s-deck,.h4s-live .slides{display:none!important;}',
+    /* 背景特效层：仅放映模式渲染 */
+    '.h4s-fx{display:none;}',
+    'body.h4s-live .h4s-fx{display:block;}',
+    '.h4s-live h4s-notes,.h4s-live .h4s-notes-el{display:none!important;}',
+
+    '.h4s-viewport{position:fixed;top:0;left:0;right:var(--h4s-reserve,0px);bottom:0;',
+    '  display:flex;align-items:center;justify-content:center;',
+    '  background:var(--h4s-letterbox,#000);}',
+    '.h4s-holder{position:relative;flex:none;transform-origin:center center;}',
+    '.h4s-holder > .h4s-in{position:absolute!important;top:0!important;left:0!important;',
+    '  width:100%!important;height:100%!important;margin:0!important;',
+    '  max-width:none!important;max-height:none!important;overflow:hidden;}',
+
+    /* 碎片：live 模式下未显示的碎片默认隐藏（文档模式/打印不受影响） */
+    '.h4s-live [data-h4s-frag]:not(.is-frag-visible),',
+    '.h4s-live .fragment:not(.is-frag-visible){opacity:0!important;',
+    '  transform:var(--h4s-frag-t,translateY(16px))!important;pointer-events:none!important;}',
+    '.h4s-live [data-h4s-frag],.h4s-live .fragment{transition:opacity .35s ease,transform .35s ease;}',
+    '.h4s-live .is-frag-visible{opacity:1!important;transform:none!important;}',
+
+    /* 进度条 / 自动播放倒计时条 */
+    '.h4s-progress{position:fixed;top:0;left:0;height:3px;width:0;background:#38bdf8;z-index:70;transition:width .25s;}',
+    '.h4s-autobar{position:fixed;bottom:0;left:0;height:3px;width:0;background:#fbbf24;z-index:71;pointer-events:none;}',
+
+    /* 遮罩式转场覆盖层（curtain/blinds/checkerboard/pixelate） */
+    '.h4s-tmask{position:absolute;inset:0;z-index:50;pointer-events:none;overflow:hidden;}',
+
+    /* 网页放映：普通 HTML（无幻灯片结构）的兼容播放 */
+    '.h4s-webp .h4s-webhint{display:none!important;}',
+    '.h4s-webhint{position:fixed;left:14px;bottom:14px;z-index:66;background:#1e293b;color:#93c5fd;',
+    '  font-size:13px;padding:8px 14px;border-radius:6px;border:1px solid #334155;}',
+    'body[data-ui] .h4s-webhint{background:#1e293b;}',
+    '.h4s-webbadge{position:fixed;right:16px;bottom:14px;z-index:66;background:rgba(13,17,23,.85);color:#c9d1d9;',
+    '  font:13px system-ui;padding:6px 12px;border-radius:6px;pointer-events:none;}',
+    'body.h4s-webp .h4s-webbadge{display:block;}',
+    '.h4s-webbadge{display:none;}',
+
+    /* 文字微调（浏览模式编辑） */
+    'body.h4s-editing .h4s-clone [data-h4s-editable]{outline:1px dashed rgba(59,130,246,.55);outline-offset:2px;cursor:text;}',
+    'body.h4s-editing .h4s-clone [data-h4s-editable][contenteditable="true"]{outline:2px solid #3b82f6;background:rgba(59,130,246,.06);}',
+    '.h4s-editing-tip{position:fixed;left:14px;bottom:46px;z-index:66;background:#1e293b;color:#93c5fd;',
+    '  font-size:13px;padding:6px 12px;border-radius:6px;border:1px solid #334155;pointer-events:none;}',
+    'body[data-ui="light"] .h4s-editing-tip{background:#f1f5f9;color:#0369a1;border-color:#cbd5e1;}',
+    '.h4s-edit-lack{outline:2px solid #f59e0b !important;outline-offset:2px;}',
+
+    /* 背景特效层（stars/snow/dust/confetti）——置于内容之下、deck 自带背景之上 */
+    '.h4s-fx{position:absolute;inset:0;z-index:1;pointer-events:none;}',
+    'body.h4s-browse .h4s-fx{z-index:2;border-radius:6px;}',
+    '.h4s-fx canvas{width:100%;height:100%;}',
+
+    /* 底部工具条 */
+    '.h4s-chrome{position:fixed;left:0;right:var(--h4s-reserve,0px);bottom:0;z-index:70;',
+    '  display:flex;justify-content:space-between;align-items:center;padding:6px 14px;',
+    '  background:linear-gradient(to top,rgba(8,10,14,.88),rgba(8,10,14,0));',
+    '  color:#cbd5e1;font:13px/1 system-ui,-apple-system,sans-serif;transition:opacity .3s;}',
+    'body.h4s-idle .h4s-chrome,body.h4s-kiosk .h4s-chrome{opacity:0;pointer-events:none;}',
+    '.h4s-chrome button{all:unset;cursor:pointer;padding:6px 9px;border-radius:6px;font-size:14px;line-height:1;}',
+    '.h4s-chrome button:hover{background:rgba(148,163,184,.22);color:#fff;}',
+    '.h4s-counter{font-variant-numeric:tabular-nums;margin:0 6px;letter-spacing:1px;}',
+    '.h4s-timer{font-variant-numeric:tabular-nums;margin:0 6px;opacity:.85;}',
+
+    /* 黑屏 / 白屏 */
+    '.h4s-blackout{position:fixed;inset:0;z-index:80;background:#000;display:none;}',
+    '.h4s-blackout.is-white{background:#fff;}',
+    '.h4s-blackout.is-on{display:block;}',
+
+    /* 总览网格 */
+    '.h4s-overview{position:fixed;top:0;left:0;right:var(--h4s-reserve,0px);bottom:44px;z-index:50;',
+    '  overflow:auto;background:rgba(6,8,12,.97);',
+    '  display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:18px;',
+    '  padding:28px 40px;align-content:start;}',
+    '.h4s-overview[hidden]{display:none;}',
+    '.h4s-cell{cursor:pointer;border-radius:8px;outline:none;}',
+    '.h4s-cell .h4s-thumb{position:relative;overflow:hidden;background:#0b0f14;',
+    '  border:1px solid rgba(148,163,184,.25);border-radius:6px;margin:0 auto;}',
+    '.h4s-cell.is-cur .h4s-thumb{border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.4);}',
+    '.h4s-cell.is-focus .h4s-thumb{border-color:#fbbf24;}',
+    '.h4s-cell .h4s-meta{display:flex;gap:8px;margin-top:6px;color:#94a3b8;font:12px/1.4 system-ui;}',
+    '.h4s-cell .h4s-meta b{color:#e2e8f0;font-variant-numeric:tabular-nums;}',
+    '.h4s-cell .h4s-meta span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+
+    /* 演讲者抽屉（同屏练习模式） */
+    '.h4s-drawer{position:fixed;top:0;right:0;bottom:0;width:400px;z-index:60;background:#0d1117;',
+    '  border-left:1px solid #1f2937;color:#cbd5e1;font:14px/1.5 system-ui,sans-serif;',
+    '  display:flex;flex-direction:column;transform:translateX(100%);}',
+    'body.h4s-presenting{--h4s-reserve:400px;}',
+    'body.h4s-presenting .h4s-drawer{transform:none;}',
+    '.h4s-drawer h3{margin:0;padding:12px 16px;font-size:13px;color:#7dd3fc;display:flex;justify-content:space-between;font-weight:600;}',
+    '.h4s-drawer .h4s-draw-prev{padding:0 16px;}',
+    '.h4s-drawer .h4s-draw-box{position:relative;overflow:hidden;background:#0b0f14;',
+    '  border:1px solid #1f2937;border-radius:6px;}',
+    '.h4s-drawer .h4s-draw-cap{font-size:12px;color:#64748b;margin:8px 0 10px;}',
+    '.h4s-drawer .h4s-draw-notes{flex:1;overflow:auto;padding:4px 16px 8px;}',
+    '.h4s-drawer .h4s-draw-notes .body{color:#e2e8f0;}',
+    '.h4s-drawer .h4s-draw-notes .body img{max-width:100%;}',
+    '.h4s-drawer .h4s-draw-foot{display:flex;gap:14px;padding:10px 16px;border-top:1px solid #1f2937;',
+    '  font-variant-numeric:tabular-nums;font-size:13px;}',
+    '.h4s-drawer .h4s-draw-foot b{color:#7dd3fc;font-weight:600;}',
+
+    /* 帮助层 */
+    '.h4s-help{position:fixed;inset:0;z-index:78;background:rgba(6,8,12,.96);color:#cbd5e1;',
+    '  display:none;place-items:center;font:14px/1.6 system-ui;}',
+    '.h4s-help.is-on{display:grid;}',
+    '.h4s-help h2{color:#7dd3fc;margin:0 0 12px;font-size:18px;}',
+    '.h4s-help table{border-collapse:collapse;}',
+    '.h4s-help td{padding:4px 14px;border-bottom:1px solid #1e293b;}',
+    '.h4s-help kbd{background:#1e293b;padding:2px 7px;border-radius:4px;',
+    '  font:12px ui-monospace,Consolas,monospace;color:#e2e8f0;}',
+
+    /* 提示条 */
+    '.h4s-toast{position:fixed;bottom:52px;left:50%;transform:translateX(-50%);z-index:100;',
+    '  background:rgba(15,23,42,.92);color:#e2e8f0;padding:8px 16px;border-radius:8px;',
+    '  font:13px system-ui;opacity:0;transition:opacity .25s;pointer-events:none;}',
+    '.h4s-toast.is-on{opacity:1;}',
+
+    /* 激光笔 */
+    'body.h4s-laser,body.h4s-laser *{cursor:none!important;}',
+    '.h4s-laser-dot{position:fixed;z-index:120;width:16px;height:16px;margin:-8px 0 0 -8px;',
+    '  border-radius:50%;pointer-events:none;display:none;',
+    '  background:radial-gradient(circle,rgba(255,60,60,.95),rgba(255,0,0,.35) 55%,transparent 70%);',
+    '  box-shadow:0 0 14px rgba(255,30,30,.8);}',
+    'body.h4s-laser .h4s-laser-dot{display:block;}',
+
+    /* 浏览模式（PowerPoint 式开场：缩略图 + 当前页预览 + 放映按钮） */
+    'body.h4s-browse .h4s-viewport,body.h4s-browse .h4s-chrome{display:none;}',
+    '.h4s-browsebar{position:fixed;top:0;left:0;right:0;height:52px;z-index:65;display:none;',
+    '  align-items:center;gap:12px;padding:0 16px;background:#0d1117;border-bottom:1px solid #1f2937;',
+    '  color:#cbd5e1;font:14px/1 system-ui,-apple-system,sans-serif;}',
+    'body.h4s-browse .h4s-browsebar{display:flex;}',
+    '.h4s-browsebar button[data-bact="playcur"]{margin-left:auto;}',
+    '.h4s-pageinfo{margin-left:auto;align-self:center;font-size:13px;color:#94a3b8;',
+    'padding:0 12px;user-select:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:30%;}',
+    '.h4s-pageinfo b{color:#e2e8f0;font-weight:600;}',
+    '.h4s-browsebar button{all:unset;cursor:pointer;padding:8px 14px;border-radius:6px;font-size:13px;}',
+    '.h4s-browsebar button:hover{background:#1e293b;}',
+    '.h4s-browsebar .h4s-play{background:#2563eb;color:#fff;font-weight:600;}',
+    '.h4s-browsebar .h4s-play:hover{background:#1d4ed8;}',
+    '.h4s-sidebar{position:fixed;top:52px;left:0;bottom:0;width:232px;z-index:64;display:none;',
+    '  overflow:auto;background:#111827;border-right:1px solid #1f2937;padding:12px;}',
+    'body.h4s-browse .h4s-sidebar{display:block;}',
+    '.h4s-sidecell{cursor:pointer;border-radius:8px;padding:6px;margin-bottom:10px;outline:none;',
+    '  transition:background .15s ease;}',
+    '.h4s-sidecell:hover{background:rgba(148,163,184,.08);}',
+    '.h4s-sidecell .h4s-thumb{position:relative;overflow:hidden;background:#0b0f14;',
+    '  border:1px solid rgba(148,163,184,.25);border-radius:4px;margin:0 auto;',
+    '  transition:border-color .15s ease,box-shadow .15s ease;}',
+    '.h4s-sidecell.is-sel .h4s-thumb{border-color:#38bdf8;box-shadow:0 0 0 2px rgba(56,189,248,.35);}',
+    '.h4s-sidecell .h4s-meta{color:#94a3b8;font:11px/1.4 system-ui;margin-top:5px;display:flex;gap:6px;}',
+    '.h4s-sidecell .h4s-meta b{color:#e2e8f0;}',
+    '.h4s-sidecell .h4s-meta span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}',
+    '.h4s-stagebox{position:fixed;top:52px;left:232px;right:0;bottom:0;z-index:63;display:none;',
+    '  align-items:center;justify-content:center;background:var(--h4s-letterbox,#000);}',
+    'body.h4s-browse .h4s-stagebox{display:flex;}',
+    '.h4s-stagebox .h4s-mini{position:relative;flex:none;}',
+
+    /* 现代化滚动条（VS Code 风格：细圆角半透明，悬停加深） */
+    '.h4s-sidebar,.h4s-overview,.h4s-draw-notes,.h4s-help,.h4s-pres .notes{',
+    '  scrollbar-width:thin;scrollbar-color:rgba(148,163,184,.3) transparent;}',
+    '.h4s-sidebar::-webkit-scrollbar,.h4s-overview::-webkit-scrollbar,',
+    '.h4s-draw-notes::-webkit-scrollbar,.h4s-help::-webkit-scrollbar,',
+    '.h4s-pres .notes::-webkit-scrollbar{width:9px;height:9px;}',
+    '.h4s-sidebar::-webkit-scrollbar-track,.h4s-overview::-webkit-scrollbar-track,',
+    '.h4s-draw-notes::-webkit-scrollbar-track,.h4s-help::-webkit-scrollbar-track,',
+    '.h4s-pres .notes::-webkit-scrollbar-track{background:transparent;}',
+    '.h4s-sidebar::-webkit-scrollbar-thumb,.h4s-overview::-webkit-scrollbar-thumb,',
+    '.h4s-draw-notes::-webkit-scrollbar-thumb,.h4s-help::-webkit-scrollbar-thumb,',
+    '.h4s-pres .notes::-webkit-scrollbar-thumb{background:rgba(148,163,184,.3);',
+    '  border-radius:8px;border:2px solid transparent;background-clip:content-box;}',
+    '.h4s-sidebar::-webkit-scrollbar-thumb:hover,.h4s-overview::-webkit-scrollbar-thumb:hover,',
+    '.h4s-draw-notes::-webkit-scrollbar-thumb:hover,.h4s-help::-webkit-scrollbar-thumb:hover,',
+    '.h4s-pres .notes::-webkit-scrollbar-thumb:hover{background-color:rgba(148,163,184,.6);}',
+
+    /* ---- 主题变量（浏览模式 UI） ---- */
+    'body{--ui-bg:#0d1117;--ui-bg2:#111827;--ui-bg3:#1e293b;--ui-border:#1f2937;',
+    '  --ui-text:#cbd5e1;--ui-hi:#e2e8f0;--ui-dim:#94a3b8;--ui-accent:#38bdf8;',
+    '  --ui-letterbox:#161b22;}',
+    'body[data-ui="light"]{--ui-bg:#f8fafc;--ui-bg2:#f1f5f9;--ui-bg3:#e2e8f0;--ui-border:#d4dce6;',
+    '  --ui-text:#334155;--ui-hi:#0f172a;--ui-dim:#64748b;--ui-accent:#0369a1;',
+    '  --ui-letterbox:#d4dce6;}',
+
+    /* 缩略图克隆 */
+    '.h4s-clone{position:absolute!important;top:0!important;left:0!important;margin:0!important;transform-origin:0 0!important;}',
+
+    /* ---- 深浅色切换：浅色覆盖（仅浏览模式 UI 表面） ---- */
+    'body[data-ui="light"] .h4s-browsebar{background:#f8fafc;border-bottom-color:#d4dce6;color:#334155;}',
+    'body[data-ui="light"] .h4s-browsebar .h4s-title{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-browsebar button{color:#334155;}',
+    'body[data-ui="light"] .h4s-browsebar button:hover{background:#dde5ee;}',
+    'body[data-ui="light"] .h4s-pageinfo{color:#64748b;}',
+    'body[data-ui="light"] .h4s-pageinfo b{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-browsebar .h4s-play{background:#2563eb;color:#fff;}',
+    'body[data-ui="light"] .h4s-browsebar .h4s-play:hover{background:#1d4ed8;}',
+    'body[data-ui="light"] .h4s-sidebar{background:#f1f5f9;border-right-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-sidecell .h4s-thumb{border-color:#c4cdd8;background:#fff;}',
+    'body[data-ui="light"] .h4s-sidecell.is-sel .h4s-thumb{border-color:#0369a1;box-shadow:0 0 0 2px rgba(3,105,161,.3);}',
+    'body[data-ui="light"] .h4s-sidecell .h4s-meta{color:#64748b;}',
+    'body[data-ui="light"] .h4s-sidecell .h4s-meta b{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-sidecell:hover{background:#e8edf3;}',
+    'body[data-ui="light"] .h4s-stagebox{background:var(--ui-letterbox);}',
+    'body[data-ui="light"] .h4s-drawer{background:#f8fafc;border-left-color:#d4dce6;color:#334155;}',
+    'body[data-ui="light"] .h4s-drawer h3{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-box{background:#fff;border-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-notes .body{color:#0f172a;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-foot{border-top-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-drawer .h4s-draw-foot b{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-help{background:rgba(255,255,255,.97);color:#334155;}',
+    'body[data-ui="light"] .h4s-help h2{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-help td{border-bottom-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-help kbd{background:#e2e8f0;color:#0f172a;}',
+    'body[data-ui="light"] .h4s-pres{background:#f8fafc;}',
+    'body[data-ui="light"] .h4s-pres .box{background:#fff;border-color:#d4dce6;}',
+    'body[data-ui="light"] .h4s-pres .notes{background:#fff;border-color:#d4dce6;color:#0f172a;}',
+    'body[data-ui="light"] .h4s-pres .btns button{border-color:#d4dce6;color:#334155;}',
+    'body[data-ui="light"] .h4s-pres .btns button:hover{background:#e2e8f0;}',
+    'body[data-ui="light"] .h4s-pres .stats .big{color:#0369a1;}',
+    'body[data-ui="light"] .h4s-pres .cap{color:#64748b;}',
+    'body[data-ui="light"] .h4s-pres .notes .body{color:#0f172a;}',
+
+    /* ---- 可拖拽分割条 ---- */
+    '.h4s-splitbar{position:fixed;top:52px;left:calc(var(--h4s-sbw,232px) - 3px);width:7px;bottom:0;',
+    '  z-index:66;cursor:col-resize;}',
+    '.h4s-splitbar:hover,.h4s-splitbar.is-drag{background:rgba(56,189,248,.25);}',
+    '.h4s-sidebar{width:var(--h4s-sbw,232px);}',
+    '.h4s-stagebox{left:var(--h4s-sbw,232px);}',
+    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}'
+  ].join('\n');
+
+  var PRESENTER_CSS = [
+    'body.h4s-presenter{margin:0;background:#0d1117;color:#cbd5e1;font:14px/1.5 system-ui,sans-serif;}',
+    'body.h4s-presenter > *:not(.h4s-pres){display:none!important;}',
+    '.h4s-pres{position:fixed;inset:0;display:flex;gap:12px;padding:12px;background:#0d1117;}',
+    '.h4s-pres .col-l{flex:1.5;display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0;}',
+    '.h4s-pres .col-l .pv{flex:1;min-height:0;display:flex;flex-direction:column;}',
+    '.h4s-pres .col-l .pv .box{flex:1;min-height:0;}',
+    '.h4s-pres .col-r{flex:1;display:flex;flex-direction:column;gap:12px;min-width:0;}',
+    '.h4s-pres .cap{font-size:12px;color:#64748b;margin:0 0 6px;}',
+    '.h4s-pres .box{position:relative;overflow:hidden;background:#0b0f14;border:1px solid #1f2937;border-radius:8px;}',
+    '.h4s-pres .notes{flex:1;overflow:auto;border:1px solid #1f2937;border-radius:8px;padding:12px 16px;color:#e2e8f0;}',
+    '.h4s-pres .notes img{max-width:100%;}',
+    '.h4s-pres .stats{display:flex;gap:18px;align-items:baseline;font-variant-numeric:tabular-nums;}',
+    '.h4s-pres .stats .big{font-size:34px;color:#7dd3fc;}',
+    '.h4s-pres .stats .dim{color:#64748b;font-size:13px;}',
+    '.h4s-pres .btns{display:flex;gap:8px;flex-wrap:wrap;}',
+    '.h4s-pres .btns button{all:unset;cursor:pointer;border:1px solid #1f2937;padding:8px 14px;border-radius:6px;font:13px system-ui;}',
+    '.h4s-pres .btns button:hover{background:#1e293b;}',
+    '.h4s-pres-shade{position:fixed;inset:0;background:#000;display:none;z-index:50;}',
+    '.h4s-pres-shade.is-on{display:block;}',
+    /* 演讲者窗内预览克隆的碎片状态（与舞台一致） */
+    '.h4s-presenter [data-h4s-frag]:not(.is-frag-visible),',
+    '.h4s-presenter .fragment:not(.is-frag-visible){opacity:0!important;',
+    '  transform:var(--h4s-frag-t,translateY(16px))!important;pointer-events:none!important;}',
+    '.h4s-presenter [data-h4s-frag],.h4s-presenter .fragment{transition:opacity .35s ease,transform .35s ease;}',
+    '.h4s-presenter .is-frag-visible{opacity:1!important;transform:none!important;}',
+    '.h4s-presenter .h4s-clone{position:absolute!important;top:0!important;left:0!important;',
+    '  margin:0!important;transform-origin:0 0!important;}',
+    '.h4s-presenter .h4s-pres .box{position:relative;overflow:hidden;}',
+    '.h4s-pres-warn{position:fixed;bottom:10px;left:50%;transform:translateX(-50%);color:#fbbf24;font-size:12px;}'
+  ].join('\n');
+
+  /* ================================================================
+   * 清单与页面采集
+   * ================================================================ */
+  var MANIFEST = {};
+  var DEFAULTS = {};
+  var MSTAGE = { w: 1280, h: 720, fit: 'contain', background: '#000' };
+
+  function readManifest() {
+    var node = $('script[type="application/h4s+json"]');
+    var m = {};
+    if (node) {
+      try { m = JSON.parse(node.textContent) || {}; }
+      catch (e) { console.warn('[h4s] 清单解析失败，使用默认值', e); }
+    }
+    return m;
+  }
+
+  function parseStage(str) {
+    if (!str) return null;
+    var m = /^(\d+)\s*[x×]\s*(\d+)$/.exec(String(str).trim());
+    return m ? { w: +m[1], h: +m[2] } : null;
+  }
+
+  function stageFor(slide) { return (slide && slide.stage) || MSTAGE; }
+
+  function collectFrags(root) {
+    return $$('[data-h4s-frag], .fragment', root)
+      .map(function (n, i) {
+        var order = parseInt(n.getAttribute('data-h4s-frag-order') ||
+          n.getAttribute('data-fragment-index') || String(i), 10);
+        return { n: n, i: i, order: isNaN(order) ? i : order };
+      })
+      .sort(function (a, b) { return (a.order - b.order) || (a.i - b.i); })
+      .map(function (x) { return x.n; });
+  }
+
+  function collectSlides() {
+    var nodes = $$('h4s-slide');
+    if (!nodes.length) {
+      var root = $('h4s-deck') || $('.slides') || document.body;
+      nodes = Array.prototype.slice.call(root.children).filter(function (n) {
+        return n.tagName === 'SECTION' || n.classList.contains('slide');
+      });
+    }
+    return nodes.map(function (n, index) {
+      var notesEl = n.querySelector(':scope > h4s-notes, :scope > aside.notes, :scope > .notes, :scope > .h4s-notes');
+      if (notesEl) notesEl.classList.add('h4s-notes-el');
+      var title = (n.getAttribute('data-h4s-title') ||
+        (n.querySelector('h1,h2,.title') ? n.querySelector('h1,h2,.title').textContent : '') || '').trim();
+      return {
+        el: n,
+        index: index,
+        id: n.id || ('slide-' + (index + 1)),
+        title: title || ('第 ' + (index + 1) + ' 页'),
+        stage: parseStage(n.getAttribute('data-h4s-stage')),
+        transition: (n.getAttribute('data-h4s-transition') || '').trim().toLowerCase(),
+        autoslide: parseFloat(n.getAttribute('data-h4s-autoslide')) || 0,
+        notesEl: notesEl,
+        frags: collectFrags(n)
+      };
+    });
+  }
+
+  function deckId() {
+    if (MANIFEST.id) return String(MANIFEST.id);
+    var t = (MANIFEST.meta && MANIFEST.meta.title) || document.title;
+    var s = t + '|' + S.slides.length;
+    var h = 0;
+    for (var i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) >>> 0;
+    return 'd' + h.toString(36);
+  }
+
+  /* ================================================================
+   * 状态
+   * ================================================================ */
+  var S = {
+    i: 0, f: -1, n: 0, overlay: null, lock: false, queued: null,
+    kiosk: false, loop: false, slides: [], fragTimers: [],
+    presenting: false, sel: 0   /* presenting: 放映中；sel: 浏览模式选中页 */
+  };
+  var T = {
+    bootAt: Date.now(), slideAt: Date.now(),
+    paused: false, pausedAt: 0, pausedTotal: 0, ptAtSlide: 0,
+    autoPausedAcc: 0, autoPauseAt: 0
+  };
+  var RH = { on: false, log: [] };
+  var AUTO_PARAM = 0;      // #auto=N
+  var drawerOn = false;
+  var shownEl = null;      // 当前显示的 slide 元素
+  var bus = null;
+  var isStage = false;     // 本窗口是否为舞台（真值持有者）
+  var numBuf = '', numTimer = 0;
+
+  function totalSec() { return (Date.now() - T.bootAt - T.pausedTotal) / 1000; }
+  function dwell() { return (Date.now() - T.slideAt - (T.pausedTotal - T.ptAtSlide)) / 1000; }
+  function autoDur() {
+    var s = S.slides[S.i];
+    return (s && s.autoslide) || (DEFAULTS.autoslide || 0) || AUTO_PARAM || 0;
+  }
+
+  /* ================================================================
+   * DOM 构建
+   * ================================================================ */
+  var app, viewport, holder, chrome, progress, autoBar, blackout, overviewEl,
+      helpEl, toastEl, drawer, laserDot;
+
+  function buildApp() {
+    var style = el('style', null, CSS);
+    style.setAttribute('data-h4s-style', '');
+    document.head.appendChild(style);
+
+    app = el('div', 'h4s-app');
+    viewport = el('div', 'h4s-viewport');
+    holder = el('div', 'h4s-holder');
+    viewport.appendChild(holder);
+
+    progress = el('div', 'h4s-progress');
+    autoBar = el('div', 'h4s-autobar');
+
+    chrome = el('div', 'h4s-chrome');
+    chrome.innerHTML =
+      '<div class="h4s-chrome-left">' +
+        '<button data-act="prev" aria-label="' + t('prevT') + '" title="' + t('prevT') + '">‹</button>' +
+        '<button data-act="next" aria-label="' + t('nextT') + '" title="' + t('nextT') + '">›</button>' +
+        '<span class="h4s-counter" role="status" aria-live="polite"><b id="h4s-cur">1</b> / <span id="h4s-total">0</span>' +
+        '<span id="h4s-numbuf" style="color:#fbbf24"></span></span>' +
+      '</div>' +
+      '<div class="h4s-chrome-right">' +
+        '<span class="h4s-timer" id="h4s-timer" title="' + t('timerT') + '">00:00</span>' +
+        '<button data-act="rehearse" aria-label="' + t('rehearseT') + '" title="' + t('rehearseT') + '">⏺</button>' +
+        '<button data-act="laser" aria-label="' + t('laserT') + '" title="' + t('laserT') + '">◎</button>' +
+        '<button data-act="black" aria-label="' + t('blackT') + '" title="' + t('blackT') + '">●</button>' +
+        '<button data-act="overview" aria-label="' + t('overviewT') + '" title="' + t('overviewT') + '">⊞</button>' +
+        '<button data-act="drawer" aria-label="' + t('drawerT') + '" title="' + t('drawerT') + '">☰</button>' +
+        '<button data-act="preswin" aria-label="' + t('preswinT') + '" title="' + t('preswinT') + '">⧉</button>' +
+        '<button data-act="fullscreen" aria-label="' + t('fullscreenT') + '" title="' + t('fullscreenT') + '">⛶</button>' +
+        '<button data-act="help" aria-label="' + t('helpT') + '" title="' + t('helpT') + '">?</button>' +
+      '</div>';
+
+    blackout = el('div', 'h4s-blackout');
+    overviewEl = el('div', 'h4s-overview');
+    overviewEl.hidden = true;
+
+    helpEl = el('div', 'h4s-help');
+    helpEl.innerHTML =
+      '<div><h2>html4s 播放器 v' + VERSION + ' — ' + t('helpTitle') + '</h2><table>' +
+      '<tr><td><kbd>→ ↓ 空格 PgDn Enter</kbd></td><td>' + t('hNext') + '</td></tr>' +
+      '<tr><td><kbd>← ↑ PgUp Backspace</kbd></td><td>' + t('hPrev') + '</td></tr>' +
+      '<tr><td><kbd>Home / End</kbd></td><td>' + t('hHome') + '</td></tr>' +
+      '<tr><td><kbd>' + t('numEnter') + '</kbd></td><td>' + t('hNum') + '</td></tr>' +
+      '<tr><td><kbd>B</kbd> / <kbd>W</kbd></td><td>' + t('hBlack') + '</td></tr>' +
+      '<tr><td><kbd>G</kbd> / <kbd>S</kbd></td><td>' + t('hGrid') + '</td></tr>' +
+      '<tr><td><kbd>T</kbd> / <kbd>R</kbd></td><td>' + t('hTime') + '</td></tr>' +
+      '<tr><td><kbd>L</kbd></td><td>' + t('hLaser') + '</td></tr>' +
+      '<tr><td><kbd>J</kbd></td><td>' + t('hRemote') + '</td></tr>' +
+      '<tr><td><kbd>F</kbd></td><td>' + t('hFull') + '</td></tr>' +
+      '<tr><td><kbd>Esc</kbd></td><td>' + t('hEsc') + '</td></tr>' +
+      '</table></div>';
+
+    toastEl = el('div', 'h4s-toast');
+    laserDot = el('div', 'h4s-laser-dot');
+    laserDot.setAttribute('aria-hidden', 'true');
+
+    drawer = el('aside', 'h4s-drawer');
+    drawer.innerHTML =
+      '<h3><span>' + t('presenter') + '</span><span>' +
+        '<button data-dact="afont-" title="备注字号减小" style="all:unset;cursor:pointer;padding:2px 7px;">A−</button>' +
+        '<button data-dact="afont+" title="备注字号增大" style="all:unset;cursor:pointer;padding:2px 7px;font-weight:700;">A＋</button>' +
+        '<span id="h4s-draw-clock"></span></span></h3>' +
+      '<div class="h4s-draw-prev">' +
+        '<div class="h4s-draw-box" id="h4s-draw-box"></div>' +
+        '<div class="h4s-draw-cap" id="h4s-draw-cap"></div>' +
+      '</div>' +
+      '<div class="h4s-draw-notes"><div class="cap" style="font-size:12px;color:#64748b;margin:0 0 4px;">' + t('notes') + '</div>' +
+        '<div class="body" id="h4s-draw-notes"></div></div>' +
+      '<div class="h4s-draw-foot">' +
+        '<span>' + t('thisPage') + ' <b id="h4s-t-slide">00:00</b></span>' +
+        '<span>' + t('total') + ' <b id="h4s-t-total">00:00</b></span>' +
+        '<span id="h4s-t-frag"></span>' +
+      '</div>';
+    /* Web 版分享场景：抽屉承担完整 speaker notes 体验——备注字号可调并记忆 */
+    var notesFs = 16;
+    try { notesFs = parseInt(localStorage.getItem('h4s-notes-fs'), 10) || 16; } catch (err) {}
+    function applyNotesFs() {
+      var b = $('#h4s-draw-notes', drawer);
+      if (b) b.style.fontSize = notesFs + 'px';
+      try { localStorage.setItem('h4s-notes-fs', String(notesFs)); } catch (err) {}
+    }
+    on(drawer, 'click', function (e) {
+      var b = e.target.closest('[data-dact]');
+      if (!b) return;
+      notesFs = Math.max(12, Math.min(40, notesFs + (b.getAttribute('data-dact') === 'afont+' ? 2 : -2)));
+      applyNotesFs();
+    });
+    applyNotesFs();
+
+    app.appendChild(viewport);
+    app.appendChild(progress);
+    app.appendChild(autoBar);
+    app.appendChild(chrome);
+    app.appendChild(blackout);
+    app.appendChild(overviewEl);
+    app.appendChild(helpEl);
+    app.appendChild(toastEl);
+    app.appendChild(laserDot);
+    app.appendChild(drawer);
+    document.body.appendChild(app);
+  }
+
+  /* ================================================================
+   * 布局：固定舞台 + 等比缩放
+   * ================================================================ */
+  function applyStageSize(slide) {
+    var st = stageFor(slide);
+    holder.style.width = st.w + 'px';
+    holder.style.height = st.h + 'px';
+  }
+
+  function layout() {
+    if (!S.n) return;
+    var st = stageFor(S.slides[S.i]);
+    holder.style.width = st.w + 'px';
+    holder.style.height = st.h + 'px';
+    var vw = viewport.clientWidth, vh = viewport.clientHeight;
+    if (vw < 10 || vh < 10) return;
+    var scale = (MSTAGE.fit === 'cover')
+      ? Math.max(vw / st.w, vh / st.h)
+      : Math.min(vw / st.w, vh / st.h);
+    holder.style.transform = 'scale(' + scale + ')';
+    document.documentElement.style.setProperty('--h4s-scale', scale);
+  }
+
+  /* ================================================================
+   * 转场（WAAPI）
+   * ================================================================ */
+  var TRANS = {
+    fade: { in: [{ opacity: 0 }, { opacity: 1 }], out: [{ opacity: 1 }, { opacity: 0 }] },
+    slide: { in: [{ transform: 'translateX(50%)', opacity: 0 }, { transform: 'translateX(0)', opacity: 1 }],
+             out: [{ transform: 'translateX(0)', opacity: 1 }, { transform: 'translateX(-35%)', opacity: 0 }] },
+    push: { in: [{ transform: 'translateX(100%)' }, { transform: 'translateX(0)' }],
+            out: [{ transform: 'translateX(0)' }, { transform: 'translateX(-100%)' }] },
+    zoom: { in: [{ transform: 'scale(.85)', opacity: 0 }, { transform: 'scale(1)', opacity: 1 }],
+            out: [{ transform: 'scale(1)', opacity: 1 }, { transform: 'scale(1.12)', opacity: 0 }] },
+    wipe: { in: [{ clipPath: 'inset(0 100% 0 0)' }, { clipPath: 'inset(0 0 0 0)' }],
+            out: [{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(0 0 0 100%)' }] },
+    flip: { in: [{ transform: 'perspective(1400px) rotateY(28deg)', opacity: .2 }, { transform: 'rotateY(0)', opacity: 1 }],
+            out: [{ transform: 'rotateY(0)', opacity: 1 }, { transform: 'perspective(1400px) rotateY(-28deg)', opacity: 0 }] },
+    /* ---- v0.3 扩展：来自 reveal.js / PowerPoint / Motion.dev curtains 的常用效果 ---- */
+    zoomblur: { in: [{ transform: 'scale(1.6)', filter: 'blur(14px)', opacity: 0 }, { transform: 'scale(1)', filter: 'blur(0px)', opacity: 1 }],
+                out: [{ transform: 'scale(1)', filter: 'blur(0px)', opacity: 1 }, { transform: 'scale(.55)', filter: 'blur(10px)', opacity: 0 }] },
+    cube: { in: [{ transform: 'perspective(1200px) translateX(55%) rotateY(-65deg)', opacity: .3 }, { transform: 'perspective(1200px) translateX(0) rotateY(0)', opacity: 1 }],
+            out: [{ transform: 'perspective(1200px) translateX(0) rotateY(0)', opacity: 1 }, { transform: 'perspective(1200px) translateX(-55%) rotateY(65deg)', opacity: .3 }] },
+    iris: { in: [{ clipPath: 'circle(0% at 50% 50%)' }, { clipPath: 'circle(120% at 50% 50%)' }],
+            out: [{ clipPath: 'circle(120% at 50% 50%)' }, { clipPath: 'circle(0% at 50% 50%)' }] },
+    unfold: { in: [{ clipPath: 'inset(50% 0 50% 0)' }, { clipPath: 'inset(0 0 0 0)' }],
+              out: [{ clipPath: 'inset(0 0 0 0)' }, { clipPath: 'inset(50% 0 50% 0)' }] },
+    rise: { in: [{ transform: 'translateY(9%)', opacity: 0, filter: 'saturate(.3)' }, { transform: 'translateY(0)', opacity: 1, filter: 'saturate(1)' }],
+            out: [{ transform: 'translateY(0)', opacity: 1 }, { transform: 'translateY(-6%)', opacity: 0 }] },
+    dissolve: { in: [{ opacity: 0 }, { opacity: 1 }], out: [{ opacity: 1 }, { opacity: 0 }], easing: 'steps(14, end)' }
+  };
+  TRANS.none = null;
+
+  function anim(node, keyframes, dur, easing) {
+    if (!node.animate || !keyframes) return null;
+    try {
+      return node.animate(keyframes, { duration: dur, easing: easing || 'cubic-bezier(.4,0,.2,1)', fill: 'both' });
+    } catch (e) { return null; }
+  }
+
+  /* ---- 遮罩式转场（PowerPoint 幕布/百叶窗/棋盘/像素溶解 的实现方式）：
+     覆盖层先"盖住"视口 → 中点切换页面内容 → 覆盖层揭开。dur 平分两半。 ---- */
+  var MASK_TRANS = { curtain: 1, blinds: 1, checkerboard: 1, pixelate: 1 };
+
+  function buildMask(name, accent) {
+    var m = el('div', 'h4s-tmask');
+    if (name === 'curtain') {
+      /* 两片幕布从上下合拢再展开 */
+      for (var i = 0; i < 2; i++) {
+        var p = el('div');
+        p.style.cssText = 'position:absolute;left:0;width:100%;height:50.5%;background:' + accent +
+          ';transform-origin:' + (i ? 'bottom' : 'top') + ';top:' + (i ? '50%' : '0');
+        m.appendChild(p);
+      }
+    } else if (name === 'blinds') {
+      for (var j = 0; j < 10; j++) {
+        var b = el('div');
+        b.style.cssText = 'position:absolute;left:0;width:100%;height:10.5%;top:' + (j * 10) + '%;background:' + accent +
+          ';transform:scaleY(0);transform-origin:center;';
+        m.appendChild(b);
+      }
+    } else if (name === 'checkerboard' || name === 'pixelate') {
+      var n = name === 'pixelate' ? 10 : 6;
+      var cell = 100 / n;
+      for (var yy = 0; yy < n; yy++) for (var xx = 0; xx < n; xx++) {
+        var c = el('div');
+        c.style.cssText = 'position:absolute;width:' + (cell + .3) + '%;height:' + (cell + .3) + '%;left:' +
+          (xx * cell) + '%;top:' + (yy * cell) + '%;background:' + accent + ';opacity:0;';
+        m.appendChild(c);
+      }
+    }
+    return m;
+  }
+
+  function doMaskTransition(oldEl, newEl, name, dur) {
+    var half = Math.max(120, dur / 2);
+    var accent = (DEFAULTS.transition && DEFAULTS.transition.color) || 'var(--h4s-mask,#c8102e)';
+    var mask = buildMask(name, accent);
+    var stage = $('.h4s-holder') || app;
+    stage.appendChild(mask);
+    /* 新页先显示（在遮罩之下）；旧页的显隐切换延迟到中点——盖住前不能闪回初始态 */
+    newEl.style.display = '';
+    newEl.classList.add('visible', 'active');
+    var nodes = Array.prototype.slice.call(mask.children);
+    var ease = 'cubic-bezier(.65,0,.35,1)';
+    var animsIn = [], animsOut = [];
+    if (name === 'curtain') {
+      nodes.forEach(function (p, i) {
+        animsIn.push(p.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: half, easing: ease, fill: 'forwards', delay: 0 }));
+        animsOut.push(p.animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(0)' }], { duration: half, easing: ease, fill: 'forwards', delay: i ? half * .12 : 0 }));
+      });
+    } else if (name === 'blinds') {
+      nodes.forEach(function (b, i) {
+        animsIn.push(b.animate([{ transform: 'scaleY(0)' }, { transform: 'scaleY(1)' }], { duration: half * .8, easing: ease, fill: 'forwards', delay: i * half * .04 }));
+        animsOut.push(b.animate([{ transform: 'scaleY(1)' }, { transform: 'scaleY(0)' }], { duration: half * .8, easing: ease, fill: 'forwards', delay: i * half * .04 }));
+      });
+    } else { /* checkerboard / pixelate：交错淡入淡出；pixelate 用随机顺序 */
+      var order = nodes.map(function (c, k) { return k; });
+      if (name === 'pixelate') for (var k = order.length - 1; k > 0; k--) { var r = (Math.random() * (k + 1)) | 0; var t = order[k]; order[k] = order[r]; order[r] = t; }
+      order.forEach(function (k, seq) {
+        var c = nodes[k];
+        var stagger = seq * half * .6 / order.length;
+        animsIn.push(c.animate([{ opacity: 0 }, { opacity: 1 }], { duration: half * .45, fill: 'forwards', delay: stagger, easing: 'linear' }));
+        animsOut.push(c.animate([{ opacity: 1 }, { opacity: 0 }], { duration: half * .45, fill: 'forwards', delay: stagger, easing: 'linear' }));
+      });
+    }
+    var closeAt = (name === 'blinds') ? half * .9 : half;
+    return sleep(closeAt + 60).then(function () {
+      /* 中点：页面内容切换 */
+      if (oldEl && oldEl !== newEl) {
+        oldEl.style.display = 'none';
+        oldEl.classList.remove('visible', 'active');
+      }
+      animsOut.forEach(function (a) { try { a.play(); } catch (e) {} });
+      return sleep(half + 200).then(function () {
+        try { mask.remove(); } catch (e) {}
+      });
+    });
+  }
+
+  function doTransition(oldEl, newEl, name, dur) {
+    if (newEl) newEl.style.display = '';
+    if (name in MASK_TRANS) {
+      return doMaskTransition(oldEl, newEl, name, dur).then(function () {
+        newEl.style.zIndex = '';
+        if (oldEl && oldEl !== newEl) oldEl.style.display = 'none';
+        confettiBurst({ el: newEl });
+      });
+    }
+    if (!oldEl || oldEl === newEl || !TRANS[name] || dur <= 1) {
+      if (oldEl && oldEl !== newEl) oldEl.style.display = 'none';
+      return Promise.resolve();
+    }
+    var t = TRANS[name];
+    newEl.style.zIndex = 2;
+    oldEl.style.zIndex = 1;
+    var a1 = anim(newEl, t.in, dur, t.easing), a2 = anim(oldEl, t.out, dur, t.easing);
+    return Promise.race([
+      Promise.allSettled([a1 && a1.finished, a2 && a2.finished].filter(Boolean)),
+      sleep(dur + 120)
+    ]).then(function () {
+      try { a1 && a1.cancel(); a2 && a2.cancel(); } catch (e) {}
+      oldEl.style.display = 'none';
+      newEl.style.zIndex = '';
+    });
+  }
+
+  /* ================================================================
+   * 背景特效层（零依赖 canvas）：manifest defaults.fx = "stars"|"snow"|"dust"
+   * 页面级礼花：slide data-h4s-fx="confetti" 进入放映时爆发一次
+   * 仅放映模式渲染；document.hidden 自动暂停
+   * ================================================================ */
+  var fx = { mode: 'none', canvas: null, ctx: null, parts: [], raf: 0 };
+
+  function fxResize() {
+    if (!fx.canvas) return;
+    /* live：舞台画布（deck 分辨率）；browse：预览箱内（按容器实际尺寸） */
+    if (fx.canvas.parentElement === holder) { fx.canvas.width = MSTAGE.w; fx.canvas.height = MSTAGE.h; }
+    else if (miniBox) {
+      var r = miniBox.getBoundingClientRect();
+      fx.canvas.width = Math.max(320, Math.round(r.width));
+      fx.canvas.height = Math.max(180, Math.round(r.height));
+    }
+  }
+
+  function fxMake(mode, w, h) {
+    var r = Math.random;
+    var p = { x: r() * w, y: mode === 'dust' ? h - r() * h : r() * h, s: 1 + r() * 2 };
+    if (mode === 'stars') { p.vx = (r() - .5) * .18; p.vy = (r() - .5) * .18; p.tw = r() * Math.PI * 2; }
+    else if (mode === 'snow') { p.vx = (r() - .5) * .5; p.vy = .35 + r() * .8; p.sw = r() * Math.PI * 2; }
+    else { p.vx = (r() - .5) * .22; p.vy = -(.15 + r() * .35); }
+    return p;
+  }
+
+  function fxTick() {
+    fx.raf = 0;
+    var ctx = fx.ctx, w = fx.canvas.width, h = fx.canvas.height;
+    ctx.clearRect(0, 0, w, h);
+    var i, p;
+    for (i = 0; i < fx.parts.length; i++) {
+      p = fx.parts[i];
+      p.x += p.vx; p.y += p.vy;
+      if (fx.mode === 'stars') { p.tw += .02; if (p.x < 0) p.x += w; if (p.x > w) p.x -= w; if (p.y < 0) p.y += h; if (p.y > h) p.y -= h; }
+      else if (fx.mode === 'snow') { p.sw += .015; p.x += Math.sin(p.sw) * .3; if (p.y > h + 6) { p.y = -6; p.x = Math.random() * w; } }
+      else { if (p.y < -6) { p.y = h + 6; p.x = Math.random() * w; } if (p.x < 0 || p.x > w) p.vx *= -1; }
+      var a = fx.mode === 'stars' ? (.35 + .65 * Math.abs(Math.sin(p.tw))) : fx.mode === 'snow' ? .8 : .45;
+      ctx.globalAlpha = a;
+      ctx.fillStyle = fx.mode === 'dust' ? 'rgba(255,214,140,1)' : '#ffffff';
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.s * (fx.mode === 'snow' ? 1.4 : 1), 0, Math.PI * 2);
+      ctx.fill();
+    }
+    ctx.globalAlpha = 1;
+    fx.raf = requestAnimationFrame(fxTick);
+  }
+
+  function fxStart() {
+    if (fx.mode === 'none' || fx.raf || !fx.canvas) return;
+    fx.raf = requestAnimationFrame(fxTick);
+  }
+  function fxStop() { if (fx.raf) { cancelAnimationFrame(fx.raf); fx.raf = 0; } }
+
+  function initFx() {
+    fx.mode = String((DEFAULTS && DEFAULTS.fx) || 'none').toLowerCase();
+    if (fx.mode === 'none' || fx.mode === 'off') return;
+    if (!fx.canvas) {
+      fx.canvas = el('canvas', 'h4s-fx');
+      fx.canvas.setAttribute('aria-hidden', 'true');
+      fx.ctx = fx.canvas.getContext('2d');
+      on(window, 'resize', fxResize);
+      on(document, 'visibilitychange', function () { document.hidden ? fxStop() : fxStart(); });
+    }
+    if (fx.canvas.parentElement !== holder) {
+      holder.insertBefore(fx.canvas, holder.firstChild);
+      fxResize();
+      fxStart();
+    }
+    var w = fx.canvas.width, h = fx.canvas.height;
+    var N = fx.mode === 'stars' ? 150 : fx.mode === 'snow' ? 120 : 90;
+    fx.parts = [];
+    for (var i = 0; i < N; i++) fx.parts.push(fxMake(fx.mode, w, h));
+    fxStart();
+  }
+
+  /* 礼花（页面级 data-h4s-fx="confetti"）：内容之上的独立画布，爆发一次 */
+  var confetti = { canvas: null, ctx: null, parts: [], raf: 0 };
+
+  function confettiBurst(slide) {
+    if ((slide.el.getAttribute('data-h4s-fx') || '').toLowerCase() !== 'confetti') return;
+    if (!confetti.canvas) {
+      confetti.canvas = el('canvas', 'h4s-fx');
+      confetti.canvas.setAttribute('aria-hidden', 'true');
+      confetti.canvas.style.zIndex = 60;
+      holder.appendChild(confetti.canvas);
+      confetti.ctx = confetti.canvas.getContext('2d');
+      var size = function () { confetti.canvas.width = MSTAGE.w; confetti.canvas.height = MSTAGE.h; };
+      size();
+      on(window, 'resize', size);
+    }
+    confetti.canvas.width = MSTAGE.w;
+    var w = confetti.canvas.width, h = confetti.canvas.height, r = Math.random;
+    var colors = ['#c8102e', '#fbbf24', '#2563eb', '#10b981', '#ffffff'];
+    for (var i = 0; i < 130; i++) {
+      confetti.parts.push({
+        x: w / 2 + (r() - .5) * w * .5, y: h * .35 + (r() - .5) * 80,
+        vx: (r() - .5) * 9, vy: -(4 + r() * 9),
+        w: 5 + r() * 7, hh: 3 + r() * 5, rot: r() * Math.PI, vr: (r() - .5) * .3,
+        color: colors[(r() * colors.length) | 0], life: 1
+      });
+    }
+    if (!confetti.raf) confettiRun();
+  }
+
+  function confettiRun() {
+    confetti.raf = requestAnimationFrame(function () {
+      var ctx = confetti.ctx, w = confetti.canvas.width, h = confetti.canvas.height;
+      ctx.clearRect(0, 0, w, h);
+      var alive = 0;
+      confetti.parts = confetti.parts.filter(function (p) {
+        p.vy += .18; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life -= .008;
+        return p.life > 0 && p.y < h + 20;
+      });
+      confetti.parts.forEach(function (p) {
+        ctx.save();
+        ctx.globalAlpha = Math.max(0, Math.min(1, p.life * 1.6));
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w / 2, -p.hh / 2, p.w, p.hh);
+        ctx.restore();
+        alive++;
+      });
+      if (alive) confettiRun();
+      else { confetti.raf = 0; ctx.clearRect(0, 0, w, h); confetti.parts = []; }
+    });
+  }
+
+  /* ================================================================
+   * 碎片
+   * ================================================================ */
+  var FRAG_T = {
+    'fade-up': 'translateY(16px)', 'slide-left': 'translateX(32px)',
+    'slide-right': 'translateX(-32px)', 'zoom': 'scale(.9)',
+    'fade': 'none', 'none': 'none'
+  };
+
+  function applyFragEffect(n) {
+    var eff = n.getAttribute('data-h4s-frag') ||
+      (DEFAULTS.fragment && DEFAULTS.fragment.effect) || 'fade-up';
+    n.style.setProperty('--h4s-frag-t', FRAG_T[eff] || FRAG_T['fade-up']);
+    if (eff === 'none') n.style.transition = 'none';
+  }
+
+  function setFragClasses(slide, f) {
+    slide.frags.forEach(function (n, idx) {
+      n.classList.toggle('is-frag-visible', idx <= f);
+    });
+  }
+
+  function revealFrag(k) {
+    var s = S.slides[S.i];
+    if (!s || k < 0 || k >= s.frags.length) return;
+    applyFragEffect(s.frags[k]);
+    s.frags[k].classList.add('is-frag-visible');
+    S.f = k;
+    updateChrome(); updateDrawer(); sendState(); updateHash();
+    emit('h4s:fragchange', { index: S.i, frag: k, total: s.frags.length });
+  }
+
+  function hideFrag(k) {
+    var s = S.slides[S.i];
+    if (!s || k < 0 || k >= s.frags.length) return;
+    s.frags[k].classList.remove('is-frag-visible');
+    S.f = k - 1;
+    updateChrome(); updateDrawer(); sendState(); updateHash();
+    emit('h4s:fragchange', { index: S.i, frag: S.f, total: s.frags.length });
+  }
+
+  /* ================================================================
+   * 导航
+   * ================================================================ */
+  function go(i, mode) {
+    i = clamp(i, 0, S.n - 1);
+    if (i === S.i && mode !== 'jump' && shownEl) return;
+    if (S.lock) { S.queued = { i: i, mode: mode }; return; }
+
+    var prevSlide = S.slides[S.i];
+    var nextSlide = S.slides[i];
+    if (RH.on && T.slideAt) RH.log.push({ page: S.i + 1, seconds: +dwell().toFixed(1), frags: S.f + 1 });
+
+    S.i = i;
+    S.f = (mode !== 'fwd' && nextSlide.frags.length) ? nextSlide.frags.length - 1 : -1;
+    setFragClasses(nextSlide, S.f);
+
+    var name = nextSlide.transition || (DEFAULTS.transition && DEFAULTS.transition.name) || 'fade';
+    var dur = (DEFAULTS.transition && DEFAULTS.transition.duration != null) ? DEFAULTS.transition.duration : 300;
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) dur = 60;
+
+    S.lock = true;
+    applyStageSize(nextSlide);
+    layout();
+
+    var oldEl = shownEl;
+    shownEl = nextSlide.el;
+    if (oldEl && oldEl !== shownEl) oldEl.classList.remove('visible', 'active');
+    shownEl.classList.add('visible', 'active');
+    doTransition(oldEl, shownEl, name, dur).then(function () {
+      if (prevSlide && prevSlide.el !== shownEl) mediaLeave(prevSlide.el);
+      mediaEnter(shownEl);
+      confettiBurst(nextSlide);
+      S.lock = false;
+      if (S.queued) { var q = S.queued; S.queued = null; go(q.i, q.mode); }
+    });
+
+    T.slideAt = Date.now();
+    T.ptAtSlide = T.pausedTotal;
+    T.autoPausedAcc = 0; T.autoPauseAt = 0;
+    scheduleAutoFrags(i);
+    updateChrome(); updateDrawer(); sendState(); updateHash();
+    emit('h4s:slidechange', { index: S.i, id: nextSlide.id, title: nextSlide.title, frags: nextSlide.frags.length, frag: S.f });
+  }
+
+  function next() {
+    var s = S.slides[S.i];
+    if (S.f < s.frags.length - 1) { revealFrag(S.f + 1); return; }
+    if (S.i < S.n - 1) go(S.i + 1, 'fwd');
+    else if (S.loop) go(0, 'jump');
+    else toast(t('lastPage'));
+  }
+
+  function prev() {
+    if (S.f >= 0) { hideFrag(S.f); return; }
+    if (S.i > 0) go(S.i - 1, 'back');
+    else if (S.loop) go(S.n - 1, 'jump');
+    else toast(t('firstPage'));
+  }
+
+  function scheduleAutoFrags(i) {
+    S.fragTimers.forEach(clearTimeout);
+    S.fragTimers = [];
+    if (autoDur() <= 0) return;
+    var acc = 600;
+    S.slides[i].frags.forEach(function (n, idx) {
+      if (idx <= S.f) return;
+      var d = parseInt(n.getAttribute('data-h4s-frag-delay') || '0', 10) ||
+        (DEFAULTS.fragment && DEFAULTS.fragment.delay) || 150;
+      acc += d;
+      S.fragTimers.push(setTimeout(function () {
+        if (S.i === i && S.f < idx) revealFrag(idx);
+      }, acc));
+    });
+  }
+
+  /* ================================================================
+   * 浮层：黑/白屏、总览、帮助
+   * ================================================================ */
+  function setOverlay(name) {
+    S.overlay = name;
+    blackout.classList.toggle('is-on', name === 'black' || name === 'white');
+    blackout.classList.toggle('is-white', name === 'white');
+    overviewEl.hidden = name !== 'overview';
+    helpEl.classList.toggle('is-on', name === 'help');
+    if (name === 'overview') OV.sync();
+    sendState();
+  }
+
+  var OV = {
+    built: false, cells: [], focus: 0,
+    build: function () {
+      if (this.built) return;
+      this.built = true;
+      var self = this;
+      S.slides.forEach(function (s, idx) {
+        var cell = el('div', 'h4s-cell');
+        cell.tabIndex = -1;
+        var st = stageFor(s);
+        var sc = Math.min(216 / st.w, 132 / st.h);
+        var thumb = el('div', 'h4s-thumb');
+        thumb.style.width = Math.round(st.w * sc) + 'px';
+        thumb.style.height = Math.round(st.h * sc) + 'px';
+        var clone = makeClone(s, 'final', 0);
+        clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+        thumb.appendChild(clone);
+        cell.appendChild(thumb);
+        cell.appendChild(el('div', 'h4s-meta',
+          '<b>' + (idx + 1) + '</b><span>' + esc(s.title) + '</span>'));
+        cell.setAttribute('role', 'button');
+        cell.setAttribute('aria-label', (idx + 1) + '. ' + s.title);
+        on(cell, 'click', function () { go(idx, 'jump'); setOverlay(null); });
+        overviewEl.appendChild(cell);
+        self.cells.push(cell);
+      });
+    },
+    sync: function () {
+      this.build();
+      this.focus = S.i;
+      this.mark();
+    },
+    mark: function () {
+      var self = this;
+      this.cells.forEach(function (c, idx) {
+        c.classList.toggle('is-cur', idx === S.i);
+        c.classList.toggle('is-focus', idx === self.focus);
+      });
+      var fc = this.cells[this.focus];
+      if (fc && fc.scrollIntoView) fc.scrollIntoView({ block: 'nearest' });
+    },
+    handleKey: function (e) {
+      var k = e.key;
+      if (k === 'Escape' || k === 'g' || k === 'G') { setOverlay(null); e.preventDefault(); return true; }
+      var perRow = Math.max(1, Math.round((overviewEl.clientWidth - 80) / 256));
+      if (k === 'ArrowRight') this.focus = clamp(this.focus + 1, 0, S.n - 1);
+      else if (k === 'ArrowLeft') this.focus = clamp(this.focus - 1, 0, S.n - 1);
+      else if (k === 'ArrowDown') this.focus = clamp(this.focus + perRow, 0, S.n - 1);
+      else if (k === 'ArrowUp') this.focus = clamp(this.focus - perRow, 0, S.n - 1);
+      else if (k === 'Enter') { go(this.focus, 'jump'); setOverlay(null); e.preventDefault(); return true; }
+      else return false;
+      this.mark();
+      e.preventDefault();
+      return true;
+    }
+  };
+
+  /* ================================================================
+   * 克隆（预览/缩略图）
+   * ================================================================ */
+  function makeClone(slide, mode, count) {
+    var c = slide.el.cloneNode(true);
+    c.removeAttribute('id');
+    $$('[id]', c).forEach(function (n) { n.removeAttribute('id'); });
+    c.classList.add('h4s-clone');
+    c.classList.remove('h4s-in');
+    c.classList.add('visible', 'active'); /* 克隆呈终态：触发 .slide.visible .reveal 等入场动画约定 */
+    var frags = collectFrags(c);
+    frags.forEach(function (n, idx) {
+      n.classList.toggle('is-frag-visible', mode === 'final' || idx < count);
+    });
+    $$('video,audio', c).forEach(function (m) {
+      try { m.pause(); } catch (e) {}
+      m.removeAttribute('autoplay');
+    });
+    return c;
+  }
+
+  /* ================================================================
+   * 演讲者抽屉
+   * ================================================================ */
+  function updateDrawer() {
+    if (!drawerOn) return;
+    var s = S.slides[S.i];
+    $('#h4s-draw-notes', drawer).innerHTML =
+      s.notesEl ? s.notesEl.innerHTML : '<span style="color:#475569">' + t('noNotes') + '</span>';
+    $('#h4s-t-frag', drawer).textContent =
+      s.frags.length ? (t('fragN') + (S.f + 1) + '/' + s.frags.length) : t('noFrags');
+
+    var box = $('#h4s-draw-box', drawer);
+    var cap = $('#h4s-draw-cap', drawer);
+    var idx = S.i, fc, label;
+    if (S.f < s.frags.length - 1) { fc = S.f + 2; label = t('nextFrag') + (S.f + 2) + '/' + s.frags.length; }
+    else if (S.i < S.n - 1) { idx = S.i + 1; fc = 'final'; label = t('nextSlide'); }
+    else { fc = null; label = t('lastPage'); }
+    cap.textContent = label;
+    if (fc != null) {
+      box.innerHTML = '';
+      var target = S.slides[idx];
+      var st = stageFor(target);
+      var bw = box.clientWidth || 356;
+      var sc = Math.min(bw / st.w, 320 / st.h); /* 高度上限，防混合比例页撑出抽屉 */
+      box.style.height = Math.round(st.h * sc) + 'px';
+      var clone = makeClone(target, fc === 'final' ? 'final' : 'at', fc === 'final' ? 0 : fc);
+      clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+      box.appendChild(clone);
+    } else {
+      box.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">' + t('endMark') + '</div>';
+      box.style.height = '160px';
+    }
+  }
+
+  function toggleDrawer() {
+    drawerOn = !drawerOn;
+    document.body.classList.toggle('h4s-presenting', drawerOn);
+    layout();
+    updateDrawer();
+    toast(drawerOn ? t('drawerOn') : t('drawerOff'));
+  }
+
+  /* ================================================================
+   * 浏览模式（PowerPoint 式开场）与放映切换
+   * ================================================================ */
+  var browseBar, sidebar, miniBox, sideCells = [];
+
+  function buildBrowse() {
+    browseBar = el('div', 'h4s-browsebar');
+    browseBar.innerHTML =
+      '<button data-bact="openfile" title="' + t('openT') + '">' + t('open') + '</button>' +
+      '<button data-bact="openurl" title="' + t('urlT') + '">' + t('url') + '</button>' +
+      /* 文档标题由原生标题栏/浏览器标签页承载，浏览栏不重复 */
+      '<button data-bact="theme" title="' + t('themeT') + '">' + (uiTheme === 'light' ? t('toDark') : t('toLight')) + '</button>' +
+      '<button data-bact="edit" title="文字微调模式：在预览中直接修改文字">' + (UILANG === 'zh' ? '✎ 编辑' : '✎ Edit') + '</button>' +
+      '<button data-bact="export" title="导出包含文字修改的 .html4s" style="display:none">' + (UILANG === 'zh' ? '⬇ 导出' : '⬇ Export') + '</button>' +
+      /* 页码指示器：flex 双 auto margin 使其大致居中 */
+      '<span class="h4s-pageinfo"></span>' +
+      '<button data-bact="playcur" title="' + t('playcurT') + '">' + t('playcur') + '</button>' +
+      '<button data-bact="play" class="h4s-play" title="' + t('playT') + '">' + t('play') + '</button>' +
+      '<button data-bact="help" title="帮助 (?)">?</button>';
+    sidebar = el('div', 'h4s-sidebar');
+    miniBox = el('div', 'h4s-stagebox');
+    miniBox.innerHTML = '<div class="h4s-mini"></div>';
+    app.appendChild(browseBar);
+    app.appendChild(sidebar);
+    app.appendChild(miniBox);
+    applyUiTheme(uiTheme);  /* 恢复上次的深浅色偏好（body 属性 + 壳标题栏同步） */
+    on(browseBar, 'click', function (e) {
+      var b = e.target.closest('[data-bact]');
+      if (!b) return;
+      var a = b.getAttribute('data-bact');
+      if (a === 'play') startShow(0);
+      else if (a === 'playcur') startShow(S.sel);
+      else if (a === 'edit') setEdit(!ED.on);
+      else if (a === 'export') exportEdited();
+      else if (a === 'help') setOverlay(S.overlay === 'help' ? null : 'help');
+      else if (a === 'theme') {
+        applyUiTheme(uiTheme === 'light' ? 'dark' : 'light');
+        updateThemeBtn();
+      }
+      else if (a === 'openfile') {
+        if (shellReady) { shellAction('openfile'); return; }
+        /* 浏览器模式：文件选择器 → object URL（自包含 deck 完整可用） */
+        if (!fileInput) {
+          fileInput = el('input', null, '');
+          fileInput.type = 'file';
+          fileInput.accept = '.html4s,.html,.htm';
+          fileInput.style.display = 'none';
+          fileInput.addEventListener('change', function () {
+            var f = fileInput.files && fileInput.files[0];
+            if (!f) return;
+            try { location.href = URL.createObjectURL(f); } catch (e) {}
+            fileInput.value = '';
+          });
+          document.body.appendChild(fileInput);
+        }
+        fileInput.click();
+      }
+      else if (a === 'openurl') {
+        if (shellReady) { shellAction('openurl'); return; }
+        var u = window.prompt('输入演示网址（http / https）：', 'https://');
+        if (u && /^https?:\/\//.test(u.trim())) location.href = u.trim();
+      }
+    });
+    buildSidebar();
+    selectSlide(S.sel);
+    bindEditing();
+    /* 旧版内嵌播放器提示（build 注入 playerVersion 指纹后启用） */
+    if (PV_STALE) {
+      try {
+        var staleBadge = el('span', null, '⚠ ' + PV_STALE + ' → ' + VERSION);
+        staleBadge.style.cssText = 'font-size:12px;color:#fbbf24;border:1px solid rgba(245,158,11,.35);padding:4px 10px;border-radius:6px;white-space:nowrap;';
+        staleBadge.title = tf('stalePlayer', PV_STALE, VERSION);
+        browseBar.insertBefore(staleBadge, browseBar.querySelector('.h4s-pageinfo'));
+        toast(tf('stalePlayer', PV_STALE, VERSION));
+      } catch (err) {}
+    }
+  }
+
+  function buildSidebar() {
+    sideCells.forEach(function (c) { c.remove(); });
+    sideCells = [];
+    S.slides.forEach(function (s, idx) {
+      var cell = el('div', 'h4s-sidecell');
+      var st = stageFor(s);
+      var sc = Math.min(198 / st.w, 112 / st.h);
+      var thumb = el('div', 'h4s-thumb');
+      thumb.style.width = Math.round(st.w * sc) + 'px';
+      thumb.style.height = Math.round(st.h * sc) + 'px';
+      var clone = makeClone(s, 'final', 0);
+      clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+      thumb.appendChild(clone);
+      cell.appendChild(thumb);
+      cell.appendChild(el('div', 'h4s-meta', '<b>' + (idx + 1) + '</b><span>' + esc(s.title) + '</span>'));
+      cell.setAttribute('role', 'button');
+      cell.setAttribute('aria-label', (idx + 1) + '. ' + s.title);
+      on(cell, 'click', function () { selectSlide(idx); });
+      on(cell, 'dblclick', function () { startShow(idx); });  /* 双击缩略图直接放映该页 */
+      sidebar.appendChild(cell);
+      sideCells.push(cell);
+    });
+  }
+
+  function selectSlide(i) {
+    S.sel = clamp(i, 0, S.n - 1);
+    sideCells.forEach(function (c, idx) { c.classList.toggle('is-sel', idx === S.sel); });
+    var focus = sideCells[S.sel];
+    if (focus && focus.scrollIntoView) focus.scrollIntoView({ block: 'nearest' });
+    renderMini();
+    updatePageInfo();
+  }
+
+  /* 浏览栏页码指示器：当前页 / 总页数 · 页标题 */
+  function updatePageInfo() {
+    var elp = browseBar && browseBar.querySelector('.h4s-pageinfo');
+    if (!elp) return;
+    var s = S.slides[S.sel];
+    elp.innerHTML = '<b>' + (S.sel + 1) + '</b> / ' + S.n +
+      (s && s.title ? ' · ' + esc(s.title) : '');
+  }
+
+  function renderMini() {
+    if (!miniBox) return;
+    var mini = $('.h4s-mini', miniBox);
+    if (!mini) return;
+    mini.innerHTML = '';
+    var s = S.slides[S.sel];
+    var st = stageFor(s);
+    var sc = Math.min((miniBox.clientWidth - 64) / st.w, (miniBox.clientHeight - 64) / st.h);
+    mini.style.width = Math.round(st.w * sc) + 'px';
+    mini.style.height = Math.round(st.h * sc) + 'px';
+    var clone = makeClone(s, 'final', 0);
+    clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');';
+    mini.appendChild(clone);
+    if (ED.on) markEditable();
+  }
+
+  function layoutBrowse() {
+    if (!document.body.classList.contains('h4s-browse')) return;
+    renderMini();
+  }
+
+  /* ================================================================
+   * 文字微调（浏览模式直接编辑预览中的文字）
+   * 设计：编辑发生在预览克隆上（cloneNode 深拷贝与真 slide 结构同构），
+   * 提交时按 childIndex 路径同步回真实 slide；导出时把全部改动
+   * 回写到 boot 快照生成新 .html4s。缺字预警复用 fontSubsetChars 指纹。
+   * ================================================================ */
+  var ED = { on: false, edits: [] };
+
+  function elPathOf(el, root) {
+    var path = [], cur = el;
+    while (cur && cur !== root) {
+      var ps = cur.parentNode, i = 0, n;
+      for (n = ps.firstElementChild; n && n !== cur; n = n.nextElementSibling) i++;
+      path.unshift(i); cur = ps;
+    }
+    return cur === root ? path : null;
+  }
+  function elByPath(root, path) {
+    var cur = root;
+    for (var i = 0; i < path.length && cur; i++) cur = cur.children[path[i]];
+    return cur || null;
+  }
+  /* 可编辑目标 = 内联级文本容器：元素含直接文字，子元素全部内联。
+     混合内容如 <h1>工欲善其事，<br>必先利其器。</h1> 整体作为一个文本块编辑，
+     <br>/<span> 等内联结构由 contenteditable 原生保持。 */
+  var ED_SKIP = /^(SCRIPT|STYLE|CANVAS|SVG|VIDEO|AUDIO|BR|IFRAME|OBJECT|TEMPLATE|H4S-NOTES)$/;
+  var ED_INLINE = /^(BR|SPAN|EM|STRONG|B|I|U|S|A|CODE|SMALL|SUB|SUP|MARK|ABBR|CITE|Q|TIME|BDO|BDI|WBR|FONT|BIG|DEL|INS|KBD|SAMP|VAR|RUBY|RT|RP)$/;
+  function isInlineTextContainer(el) {
+    if (ED_SKIP.test(el.tagName)) return false;
+    var hasText = false;
+    for (var k = 0; k < el.childNodes.length; k++) {
+      var n = el.childNodes[k];
+      if (n.nodeType === 3 && n.nodeValue.trim()) { hasText = true; break; }
+    }
+    if (!hasText) return false;
+    for (var k = 0; k < el.children.length; k++) {
+      if (!ED_INLINE.test(el.children[k].tagName)) return false;
+    }
+    return true;
+  }
+  /* 内嵌子集缺字检测：返回文本中不被任何内嵌族子集覆盖的字符（无指纹/无内嵌字体返回 []） */
+  function findLack(text) {
+    var fp = (MANIFEST && MANIFEST.fontSubsetChars) || null;
+    if (!fp || !Object.keys(fp).length) return [];
+    var sets = {};
+    for (var fam in fp) sets[fam] = fp[fam];
+    var fams = Object.keys(sets);
+    var out = [], seen = {};
+    for (var i = 0; i < text.length; i++) {
+      var ch = text[i], cp = ch.codePointAt(0);
+      if (/\s/.test(ch) || seen[ch]) continue;
+      var covered = fams.some(function (f) { return sets[f].indexOf(cp) !== -1; });
+      if (!covered) { seen[ch] = 1; out.push(ch); }
+    }
+    return out;
+  }
+  function markEditable() {
+    $$('.h4s-clone', miniBox).forEach(function (c) {
+      $$('*', c).forEach(function (n) {
+        if (isInlineTextContainer(n) && getComputedStyle(n).display !== 'none') {
+          n.setAttribute('data-h4s-editable', '');
+        }
+      });
+    });
+  }
+  function setEdit(on) {
+    ED.on = on;
+    document.body.classList.toggle('h4s-editing', on);
+    var btn = $('[data-bact="edit"]');
+    if (btn) btn.style.color = on ? '#3b82f6' : '';
+    if (on) markEditable();
+    else {
+      $$('[data-h4s-editable]', miniBox).forEach(function (n) {
+        n.removeAttribute('data-h4s-editable');
+        n.classList.remove('h4s-edit-lack');
+      });
+      renderMini();
+    }
+    toast(on ? t('editHint') : t('editOff'));
+  }
+  /* 克隆编辑提交：文本节点级同步（元素路径 + tIdx → 真树 nodeValue），记入改动表，缺字预警 */
+  function commitEdit(el) {
+    var cloneSlide = el.closest('.h4s-clone');
+    var path = elPathOf(el, cloneSlide);
+    if (!path) return;
+    var si = S.sel;
+    var slide = S.slides[si];
+    var real = elByPath(slide.el, path);
+    if (!real) return;
+    var oldNow = real.innerHTML;
+    var nowHTML = el.innerHTML;
+    if (oldNow === nowHTML) { renderMini(); return; }
+    /* 同步回真实 slide：元素级 innerHTML 替换（<br>/<span> 等混合结构整体保持） */
+    real.innerHTML = nowHTML;
+    /* 缺字预警 */
+    var lack = findLack(el.textContent);
+    if (lack.length) {
+      real.classList.add('h4s-edit-lack');
+      el.classList.add('h4s-edit-lack');
+    }
+    /* 改动表：同页同路径去重更新（now 存 innerHTML，导出按元素级替换） */
+    var i;
+    for (i = 0; i < ED.edits.length; i++) {
+      var e = ED.edits[i];
+      if (e.si === si && e.path.join() === path.join()) { e.now = nowHTML; e.lack = lack; break; }
+    }
+    if (i === ED.edits.length) ED.edits.push({ si: si, path: path, old: oldNow, now: nowHTML, lack: lack, title: slide.title });
+    refreshExportBtn();
+    renderMini();
+    toast(tf('edited', si + 1) + (lack.length ? tf('editedLack', lack.join('')) : ''));
+  }
+  function refreshExportBtn() {
+    var b = $('[data-bact="export"]');
+    if (b) b.style.display = ED.edits.length ? '' : 'none';
+  }
+  /* 快照里的页面元素定位：与 collectSlides 完全同规则（h4s-slide 优先，
+     否则 h4s-deck / .slides / body 容器的 section/.slide 子元素）——
+     此前只查 h4s-deck，.slides 类 deck 的导出定位整批失效 */
+  function snapSections(doc) {
+    var nodes = $$('h4s-slide', doc);
+    if (!nodes.length) {
+      var root = $('h4s-deck', doc) || $('.slides', doc) || doc.body;
+      nodes = Array.prototype.slice.call(root.children).filter(function (n) {
+        return n.tagName === 'SECTION' || n.classList.contains('slide');
+      });
+    }
+    return nodes;
+  }
+  /* 浏览器（非壳）环境导出为下载文件；壳内写回失败时也回退到这里（silent=不重复 toast） */
+  function downloadEdited(html, silent) {
+    var blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+    var a = el('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = (document.title.replace(/\.html4s$|\.html$/i, '') || 'deck') + '.edited.html4s';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 200);
+    if (!silent) toast(t('exported'));
+  }
+  /* 导出：改动回写 boot 快照 → 完整 .html4s。壳内走 save 写回源文件，否则下载 */
+  function exportEdited() {
+    if (!ED.snap) { toast(t('snapFail')); return; }
+    var doc = new DOMParser().parseFromString(ED.snap, 'text/html');
+    var secs = snapSections(doc);
+    ED.edits.forEach(function (e) {
+      var sec = secs[e.si];
+      var el = sec && elByPath(sec, e.path);
+      if (el) el.innerHTML = e.now;
+    });
+    var out = doc.documentElement.outerHTML;
+    if (shellReady) {
+      /* 等壳回执：成功 → toast；失败/从网址打开 → 回退下载（downloadEdited） */
+      pendingSave = out;
+      shellAction('save', { html: out, name: (MANIFEST.meta && MANIFEST.meta.title || 'deck') });
+      toast(t('exporting'));
+      return;
+    }
+    downloadEdited(out);
+  }
+
+  /* 编辑交互（stagebox 委托：克隆会被 renderMini 重建，不能直接绑在克隆上）。
+     绑定时机：miniBox 在 buildBrowse 才创建 —— 由 buildBrowse 末尾调用 bindEditing() */
+  function bindEditing() {
+  on(miniBox, 'click', function (e) {
+    if (!ED.on) return;
+    var t = e.target.closest('[data-h4s-editable]');
+    if (!t || t.getAttribute('contenteditable') === 'true') return;
+    var cloneSlide = t.closest('.h4s-clone');
+    var path = elPathOf(t, cloneSlide);
+    if (!path) return;
+    ED.active = { si: S.sel, path: path, el: t, oldHTML: t.innerHTML };
+    t.__h4sOld = t.innerHTML; /* Esc 撤销读取（此前从未赋值——Esc 实际会提交而非撤销） */
+    t.setAttribute('contenteditable', 'true');
+    t.setAttribute('data-h4s-edit-active', '1');
+    t.classList.add('h4s-edit-focus');
+    try { t.focus(); } catch (err) {}
+  });
+  on(miniBox, 'focusout', function (e) {
+    var t = e.target;
+    if (t.getAttribute && t.getAttribute('data-h4s-edit-active') === '1') commitEdit(t);
+  });
+  on(miniBox, 'keydown', function (e) {
+    var t = e.target;
+    if (!t.hasAttribute || t.getAttribute('data-h4s-edit-active') !== '1') return;
+    if (e.key === 'Enter') { e.preventDefault(); t.blur(); }
+    else if (e.key === 'Escape') { e.preventDefault(); t.innerHTML = t.__h4sOld || t.innerHTML; t.blur(); }
+  });
+  on(miniBox, 'paste', function (e) {
+    if (!e.target.hasAttribute || e.target.getAttribute('data-h4s-edit-active') !== '1') return;
+    e.preventDefault();
+    var txt = (e.clipboardData || window.clipboardData).getData('text/plain').replace(/\s+/g, ' ');
+    document.execCommand('insertText', false, txt);
+  });
+
+  }
+
+  /* ================================================================
+   * 网页放映：普通 HTML（无幻灯片结构）的兼容播放
+   * F5 全屏 → 方向键/空格按屏滚动翻页 → Esc 退出。内容零改动。
+   * ================================================================ */
+  var WP = { on: false };
+  function wpInfo() {
+    var max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
+    var step = window.innerHeight * 0.9;
+    var total = Math.max(1, Math.ceil(max / step) + 1);
+    var cur = Math.min(total, Math.max(1, Math.round(window.scrollY / step) + 1));
+    return { cur: cur, total: total };
+  }
+  function wpBadge() {
+    var b = document.querySelector('.h4s-webbadge');
+    if (b && WP.on) {
+      var w = wpInfo();
+      b.textContent = tf('webBadge', w.cur, w.total);
+    }
+  }
+  function wpStep(dir) {
+    window.scrollBy({ top: dir * window.innerHeight * 0.9, behavior: 'smooth' });
+    setTimeout(wpBadge, 420);
+  }
+  function wpShow() {
+    if (WP.on) return;
+    WP.on = true;
+    document.body.classList.add('h4s-webp');
+    if (!document.querySelector('.h4s-webbadge')) {
+      var b = el('div', 'h4s-webbadge');
+      b.setAttribute('role', 'status');
+      document.body.appendChild(b);
+    }
+    try { document.documentElement.requestFullscreen().catch(function () {}); } catch (e) {}
+    window.scrollTo(0, 0);
+    wpBadge();
+    toast(t('webToast'));
+  }
+  function wpHide() {
+    WP.on = false;
+    document.body.classList.remove('h4s-webp');
+    try { if (document.fullscreenElement) document.exitFullscreen().catch(function () {}); } catch (e) {}
+  }
+  function initWebPresent() {
+    /* 文档模式下的极简入口横幅（不与 deck 内容冲突） */
+    var hint = el('div', 'h4s-webhint');
+    hint.setAttribute('role', 'note');
+    hint.innerHTML = t('webHint');
+    document.body.appendChild(hint);
+    on(document, 'keydown', function (e) {
+      var k = e.key;
+      if (k === 'F5') { e.preventDefault(); WP.on ? wpHide() : wpShow(); return; }
+      if (!WP.on) return;
+      if (k === 'ArrowRight' || k === ' ' || k === 'PageDown' || k === 'ArrowDown') { e.preventDefault(); wpStep(1); }
+      else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'ArrowUp') { e.preventDefault(); wpStep(-1); }
+      else if (k === 'Home') { e.preventDefault(); window.scrollTo({ top: 0, behavior: 'smooth' }); setTimeout(wpBadge, 420); }
+      else if (k === 'End') { e.preventDefault(); window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'smooth' }); setTimeout(wpBadge, 420); }
+      else if (k === 'Escape') { e.preventDefault(); wpHide(); }
+    });
+    on(window, 'scroll', function () { if (WP.on) wpBadge(); }, { passive: true });
+    on(window, 'resize', function () { if (WP.on) wpBadge(); });
+  }
+
+  /* 进入放映（i=起始页，fragHint>=0 时直接呈现到该碎片状态） */
+  function startShow(i, fragHint) {
+    S.presenting = true;
+    document.body.classList.remove('h4s-browse');
+    document.body.classList.add('h4s-live');
+    poke();
+    var s = S.slides[clamp(i, 0, S.n - 1)];
+    S.i = s.index;
+    S.f = fragHint >= 0 ? clamp(fragHint, 0, s.frags.length - 1) : -1;
+    setFragClasses(s, S.f);
+    applyStageSize(s);
+    layout();
+    if (shownEl !== s.el) {
+      if (shownEl) { shownEl.style.display = 'none'; shownEl.classList.remove('visible', 'active'); }
+      s.el.style.display = '';
+      s.el.classList.add('visible', 'active');
+      shownEl = s.el;
+    }
+    mediaLeave(shownEl); /* 重置再进入 */
+    mediaEnter(shownEl);
+    T.bootAt = Date.now(); T.slideAt = Date.now(); T.ptAtSlide = T.pausedTotal;
+    T.autoPausedAcc = 0; T.autoPauseAt = 0;
+    scheduleAutoFrags(S.i);
+    initFx();
+    confettiBurst(s);
+    updateChrome(); updateDrawer(); updateHash(); sendState();
+    emit('h4s:slidechange', { index: S.i, id: s.id, title: s.title, frags: s.frags.length, frag: S.f });
+    try {
+      if (!document.fullscreenElement && document.documentElement.requestFullscreen)
+        document.documentElement.requestFullscreen().catch(function () {});
+    } catch (err) {}
+  }
+
+  /* 退出放映，回到浏览模式 */
+  function endShow() {
+    S.presenting = false;
+    document.body.classList.remove('h4s-live');
+    document.body.classList.add('h4s-browse');
+    fxStop();
+    S.fragTimers.forEach(clearTimeout);
+    S.fragTimers = [];
+    if (shownEl) { mediaLeave(shownEl); shownEl.style.display = 'none'; }
+    /* 浏览模式 fx 预览：canvas 移入右侧预览箱，让讲者在 browse 也能看到氛围特效 */
+    if (fx.canvas && miniBox) {
+      fxStop();
+      miniBox.appendChild(fx.canvas);
+      fxResize();
+      fxStart();
+    }
+    if (S.overlay) setOverlay(null);
+    if (drawerOn) toggleDrawer();
+    selectSlide(S.i);
+    try { if (document.fullscreenElement) document.exitFullscreen(); } catch (err) {}
+    /* 壳 F11 无边框全屏 ≠ 网页全屏（不触发 fullscreenchange）——
+       Esc 回浏览时必须显式通知壳退出，否则标题栏卡在隐藏态 */
+    shellAction('exitfullscreen');
+    sendState();
+    emit('h4s:showend', { index: S.i });
+  }
+
+  /* ================================================================
+   * 工具条 / 提示 / 激光笔
+   * ================================================================ */
+  var toastTimer = 0;
+  function toast(msg) {
+    toastEl.textContent = msg;
+    toastEl.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function () { toastEl.classList.remove('is-on'); }, 1800);
+  }
+
+  var laserOn = false;
+  function toggleLaser() {
+    laserOn = !laserOn;
+    document.body.classList.toggle('h4s-laser', laserOn);
+  }
+
+  /* 空闲时隐藏 UI（鼠标停止移动 2.6s） */
+  var idleT;
+  function poke() {
+    document.body.classList.remove('h4s-idle');
+    clearTimeout(idleT);
+    idleT = setTimeout(function () { document.body.classList.add('h4s-idle'); }, 2600);
+  }
+
+  function updateChrome() {
+    $('#h4s-cur').textContent = numBuf || String(S.i + 1);
+    $('#h4s-total').textContent = String(S.n);
+    $('#h4s-timer').textContent = fmt(totalSec());
+    progress.style.width = ((S.i + 1) / S.n * 100) + '%';
+  }
+
+  /* ================================================================
+   * 计时 / 自动播放
+   * ================================================================ */
+  setInterval(function () {
+    if (!S.n || !S.presenting) return; /* 文档模式 / 浏览模式下不运行计时与自动播放 */
+    /* 暂停累计（T 键） */
+    if (T.paused) { if (!T.pausedAt) T.pausedAt = Date.now(); }
+    else if (T.pausedAt) { T.pausedTotal += Date.now() - T.pausedAt; T.pausedAt = 0; }
+
+    /* 自动播放暂停累计（黑/白屏时暂停 autoslide，总时长继续走） */
+    if (T.paused || S.overlay === 'black' || S.overlay === 'white') {
+      if (!T.autoPauseAt) T.autoPauseAt = Date.now();
+    } else if (T.autoPauseAt) {
+      T.autoPausedAcc += Date.now() - T.autoPauseAt;
+      T.autoPauseAt = 0;
+    }
+
+    var ad = autoDur();
+    if (ad > 0) {
+      var used = (Date.now() - T.slideAt - T.autoPausedAcc) / 1000;
+      autoBar.style.width = (clamp(used / ad, 0, 1) * 100) + '%';
+      if (used >= ad && !S.lock && !S.overlay && !T.paused) next();
+    } else {
+      autoBar.style.width = '0';
+    }
+
+    $('#h4s-timer').textContent = fmt(totalSec());
+    if (drawerOn) {
+      $('#h4s-t-slide', drawer).textContent = fmt(dwell());
+      $('#h4s-t-total', drawer).textContent = fmt(totalSec());
+      $('#h4s-draw-clock', drawer).textContent =
+        new Date().toLocaleTimeString('zh-CN', { hour12: false });
+    }
+    if (RH.on) updateChrome();
+    sendState(); /* 持续广播：演讲者窗口随时加入都能拿到最新状态 */
+  }, 200);
+
+  function togglePause() {
+    T.paused = !T.paused;
+    toast(T.paused ? t('paused') : t('resumed'));
+  }
+
+  function toggleRehearse() {
+    RH.on = !RH.on;
+    if (RH.on) {
+      RH.log = [];
+      toast(t('rehearseStart'));
+    } else {
+      if (T.slideAt) RH.log.push({ page: S.i + 1, seconds: +dwell().toFixed(1), frags: S.f + 1 });
+      shellAction('timings', { log: RH.log, total: Math.round(totalSec()) });
+      toast(tf('rehearseEnd', fmt(totalSec())));
+      console.table(RH.log);
+      emit('h4s:rehearse', { log: RH.log, total: totalSec() });
+    }
+  }
+
+  /* ================================================================
+   * 媒体管理
+   * ================================================================ */
+  function mediaLeave(root) {
+    $$('video,audio', root).forEach(function (m) { try { m.pause(); } catch (e) {} });
+  }
+  function mediaEnter(root) {
+    $$('[data-h4s-media~="autoplay"]', root).forEach(function (w) {
+      var ms = (w.tagName === 'VIDEO' || w.tagName === 'AUDIO') ? [w] : $$('video,audio', w);
+      ms.forEach(function (m) { try { var p = m.play(); p && p.catch && p.catch(function () {}); } catch (e) {} });
+    });
+  }
+
+  /* ================================================================
+   * 深链 hash
+   * ================================================================ */
+  function parseHash() {
+    var segs = location.hash.replace(/^#\/?/, '').split('/');
+    var r = { i: 0, f: -1, kiosk: false, auto: 0, presenter: false, seen: false };
+    segs.forEach(function (s) {
+      if (!s) return;
+      if (/^\d+$/.test(s)) {
+        if (!r.seen) { r.i = parseInt(s, 10) - 1; r.seen = true; }
+        else r.f = parseInt(s, 10) - 1;
+      } else if (s === 'kiosk') r.kiosk = true;
+      else if (s === 'presenter' || s === 'present') r.presenter = true;
+      else if (/^(auto|autoplay)=/.test(s)) r.auto = parseFloat(s.split('=')[1]) || 0;
+    });
+    return r;
+  }
+
+  function updateHash() {
+    var h = '#/' + (S.i + 1) + (S.f >= 0 ? '/' + (S.f + 1) : '');
+    try { history.replaceState(null, '', h); } catch (e) {}
+  }
+
+  /* ================================================================
+   * 状态总线（双窗口演讲者视图）
+   * ================================================================ */
+  function initBus() {
+    try { bus = new BroadcastChannel('h4s:' + deckId()); } catch (e) { bus = null; }
+    if (!bus) return;
+    bus.onmessage = function (e) {
+      var m = e.data || {};
+      if (m.role !== 'presenter') return;
+      if (m.type === 'hello') { sendState(); return; }
+      if (m.type === 'cmd') act(m.action, m.arg);
+    };
+  }
+
+  function sendState() {
+    if (!bus || !isStage) return;
+    try {
+      bus.postMessage({
+        v: 1, role: 'stage', type: 'state',
+        i: S.i, f: S.f, overlay: S.overlay,
+        total: Math.round(totalSec()), kiosk: S.kiosk
+      });
+    } catch (e) {}
+  }
+
+  /* ================================================================
+   * 动作分发
+   * ================================================================ */
+  function act(name, arg) {
+    switch (name) {
+      case 'next': if (S.presenting) next(); break;
+      case 'prev': if (S.presenting) prev(); break;
+      case 'jump': if (S.presenting) go((parseInt(arg, 10) || 1) - 1, 'jump'); break;
+      case 'play': startShow(parseInt(arg, 10) ? parseInt(arg, 10) - 1 : 0); break;
+      case 'stop': endShow(); break;
+      case 'black': setOverlay(S.overlay === 'black' ? null : 'black'); break;
+      case 'white': setOverlay(S.overlay === 'white' ? null : 'white'); break;
+      case 'overview': setOverlay(S.overlay === 'overview' ? null : 'overview'); break;
+      case 'help': setOverlay(S.overlay === 'help' ? null : 'help'); break;
+      case 'drawer': if (S.presenting) toggleDrawer(); break;
+      case 'fullscreen': toggleFullscreen(); break;
+      case 'laser': toggleLaser(); break;
+      case 'rehearse': toggleRehearse(); break;
+      case 'preswin': openPresenterWindow(); break;
+    }
+  }
+
+  function toggleFullscreen() {
+    if (document.fullscreenElement) document.exitFullscreen();
+    else document.documentElement.requestFullscreen().catch(function () {});
+  }
+
+  function openPresenterWindow() {
+    var u = new URL(location.href);
+    u.hash = '#presenter';
+    var w = window.open(u.href, 'h4s-presenter', 'width=1100,height=720');
+    if (!w) toast(t('popupBlocked'));
+    else toast(t('presWinOpened'));
+  }
+
+  /* ---- WebHID 翻页笔（实验性，J 键 / H4S.connectRemote）----
+     多数翻页笔是键盘类设备（PageUp/Down 直接可用，无需此功能）；
+     这里覆盖走厂商私有报告协议的型号，按常见字节模式尽力识别：
+     报告末字节/次末字节 = 1 前进 · 2 后退 · 4 黑屏（Logitech R400 系等） */
+  var remoteDev = null;
+  function connectRemote() {
+    if (!navigator.hid || !navigator.hid.requestDevice) { toast(t('remoteUnsupported')); return; }
+    navigator.hid.requestDevice({ filters: [] }).then(function (devs) {
+      var d = devs && devs[0];
+      if (!d) return;
+      return d.open().then(function () {
+        remoteDev = d;
+        d.addEventListener('inputreport', function (e) {
+          try {
+            var u = new Uint8Array(e.data.buffer);
+            var code = 0;
+            if (u.length >= 2 && u[u.length - 1] !== 0) code = u[u.length - 1];
+            else if (u.length >= 3 && u[u.length - 2] !== 0) code = u[u.length - 2];
+            if (code === 0x01) { if (S.presenting) next(); }
+            else if (code === 0x02) { if (S.presenting) prev(); }
+            else if (code === 0x04) setOverlay(S.overlay === 'black' ? null : 'black');
+          } catch (err) {}
+        });
+        toast(t('remoteConnected') + (d.productName || (d.vendorId + ':' + d.productId)));
+      });
+    }).then(function () {}, function () { toast(t('remoteFail')); }).catch(function () {});
+  }
+
+  /* ================================================================
+   * 演讲者窗口模式（role=presenter）
+   * ================================================================ */
+  function presenterMode(hash) {
+    var style = el('style', null, CSS + '' + PRESENTER_CSS);
+    document.head.appendChild(style);
+    document.title = t('presTitle') + document.title;
+    document.body.classList.add('h4s-presenter');
+
+    MANIFEST = readManifest();
+    DEFAULTS = MANIFEST.defaults || {};
+    if (MANIFEST.stage) {
+      MSTAGE = {
+        w: MANIFEST.stage.width || 1280, h: MANIFEST.stage.height || 720,
+        fit: MANIFEST.stage.fit || 'contain',
+        background: MANIFEST.stage.background || '#000'
+      };
+    }
+    var slides = collectSlides();
+    var n = slides.length;
+    /* deckId() 依赖 S.slides —— 填充以保证与舞台窗口同频道 */
+    S.slides = slides; S.n = n;
+
+    var ui = el('div', 'h4s-pres');
+    ui.innerHTML =
+      '<div class="col-l">' +
+        '<div class="pv"><div class="cap">' + t('thisPage') + ' · <span id="h4s-p-frag"></span></div><div class="box" id="h4s-p-cur"></div></div>' +
+        '<div class="pv"><div class="cap" id="h4s-p-nextcap">' + t('nextCap') + '</div><div class="box" id="h4s-p-next"></div></div>' +
+      '</div>' +
+      '<div class="col-r">' +
+        '<div class="stats">' +
+          '<span class="big" id="h4s-p-total">00:00</span>' +
+          '<span class="dim">' + t('thisPage') + ' <b id="h4s-p-slide">00:00</b></span>' +
+          '<span class="dim" id="h4s-p-clock"></span>' +
+          '<span class="dim" id="h4s-p-page"></span>' +
+        '</div>' +
+        '<div class="cap">' + t('notes') + '</div>' +
+        '<div class="notes" id="h4s-p-notes"></div>' +
+        '<div class="btns">' +
+          '<button data-act="prev">' + t('presPrev') + '</button>' +
+          '<button data-act="next">' + t('presNext') + '</button>' +
+          '<button data-act="black">' + t('presBlack') + '</button>' +
+          '<button data-act="white">' + t('presWhite') + '</button>' +
+          '<button data-act="overview">' + t('presGrid') + '</button>' +
+        '</div>' +
+      '</div>' +
+      '<div class="h4s-pres-shade" id="h4s-p-shade"></div>' +
+      '<div class="h4s-pres-warn" id="h4s-p-warn"></div>';
+    document.body.appendChild(ui);
+    var mainEl = ui;
+
+    var P = { i: 0, f: -1, overlay: null, total: 0, slideAt: Date.now(), lastMsg: 0 };
+    var localMode = false;
+    var shade = $('#h4s-p-shade', ui);
+
+    function layoutPres() {
+      /* 左列宽度按 deck 长宽比计算：两个预览区平分列高，预览无 letterbox 浪费；
+         右列显式宽度 = 余下全部 → 右列上下左右边界与左列对齐 */
+      var colL = ui.querySelector('.col-l');
+      var colR = ui.querySelector('.col-r');
+      if (!colL || !colR) return;
+      var st = stageFor(slides[P.i] || slides[0]);
+      if (!st) return;
+      var totalH = mainEl.clientHeight - 24;
+      var pvH = (totalH - 12) / 2;
+      var boxH = Math.max(120, pvH - 22);
+      var targetW = Math.round(boxH * (st.w / st.h) + 16);
+      targetW = Math.max(300, Math.min(targetW, Math.round(totalH * 1.9)));
+      colL.style.flex = 'none';
+      colL.style.width = targetW + 'px';
+      colR.style.flex = 'none';
+      colR.style.width = Math.max(280, Math.round(mainEl.clientWidth - 24 - 12 - targetW)) + 'px';
+    }
+
+    function render() {
+      layoutPres();
+      var s = slides[P.i];
+      if (!s) return;
+      var curBox = $('#h4s-p-cur', ui), nextBox = $('#h4s-p-next', ui);
+      $('#h4s-p-frag', ui).textContent = s.frags.length
+        ? (t('fragN') + (P.f + 1) + '/' + s.frags.length) : t('noFrags');
+      $('#h4s-p-page', ui).textContent = (P.i + 1) + ' / ' + n;
+      $('#h4s-p-notes', ui).innerHTML =
+        s.notesEl ? s.notesEl.innerHTML : '<span style="color:#475569">' + t('noNotes') + '</span>';
+
+      fillBox(curBox, s, P.f < 0 ? 0 : P.f + 1);
+
+      var idx = P.i, fc = 0, cap = t('nextCap');
+      if (P.f < s.frags.length - 1) { fc = P.f + 2; cap = t('nextFrag') + (P.f + 2) + '/' + s.frags.length; }
+      else if (P.i < n - 1) { idx = P.i + 1; fc = -2; cap = t('nextCapFinal'); }
+      else fc = -3;
+      $('#h4s-p-nextcap', ui).textContent = cap;
+      if (fc >= 0) fillBox(nextBox, slides[idx], fc);
+      else if (fc === -2) fillBox(nextBox, slides[idx], -2);
+      else nextBox.innerHTML = '<div style="display:flex;height:100%;align-items:center;justify-content:center;color:#475569;">' + t('endMark') + '</div>';
+
+      /* 黑屏/白屏只作用于舞台窗（观众屏）；演讲者窗保持正常显示 */
+    }
+
+    function fillBox(box, slide, fragCount) {
+      box.innerHTML = '';
+      var st = stageFor(slide);
+      var bw = box.clientWidth || 480;
+      var bh = box.clientHeight || Math.round(bw * st.h / st.w);
+      var sc = Math.min(bw / st.w, bh / st.h); /* 宽高双约束：任何比例的页面都完整可见 */
+      var clone = (fragCount === -2) ? makeClone(slide, 'final', 0) : makeClone(slide, 'at', fragCount);
+      var ox = Math.max(0, Math.round((bw - st.w * sc) / 2));
+      var oy = Math.max(0, Math.round((bh - st.h * sc) / 2));
+      clone.style.cssText = 'width:' + st.w + 'px;height:' + st.h + 'px;transform:scale(' + sc + ');left:' + ox + 'px;top:' + oy + 'px;';
+      box.appendChild(clone);
+    }
+
+    function applyLocal(a, arg) {
+      if (a === 'next') { var s = slides[P.i]; if (P.f < s.frags.length - 1) P.f++; else if (P.i < n - 1) { P.i++; P.f = -1; P.slideAt = Date.now(); } }
+      else if (a === 'prev') { if (P.f >= 0) P.f--; else if (P.i > 0) { P.i--; P.f = -1; P.slideAt = Date.now(); } }
+      else if (a === 'black' || a === 'white') { /* 本地模式无舞台，黑屏无意义 */ }
+      render();
+    }
+
+    function sendCmd(a, arg) {
+      if (localMode || !bus) { applyLocal(a, arg); return; }
+      try { bus.postMessage({ v: 1, role: 'presenter', type: 'cmd', action: a, arg: arg }); }
+      catch (e) { applyLocal(a, arg); }
+    }
+
+    on(ui, 'click', function (e) {
+      var b = e.target.closest('[data-act]');
+      if (b) sendCmd(b.getAttribute('data-act'));
+    });
+
+    on(document, 'keydown', function (e) {
+      var k = e.key;
+      if (k === 'ArrowRight' || k === ' ' || k === 'PageDown') { e.preventDefault(); sendCmd('next'); }
+      else if (k === 'ArrowLeft' || k === 'PageUp') { e.preventDefault(); sendCmd('prev'); }
+      else if (k === 'b' || k === 'B') sendCmd('black');
+      else if (k === 'w' || k === 'W') sendCmd('white');
+    });
+
+    try { bus = new BroadcastChannel('h4s:' + deckId()); } catch (e) { bus = null; }
+    if (bus) {
+      bus.onmessage = function (e) {
+        var m = e.data || {};
+        if (m.role !== 'stage' || m.type !== 'state') return;
+        P.lastMsg = Date.now();
+        $('#h4s-p-warn', ui).textContent = '';
+        if (m.i !== P.i) P.slideAt = Date.now();
+        var changed = (m.i !== P.i || m.f !== P.f || m.overlay !== P.overlay);
+        P.i = m.i; P.f = m.f; P.overlay = m.overlay;
+        P.total = m.total || 0;
+        $('#h4s-p-total', ui).textContent = fmt(P.total);
+        if (changed) render();
+      };
+      try { bus.postMessage({ v: 1, role: 'presenter', type: 'hello' }); } catch (e) {}
+    } else {
+      localMode = true;
+      $('#h4s-p-warn', ui).textContent = t('presWarnNoStage');
+    }
+    setTimeout(function () {
+      if (!localMode && Date.now() - P.lastMsg > 2500)
+        $('#h4s-p-warn', ui).textContent = t('presWarnLost');
+    }, 3000);
+
+    on(window, 'resize', render);
+    setInterval(function () {
+      $('#h4s-p-slide', ui).textContent = fmt((Date.now() - P.slideAt) / 1000);
+      $('#h4s-p-clock', ui).textContent = new Date().toLocaleTimeString('zh-CN', { hour12: false });
+      if (localMode) $('#h4s-p-total', ui).textContent = fmt((Date.now() - T.bootAt) / 1000);
+    }, 500);
+
+    render();
+    setTimeout(render, 120); /* 布局稳定后按真实 box 尺寸重渲染 */
+    emit('h4s:presenter-ready', { slides: n });
+  }
+
+  /* ================================================================
+   * 输入：键盘 / 鼠标 / 触摸 / 滚轮
+   * ================================================================ */
+  function pushNum(d) {
+    numBuf = (numBuf + d).slice(-3);
+    clearTimeout(numTimer);
+    numTimer = setTimeout(clearNum, 1600);
+    updateChrome();
+  }
+  function clearNum() { numBuf = ''; updateChrome(); }
+  function commitNum() {
+    if (!numBuf) return;
+    var n = parseInt(numBuf, 10);
+    clearNum();
+    if (n >= 1 && n <= S.n) {
+      if (S.presenting) go(n - 1, 'jump');
+      else selectSlide(n - 1);
+    } else toast(tf('numRange', S.n));
+  }
+
+  function handleEscape() {
+    if (laserOn) { toggleLaser(); return; }
+    if (S.overlay) { setOverlay(null); return; }
+    if (document.fullscreenElement) { endShow(); return; } /* endShow 内含退全屏 */
+    if (drawerOn) { toggleDrawer(); return; } /* 先关抽屉，不连带结束放映 */
+    if (S.presenting && !S.kiosk) endShow();
+  }
+
+  function initInput() {
+    on(document, 'keydown', function (e) {
+      var tag = (e.target.tagName || '').toLowerCase();
+      if (tag === 'input' || tag === 'textarea' || tag === 'select' || e.target.isContentEditable) return;
+      if (S.overlay === 'overview' && OV.handleKey(e)) return;
+      var k = e.key;
+
+      /* 壳级快捷键：仅壳环境（握手确认）接管；纯浏览器放行原生行为
+         （F11 全屏 / Ctrl+L 地址栏 / Ctrl+O 打开 / Ctrl+R 刷新 / Ctrl+W 关闭）——
+         此前一律 preventDefault + 无处投递的 shellAction，浏览器里按了没反应 */
+      if (shellReady) {
+        if (k === 'F11') { e.preventDefault(); shellAction('fullscreen'); return; }
+        if (e.ctrlKey && (k === 'l' || k === 'L')) { e.preventDefault(); shellAction('openurl'); return; }
+        if (e.ctrlKey && (k === 'o' || k === 'O')) { e.preventDefault(); shellAction('openfile'); return; }
+        if (e.ctrlKey && (k === 'w' || k === 'W')) { e.preventDefault(); shellAction('close'); return; }
+        if (e.ctrlKey && (k === 'r' || k === 'R')) { e.preventDefault(); shellAction('recent'); return; }
+      }
+      if (e.ctrlKey && e.altKey && (k === 'q' || k === 'Q') && S.kiosk) { e.preventDefault(); endShow(); toast(t('kioskUnlock')); return; }
+
+      /* 浏览模式键位（PowerPoint 式） */
+      if (!S.presenting) {
+        switch (k) {
+          case 'F5':
+            e.preventDefault(); startShow(e.shiftKey ? S.sel : 0); return;
+          case ' ':
+            e.preventDefault(); startShow(S.sel); return;
+          case 'Enter':
+            e.preventDefault();
+            if (numBuf) commitNum(); else startShow(S.sel);
+            return;
+          case 'ArrowDown': case 'ArrowRight':
+            e.preventDefault(); clearNum(); selectSlide(S.sel + 1); return;
+          case 'ArrowUp': case 'ArrowLeft':
+            e.preventDefault(); clearNum(); selectSlide(S.sel - 1); return;
+          case 'Home': e.preventDefault(); selectSlide(0); return;
+          case 'End': e.preventDefault(); selectSlide(S.n - 1); return;
+          case '?': setOverlay(S.overlay === 'help' ? null : 'help'); return;
+          case 'Escape':
+            if (S.overlay) setOverlay(null);
+            else if (ED.on) setEdit(false);
+            return;
+          default:
+            if (/^\d$/.test(k)) { e.preventDefault(); pushNum(k); }
+        }
+        return;
+      }
+
+      switch (k) {
+        case 'F5':
+          e.preventDefault(); startShow(e.shiftKey ? S.i : 0); break;
+        case 'ArrowRight': case 'ArrowDown': case ' ': case 'PageDown': case 'n': case 'N':
+          e.preventDefault(); clearNum(); next(); break;
+        case 'Enter':
+          e.preventDefault();
+          if (numBuf) commitNum(); else next();
+          break;
+        case 'ArrowLeft': case 'ArrowUp': case 'PageUp': case 'Backspace': case 'p': case 'P':
+          e.preventDefault(); clearNum(); prev(); break;
+        case 'Home': e.preventDefault(); clearNum(); go(0, 'jump'); break;
+        case 'End': e.preventDefault(); clearNum(); go(S.n - 1, 'jump'); break;
+        case 'b': case 'B': case '.': setOverlay(S.overlay === 'black' ? null : 'black'); break;
+        case 'w': case 'W': case ',': setOverlay(S.overlay === 'white' ? null : 'white'); break;
+        case 'f': case 'F': toggleFullscreen(); break;
+        case 'g': case 'G': setOverlay(S.overlay === 'overview' ? null : 'overview'); break;
+        case 's': case 'S': toggleDrawer(); break;
+        case 't': case 'T': togglePause(); break;
+        case 'r': case 'R': toggleRehearse(); break;
+        case 'l': case 'L': toggleLaser(); break;
+        case 'j': case 'J': connectRemote(); break;
+        case '?': setOverlay(S.overlay === 'help' ? null : 'help'); break;
+        case 'Escape': handleEscape(); break;
+        default:
+          if (/^\d$/.test(k)) { e.preventDefault(); pushNum(k); }
+      }
+    });
+
+    on(viewport, 'click', function (e) {
+      if (e.target.closest('a,button,video,audio,input,select,textarea,label,[data-h4s-noclick]')) return;
+      next();
+    });
+
+    on(blackout, 'click', function () { setOverlay(null); });
+
+    on(chrome, 'click', function (e) {
+      var b = e.target.closest('[data-act]');
+      if (b) act(b.getAttribute('data-act'));
+    });
+
+    var wheelLock = 0;
+    on(viewport, 'wheel', function (e) {
+      if (S.overlay) return;
+      var now = Date.now();
+      if (now - wheelLock < 350) return;
+      if (Math.abs(e.deltaY) < 12 && Math.abs(e.deltaX) < 12) return;
+      wheelLock = now;
+      if (e.deltaY > 0 || e.deltaX > 0) next(); else prev();
+      e.preventDefault();
+    }, { passive: false });
+
+    var tSX = 0, tSY = 0, tT = 0;
+    on(viewport, 'pointerdown', function (e) {
+      if (e.pointerType === 'mouse') return;
+      tSX = e.clientX; tSY = e.clientY; tT = Date.now();
+    });
+    on(viewport, 'pointerup', function (e) {
+      if (e.pointerType === 'mouse') return;
+      var dx = e.clientX - tSX, dy = e.clientY - tSY;
+      if (Date.now() - tT < 600 && Math.abs(dx) > 46 && Math.abs(dx) > Math.abs(dy)) {
+        if (dx < 0) next(); else prev();
+      }
+    });
+
+    on(document, 'pointermove', function (e) {
+      if (laserOn) {
+        laserDot.style.left = e.clientX + 'px';
+        laserDot.style.top = e.clientY + 'px';
+      }
+    });
+
+    /* 空闲隐藏 UI */
+    on(document, 'mousemove', poke);
+    poke();
+
+    on(window, 'resize', function () { layout(); layoutBrowse(); });
+    on(document, 'fullscreenchange', function () {
+      /* 放映中被退出全屏（Esc/系统）→ 回浏览界面（kiosk 除外） */
+      if (!document.fullscreenElement && S.presenting && !S.kiosk) endShow();
+      layout(); layoutBrowse();
+    });
+  }
+
+  /* ================================================================
+   * 启动
+   * ================================================================ */
+  function fontsReady() {
+    return Promise.race([
+      (document.fonts && document.fonts.ready) || Promise.resolve(),
+      sleep(3000)
+    ]);
+  }
+
+  function initStage(hash) {
+    isStage = true;
+    buildApp();
+    /* 把幻灯片搬进舞台（脱离原文档流，进入固定坐标系） */
+    S.slides.forEach(function (s) {
+      s.el.classList.add('h4s-in');
+      s.el.style.display = 'none';
+      holder.appendChild(s.el);
+    });
+    initInput();
+    initBus();
+
+    document.body.classList.add('h4s-live');
+    if (DEFAULTS.progress === false) progress.style.display = 'none';
+
+    viewport.style.setProperty('--h4s-letterbox', MSTAGE.background);
+    applyStageSize(S.slides[0]);
+    layout(); /* 初始缩放：确保舞台在任何启动路径下都有正确的 transform */
+
+    S.kiosk = hash.kiosk;
+    if (hash.kiosk) {
+      document.body.classList.add('h4s-kiosk');
+      S.loop = true;
+      document.body.classList.add('h4s-idle');
+    }
+    AUTO_PARAM = hash.auto || 0;
+    S.loop = S.loop || !!DEFAULTS.loop;
+
+    /* 不等字体就绪——字体异步加载后文字自动更新，
+       门控会导致 document.fonts.ready 在某些 WebView2 环境不 resolve 时整个初始化卡死 */
+    try {
+      buildBrowse();
+      if (hash.kiosk || hash.auto > 0) {
+        startShow(0, hash.f);
+      } else if (hash.i > 0 || hash.f >= 0) {
+        startShow(clamp(hash.i, 0, S.n - 1), hash.f);
+      } else {
+        endShow();
+      }
+      updateChrome();
+      emit('h4s:ready', { count: S.n, index: S.sel, presenting: S.presenting });
+      console.info('[h4s] player v' + VERSION + ' 就绪：' + S.n + ' 页' +
+        (S.presenting ? '（放映中）' : '（浏览模式）'));
+    } catch (e) {
+      var d = document.createElement('div');
+      d.style.cssText = 'position:fixed;top:0;left:0;right:0;background:#c0392b;color:#fff;padding:12px 20px;z-index:99999;font:14px/1.5 monospace;white-space:pre-wrap;';
+      d.textContent = '[h4s] 初始化错误: ' + (e.stack || e.message || String(e));
+      document.body.appendChild(d);
+      console.error('[h4s] init error:', e.stack || e.message);
+    }
+  }
+
+  function boot() {
+    var hash = parseHash();
+    if (hash.presenter) { presenterMode(hash); return; }
+
+    MANIFEST = readManifest();
+    DEFAULTS = MANIFEST.defaults || {};
+    if (MANIFEST.stage) {
+      MSTAGE = {
+        w: MANIFEST.stage.width || 1280, h: MANIFEST.stage.height || 720,
+        fit: MANIFEST.stage.fit || 'contain',
+        background: MANIFEST.stage.background || '#000'
+      };
+    }
+    /* 内嵌播放器版本指纹：deck 由旧版播放器构建 → 提示重建（阶段1 可靠性） */
+    PV_STALE = (MANIFEST.playerVersion && MANIFEST.playerVersion !== VERSION) ? String(MANIFEST.playerVersion) : null;
+    /* 文字微调快照：保存接管前的原始文档（导出/写回的基底）。
+       必须在 collectSlides 之前——后者会给 notes 元素加 h4s-notes-el 类，
+       快照晚于它就会把该类污染进导出文件 */
+    try { ED.snap = document.documentElement.outerHTML; } catch (err) {}
+    S.slides = collectSlides();
+    S.n = S.slides.length;
+    if (!S.n) {
+      console.info('[h4s] 未发现幻灯片结构，启用网页放映模式');
+      initWebPresent();
+      return;
+    }
+    initStage(hash);
+  }
+
+  try { boot(); } catch (e) { console.error('[h4s] 启动失败，保持文档模式', e); }
+
+  /* ================================================================
+   * 对外 API
+   * ================================================================ */
+  window.H4S = {
+    version: VERSION,
+    next: next, prev: prev,
+    go: function (n) { go((parseInt(n, 10) || 1) - 1, 'jump'); },
+    present: function (n) { startShow((parseInt(n, 10) || 1) - 1); },
+    stop: endShow,
+    state: function () { return { i: S.i, f: S.f, overlay: S.overlay, kiosk: S.kiosk, presenting: S.presenting, sel: S.sel }; },
+    toggleOverview: function () { setOverlay(S.overlay === 'overview' ? null : 'overview'); },
+    toggleDrawer: toggleDrawer,
+    toggleLaser: toggleLaser,
+    toggleFullscreen: toggleFullscreen,
+    connectRemote: connectRemote,
+    timings: function () { return RH.log; }
+  };
+})();
+
+</script>
+</body>
+</html>
