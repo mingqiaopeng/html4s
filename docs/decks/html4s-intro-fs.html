@@ -5,7 +5,7 @@
 <title>html4s · 项目介绍 · Frontend Slides 版</title>
 <script type="application/h4s+json">
 {
-  "h4s": "1.0", "playerVersion": "0.3.2",
+  "h4s": "1.0", "playerVersion": "0.4.1",
   "meta": { "title": "html4s · 项目介绍 · Frontend Slides 版", "lang": "zh-CN", "author": "Html4s Project" },
   "stage": { "width": 1920, "height": 1080, "fit": "contain", "background": "#000" },
   "defaults": { "transition": { "name": "fade", "duration": 450 }, "autoslide": 0, "loop": false },
@@ -215,7 +215,7 @@
 </h4s-deck>
 <script>
 /*!
- * h4s-core — html4s 播放器运行时 v0.3.2（转场特效引擎 · 增量编辑配套）
+ * h4s-core — html4s 播放器运行时 v0.4.1（转场特效 · 增量编辑 · 声明式图表）
  * ------------------------------------------------
  * 单文件、零依赖、无构建。任何遵循 html4s 约定的 HTML 页面引入本文件
  * 即进入播放器模式；页面没有幻灯片结构时保持文档模式不受影响。
@@ -233,7 +233,7 @@
   if (window.__H4S_LOADED__) return;
   window.__H4S_LOADED__ = true;
 
-  var VERSION = '0.3.2';
+  var VERSION = '0.4.1';
   var PV_STALE = null; /* 清单 playerVersion ≠ 本播放器版本 → 旧版内嵌（build 注入指纹后检测） */
 
   /* ================================================================
@@ -631,7 +631,22 @@
     '.h4s-splitbar:hover,.h4s-splitbar.is-drag{background:rgba(56,189,248,.25);}',
     '.h4s-sidebar{width:var(--h4s-sbw,232px);}',
     '.h4s-stagebox{left:var(--h4s-sbw,232px);}',
-    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}'
+    'body:not(.h4s-browse) .h4s-splitbar{display:none!important;}',
+
+    /* ---- 声明式图表（h4s-chart，零依赖 SVG） ---- */
+    'h4s-chart{display:block;width:100%;min-height:380px;}',
+    '.h4s-chart svg{width:100%;height:100%;display:block;}',
+    '.h4s-chart .bar{transform:scaleY(0);transform-origin:center bottom;transform-box:fill-box;',
+    '  transition:transform .9s cubic-bezier(.16,1,.3,1);}',
+    '.h4s-holder .slide.visible .h4s-chart .bar{transform:scaleY(1);}',
+    '.h4s-chart polyline{stroke-dasharray:1;stroke-dashoffset:1;transition:stroke-dashoffset 1.2s ease .15s;}',
+    '.h4s-holder .slide.visible .h4s-chart polyline{stroke-dashoffset:0;}',
+    '.h4s-chart .slice{opacity:0;transition:opacity .7s ease;}',
+    '.h4s-holder .slide.visible .h4s-chart .slice{opacity:1;}',
+
+    /* ---- 图标引擎（data-h4s-icon，零依赖内置 SVG 集） ---- */
+    '[data-h4s-icon]{display:inline-flex;align-items:center;justify-content:center;line-height:1;}',
+    '[data-h4s-icon] .h4s-icon-svg{width:1em;height:1em;display:block;}'
   ].join('\n');
 
   var PRESENTER_CSS = [
@@ -1169,6 +1184,345 @@
       });
       if (alive) confettiRun();
       else { confetti.raf = 0; ctx.clearRect(0, 0, w, h); confetti.parts = []; }
+    });
+  }
+
+  /* ================================================================
+   * 声明式图表（h4s-chart，零依赖 SVG，阶段 0.4.0-M1）
+   * 用法：<h4s-chart type="bar|hbar|line|pie|donut">
+   *        [{"label":"…","value":42}, …]
+   *       </h4s-chart>
+   * 数据为元素内 JSON 数组；颜色走 CSS 变量（随主题换肤）；
+   * slide.visible 触发生长/描线/切片渐显动画。
+   * ================================================================ */
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function svgEl(tag, attrs) {
+    var e = document.createElementNS(SVGNS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    return e;
+  }
+  function niceMax(v) {
+    if (!(v > 0)) return 1;
+    var p = Math.pow(10, Math.floor(Math.log(v) / Math.LN10));
+    var d = v / p;
+    return (d <= 1 ? 1 : d <= 2 ? 2 : d <= 5 ? 5 : 10) * p;
+  }
+  function fmtNum(v) {
+    return Math.abs(v) >= 10000 ? (v / 10000).toFixed(v % 10000 ? 1 : 0) + '万' : String(v);
+  }
+
+  /* 多系列颜色/线型：全部由 --ac 派生（透明度+虚线），任何主题自适应 */
+  var SERIES_OP = [1, 0.72, 0.5, 0.34, 0.24, 0.16];
+  var SERIES_DASH = ['', '', '7 4', '2 4', '9 3 2 3', '1 4'];
+
+  /* 数据归一化：v1 [ {label,value} ] 单系列；v2 { labels:[], series:[{name,values:[]}] } 多系列 */
+  function chartNormalize(raw) {
+    if (Array.isArray(raw)) {
+      if (!raw.length) return null;
+      return {
+        labels: raw.map(function (d) { return String(d.label); }),
+        series: [{ name: '', values: raw.map(function (d) { return +d.value; }) }],
+        meta: raw
+      };
+    }
+    if (raw && Array.isArray(raw.labels) && Array.isArray(raw.series) && raw.series.length) {
+      return {
+        labels: raw.labels.map(String),
+        series: raw.series.map(function (s) { return { name: String(s.name || ''), values: (s.values || []).map(Number) }; }),
+        meta: null
+      };
+    }
+    return null;
+  }
+  function chartValid(norm) {
+    return norm && norm.labels.length && norm.series.every(function (s) {
+      return s.values.length === norm.labels.length && s.values.every(function (v) { return Number.isFinite(v); });
+    });
+  }
+
+  function gridAndScale(W, H, min, max, padL, padR, padT, padB, svg, unit) {
+    /* 横向刻度线 + 刻度值（4 分位）；返回 y(v) 映射与零线 y */
+    if (max === min) max = min + 1;
+    var plotT = padT, plotB = H - padB;
+    var yOf = function (v) { return plotT + (max - v) / (max - min) * (plotB - plotT); };
+    for (var f = 1; f >= 0; f -= 0.25) {
+      var v = min + (max - min) * f;
+      var y = yOf(v);
+      svg.appendChild(svgEl('line', { x1: padL, y1: y, x2: W - padR, y2: y,
+        stroke: f === 0 ? 'var(--dim)' : 'var(--bd2)', 'stroke-width': f === 0 ? 2 : 1 }));
+      var t = svgEl('text', { x: W - padR, y: y - 5, 'text-anchor': 'end', fill: 'var(--dim)', 'font-size': 18 });
+      t.textContent = fmtNum(Math.round(v * 100) / 100) + (unit || '');
+      svg.appendChild(t);
+    }
+    return { yOf: yOf, zeroY: yOf(Math.min(0, Math.max(0, min))) , plotT: plotT, plotB: plotB };
+  }
+
+  function chartBar(norm, W, H, el) {
+    var unit = el.getAttribute('unit') || '';
+    var padL = 24, padR = 92, padT = 46, padB = 64;
+    var labels = norm.labels, series = norm.series, n = labels.length, m = series.length;
+    var vals = [];
+    series.forEach(function (s) { s.values.forEach(function (v) { vals.push(v); }); });
+    var max = niceMax(Math.max.apply(null, vals.map(Math.abs)) * 1.05);
+    var min = Math.min(0, Math.min.apply(null, vals));
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    var g = gridAndScale(W, H, min, max, padL, padR, padT, padB, svg, unit);
+    var groupW = (W - padL - padR) / n;
+    var bw = Math.min(120, groupW / m * 0.62);
+    labels.forEach(function (label, i) {
+      series.forEach(function (s, si) {
+        var v = s.values[i];
+        var h = Math.abs(v) / (max - min) * (g.plotB - g.plotT);
+        var y = v >= 0 ? g.zeroY - h : g.zeroY;
+        var x = padL + groupW * i + groupW / 2 - (m * bw + (m - 1) * 8) / 2 + si * (bw + 8);
+        svg.appendChild(svgEl('rect', { class: 'bar', x: x, y: y, width: bw, height: Math.max(1, h), rx: 4,
+          fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' }));
+      });
+      var lt = svgEl('text', { x: padL + groupW * i + groupW / 2, y: H - padB + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 21 });
+      lt.textContent = label;
+      svg.appendChild(lt);
+      var lastV = series[m - 1].values[i];
+      var vt = svgEl('text', { x: padL + groupW * i + groupW / 2, y: Math.min(g.zeroY, g.yOf(Math.max(0, lastV))) - 10, 'text-anchor': 'middle', fill: 'var(--tx2)', 'font-size': 22 });
+      vt.textContent = fmtNum(lastV) + (unit || '');
+      svg.appendChild(vt);
+    });
+    if (m > 1) legend(svg, series, W, padT - 16, false);
+    return svg;
+  }
+
+  function chartHBar(norm, W, H, el) {
+    /* 横向条：仅非负值（零线在最左），多系列并排；值轴刻度在顶部 */
+    var unit = el.getAttribute('unit') || '';
+    var padL = 24, padR = 24, padT = 58, padB = 40;
+    var labels = norm.labels, series = norm.series, n = labels.length, m = series.length;
+    var vals = [];
+    series.forEach(function (s) { s.values.forEach(function (v) { vals.push(Math.abs(v)); }); });
+    var max = niceMax(Math.max.apply(null, vals) * 1.05);
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    var labelW = 230, plotL = labelW, plotW = W - padR - labelW;
+    [1, 0.75, 0.5, 0.25].forEach(function (f) {
+      var x = plotL + plotW * f;
+      svg.appendChild(svgEl('line', { x1: x, y1: padT - 14, x2: x, y2: H - padB, stroke: 'var(--bd2)', 'stroke-width': 1 }));
+      var t = svgEl('text', { x: x, y: padT - 22, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 18 });
+      t.textContent = fmtNum(Math.round(max * f * 100) / 100) + (unit || '');
+      svg.appendChild(t);
+    });
+    var rowH = (H - padT - padB) / n;
+    labels.forEach(function (label, i) {
+      var lt = svgEl('text', { x: labelW - 14, y: padT + rowH * (i + 0.5), 'text-anchor': 'end', fill: 'var(--dim)', 'font-size': 21, 'dominant-baseline': 'middle' });
+      lt.textContent = label;
+      svg.appendChild(lt);
+      series.forEach(function (s, si) {
+        var v = Math.abs(s.values[i]);
+        var bh = Math.min(32, rowH / m * 0.6);
+        var y = padT + rowH * (i + 0.5) - (m * bh + (m - 1) * 6) / 2 + si * (bh + 6);
+        var w2 = v / max * plotW;
+        svg.appendChild(svgEl('rect', { class: 'bar', x: plotL, y: y, width: Math.max(1, w2), height: bh, rx: 4,
+          fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length], 'transition-delay': (i * 60 + si * 40) + 'ms' }));
+        var vt = svgEl('text', { x: plotL + w2 + 12, y: y + bh / 2 + 7, fill: 'var(--tx2)', 'font-size': 21 });
+        vt.textContent = fmtNum(v) + (unit || '');
+        svg.appendChild(vt);
+      });
+    });
+    if (m > 1) legend(svg, series, W, padT - 44, false);
+    return svg;
+  }
+
+  function chartLine(norm, W, H, el, area) {
+    var unit = el.getAttribute('unit') || '';
+    var padL = 24, padR = 92, padT = 46, padB = 64;
+    var labels = norm.labels, series = norm.series, n = labels.length;
+    var vals = [];
+    series.forEach(function (s) { s.values.forEach(function (v) { vals.push(v); }); });
+    var max = niceMax(Math.max.apply(null, vals.map(Math.abs)) * 1.1);
+    var min = Math.min(0, Math.min.apply(null, vals));
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    var g = gridAndScale(W, H, min, max, padL, padR, padT, padB, svg, unit);
+    var xs = labels.map(function (_l, i) { return n === 1 ? padL + (W - padL - padR) / 2 : padL + (W - padL - padR) * i / (n - 1); });
+    series.forEach(function (s, si) {
+      var pts = s.values.map(function (v, i) { return xs[i] + ',' + g.yOf(v); });
+      if (area) {
+        svg.appendChild(svgEl('polygon', { class: 'slice', points: pts.join(' ') + ' ' + xs[n - 1] + ',' + g.zeroY + ' ' + xs[0] + ',' + g.zeroY,
+          fill: 'var(--ac)', 'fill-opacity': 0.13, stroke: 'none', 'transition-delay': (si * 120) + 'ms' }));
+      }
+      svg.appendChild(svgEl('polyline', {
+        points: pts.join(' '), fill: 'none', stroke: 'var(--ac)',
+        'stroke-opacity': SERIES_OP[si % SERIES_OP.length], 'stroke-width': 5,
+        'stroke-linejoin': 'round', 'stroke-linecap': 'round', pathLength: 1,
+        'stroke-dasharray': SERIES_DASH[si % SERIES_DASH.length] || '1', 'transition-delay': (si * 150) + 'ms'
+      }));
+      s.values.forEach(function (v, i) {
+        svg.appendChild(svgEl('circle', { cx: xs[i], cy: g.yOf(v), r: 7, fill: 'var(--bg)', stroke: 'var(--ac)', 'stroke-width': 4 }));
+        var vt = svgEl('text', { x: xs[i], y: g.yOf(v) - 18, 'text-anchor': 'middle', fill: 'var(--tx2)', 'font-size': 22 });
+        vt.textContent = fmtNum(v) + (unit || '');
+        svg.appendChild(vt);
+      });
+    });
+    labels.forEach(function (label, i) {
+      var lt = svgEl('text', { x: xs[i], y: H - padB + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 21 });
+      lt.textContent = label;
+      svg.appendChild(lt);
+    });
+    if (series.length > 1 || series[0].name) legend(svg, series, W, padT - 14, true);
+    return svg;
+  }
+
+  function legend(svg, series, W, y, lineStyle) {
+    var named = series.some(function (s) { return s.name; });
+    if (series.length < 2 && !named) return;
+    var x = W - 340;
+    series.forEach(function (s, si) {
+      var sw = lineStyle
+        ? svgEl('line', { x1: x, y1: y, x2: x + 34, y2: y, stroke: 'var(--ac)', 'stroke-opacity': SERIES_OP[si % SERIES_OP.length], 'stroke-width': 5, 'stroke-dasharray': SERIES_DASH[si % SERIES_DASH.length] || '' })
+        : svgEl('rect', { x: x, y: y - 9, width: 26, height: 18, rx: 4, fill: 'var(--ac)', 'fill-opacity': SERIES_OP[si % SERIES_OP.length] });
+      svg.appendChild(sw);
+      var t = svgEl('text', { x: x + (lineStyle ? 42 : 34), y: y + 6, fill: 'var(--tx2)', 'font-size': 20 });
+      t.textContent = s.name || ('系列' + (si + 1));
+      svg.appendChild(t);
+      x += 44 + 20 + t.textContent.length * 21;
+    });
+  }
+
+  function chartPie(norm, W, H, el, donut) {
+    var unit = el.getAttribute('unit') || '';
+    var data = norm.meta || norm.labels.map(function (l, i) { return { label: l, value: norm.series[0].values[i] }; });
+    var svg = svgEl('svg', { viewBox: '0 0 ' + W + ' ' + H, preserveAspectRatio: 'xMidYMid meet' });
+    var total = data.reduce(function (a, d) { return a + Math.abs(d.value); }, 0) || 1;
+    var cx = W * 0.30, cy = H / 2, r = Math.min(W * 0.30, H / 2) - 40;
+    var ang = -Math.PI / 2;
+    data.forEach(function (d, i) {
+      var frac = Math.abs(d.value) / total;
+      var a2 = ang + frac * Math.PI * 2;
+      var x1 = cx + r * Math.cos(ang), y1 = cy + r * Math.sin(ang);
+      var x2 = cx + r * Math.cos(a2), y2 = cy + r * Math.sin(a2);
+      var large = frac > 0.5 ? 1 : 0;
+      svg.appendChild(svgEl('path', {
+        class: 'slice', d: 'M' + cx + ',' + cy + ' L' + x1 + ',' + y1 + ' A' + r + ',' + r + ' 0 ' + large + ' 1 ' + x2 + ',' + y2 + ' Z',
+        fill: 'var(--ac)', 'fill-opacity': Math.max(0.32, 1 - i * 0.09).toFixed(2),
+        stroke: 'var(--bg)', 'stroke-width': 2, 'transition-delay': (i * 90) + 'ms'
+      }));
+      ang = a2;
+    });
+    if (donut) {
+      svg.appendChild(svgEl('circle', { cx: cx, cy: cy, r: r * 0.58, fill: 'var(--bg)' }));
+      var ct = svgEl('text', { x: cx, y: cy - 4, 'text-anchor': 'middle', fill: 'var(--tx)', 'font-size': 40, 'font-weight': 300 });
+      ct.textContent = fmtNum(total) + (unit || '');
+      svg.appendChild(ct);
+      var cl = svgEl('text', { x: cx, y: cy + 34, 'text-anchor': 'middle', fill: 'var(--dim)', 'font-size': 19 });
+      cl.textContent = '合计';
+      svg.appendChild(cl);
+    }
+    var lx = cx + r + 70, ly = cy - (data.length * 30) / 2 + 8;
+    data.forEach(function (d, i) {
+      svg.appendChild(svgEl('rect', { x: lx, y: ly + i * 30 - 12, width: 18, height: 18, rx: 4, fill: 'var(--ac)', 'fill-opacity': Math.max(0.32, 1 - i * 0.09).toFixed(2) }));
+      var t = svgEl('text', { x: lx + 30, y: ly + i * 30 + 3, fill: 'var(--tx2)', 'font-size': 22 });
+      t.textContent = d.label + ' · ' + fmtNum(d.value) + (unit || '') + '（' + Math.round(Math.abs(d.value) / total * 100) + '%）';
+      svg.appendChild(t);
+    });
+    return svg;
+  }
+
+  var CHART_BUILDERS = {
+    bar: function (d, W, H, el) { return chartBar(d, W, H, el); },
+    hbar: function (d, W, H, el) { return chartHBar(d, W, H, el); },
+    line: function (d, W, H, el) { return chartLine(d, W, H, el, false); },
+    area: function (d, W, H, el) { return chartLine(d, W, H, el, true); },
+    pie: function (d, W, H, el) { return chartPie(d, W, H, el, false); },
+    donut: function (d, W, H, el) { return chartPie(d, W, H, el, true); }
+  };
+  var CHART_TYPES = Object.keys(CHART_BUILDERS);
+
+  function renderCharts() {
+    $$('h4s-chart').forEach(function (el) {
+      if (el.__chart) return;
+      var type = (el.getAttribute('type') || 'bar').toLowerCase();
+      var raw = null;
+      try { raw = JSON.parse(el.textContent); } catch (e) { }
+      var norm = chartNormalize(raw);
+      if (CHART_TYPES.indexOf(type) === -1 || !chartValid(norm)) {
+        el.textContent = '[h4s] 图表无效：type 须为 ' + CHART_TYPES.join('/') +
+          '；数据为 [{label,value}] 或 {labels:[],series:[{name,values:[]}]}';
+        return;
+      }
+      el.__chart = true;
+      el.classList.add('h4s-chart');
+      el.textContent = '';
+      var W = el.clientWidth || 900, H = el.clientHeight || 460;
+      var svg = CHART_BUILDERS[type](norm, W, H, el);
+      svg.setAttribute('class', 'h4s-chart-svg');
+      el.appendChild(svg);
+    });
+  }
+
+  /* ================================================================
+   * 图标引擎（data-h4s-icon，零依赖内置 SVG 集，0.4.1）
+   * 用法：<i data-h4s-icon="check"></i> —— 尺寸随 font-size（1em），颜色随 currentColor。
+   * 36 枚常用演示图标，24×24 stroke 风格（lucide 风格的轻量替代：无需 485KB 全量库）。
+   * ================================================================ */
+  var ICONS = {
+    'check': '<polyline points="4,13 9.5,18.5 20,6"/>',
+    'x': '<line x1="5" y1="5" x2="19" y2="19"/><line x1="19" y1="5" x2="5" y2="19"/>',
+    'arrow-right': '<line x1="3" y1="12" x2="20" y2="12"/><polyline points="13,5 20,12 13,19"/>',
+    'arrow-left': '<line x1="21" y1="12" x2="4" y2="12"/><polyline points="11,5 4,12 11,19"/>',
+    'plus': '<line x1="12" y1="4" x2="12" y2="20"/><line x1="4" y1="12" x2="20" y2="12"/>',
+    'minus': '<line x1="4" y1="12" x2="20" y2="12"/>',
+    'star': '<polygon points="12,2.5 15,9 22,9.5 16.8,14.2 18.4,21.2 12,17.5 5.6,21.2 7.2,14.2 2,9.5 9,9"/>',
+    'flag': '<line x1="5" y1="3" x2="5" y2="21"/><path d="M5,4 C9,2.5 13,5.5 19,4 L19,12 C13,13.5 9,10.5 5,12 Z"/>',
+    'target': '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/>',
+    'user': '<circle cx="12" cy="7.5" r="4"/><path d="M4,20 C4,15.5 8,14 12,14 C16,14 20,15.5 20,20"/>',
+    'users': '<circle cx="9" cy="8" r="3.5"/><path d="M2.5,19 C2.5,15.5 6,14 9,14 C12,14 15.5,15.5 15.5,19"/><circle cx="16.5" cy="9" r="2.8"/><path d="M16.5,14 C19.5,14 21.5,15.8 21.5,18.5"/>',
+    'gear': '<circle cx="12" cy="12" r="3.5"/><line x1="12" y1="2.5" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="21.5"/><line x1="2.5" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="21.5" y2="12"/><line x1="5.3" y1="5.3" x2="7" y2="7"/><line x1="17" y1="17" x2="18.7" y2="18.7"/><line x1="18.7" y1="5.3" x2="17" y2="7"/><line x1="7" y1="17" x2="5.3" y2="18.7"/>',
+    'lightbulb': '<path d="M9,18 C9,15 7,13.5 7,10.5 A5,5 0 0,1 17,10.5 C17,13.5 15,15 15,18 Z"/><line x1="9.5" y1="20.5" x2="14.5" y2="20.5"/>',
+    'calendar': '<rect x="3.5" y="5" width="17" height="15.5" rx="2"/><line x1="3.5" y1="9.5" x2="20.5" y2="9.5"/><line x1="8" y1="3" x2="8" y2="7"/><line x1="16" y1="3" x2="16" y2="7"/>',
+    'clock': '<circle cx="12" cy="12" r="8.5"/><polyline points="12,7 12,12 15.5,14"/>',
+    'mail': '<rect x="3" y="5" width="18" height="14" rx="2"/><polyline points="3.5,6.5 12,12.5 20.5,6.5"/>',
+    'download': '<line x1="12" y1="4" x2="12" y2="15"/><polyline points="7,10.5 12,15.5 17,10.5"/><path d="M4,16.5 L4,19 A1.5,1.5 0 0,0 5.5,20.5 L18.5,20.5 A1.5,1.5 0 0,0 20,19 L20,16.5"/>',
+    'upload': '<line x1="12" y1="15.5" x2="12" y2="4"/><polyline points="7,8.5 12,3.5 17,8.5"/><path d="M4,16.5 L4,19 A1.5,1.5 0 0,0 5.5,20.5 L18.5,20.5 A1.5,1.5 0 0,0 20,19 L20,16.5"/>',
+    'edit': '<path d="M16.8,3.7 A2.2,2.2 0 0,1 20.1,7 L7.5,19.5 L3.5,20.5 L4.5,16.5 Z"/>',
+    'eye': '<path d="M2.5,12 C5.5,6.5 10,4.5 12,4.5 C14,4.5 18.5,6.5 21.5,12 C18.5,17.5 14,19.5 12,19.5 C10,19.5 5.5,17.5 2.5,12 Z"/><circle cx="12" cy="12" r="3"/>',
+    'chart-bar': '<line x1="4" y1="20" x2="20" y2="20"/><rect x="6" y="10" width="3.5" height="10" rx="1"/><rect x="11" y="5" width="3.5" height="15" rx="1"/><rect x="16" y="13" width="3.5" height="7" rx="1"/>',
+    'chart-line': '<polyline points="3.5,17 9,10 13.5,13.5 20.5,6"/><line x1="3.5" y1="20.5" x2="20.5" y2="20.5"/>',
+    'pie': '<path d="M12,3 A9,9 0 1,1 3.2,14.5 L12,12 Z"/><line x1="12" y1="12" x2="12" y2="3"/>',
+    'database': '<ellipse cx="12" cy="5.5" rx="8" ry="2.8"/><path d="M4,5.5 L4,18.5 C4,20 7.6,21.3 12,21.3 C16.4,21.3 20,20 20,18.5 L20,5.5"/><path d="M4,12 C4,13.5 7.6,14.8 12,14.8 C16.4,14.8 20,13.5 20,12"/>',
+    'zap': '<polygon points="13,2 4.5,13.5 11,13.5 10,22 19.5,10 12.5,10"/>',
+    'shield': '<path d="M12,2.5 L19.5,5.5 C19.5,13 17,18.5 12,21.5 C7,18.5 4.5,13 4.5,5.5 Z"/>',
+    'layers': '<polygon points="12,2.5 21.5,7.5 12,12.5 2.5,7.5"/><polyline points="2.5,12 12,17 21.5,12"/><polyline points="2.5,16.5 12,21.5 21.5,16.5"/>',
+    'book': '<path d="M5,3.5 H19 V20.5 H6.5 C5.4,20.5 5,19.8 5,19 Z M5,19 C5,18.2 5.6,17.5 6.5,17.5 H19"/>',
+    'search': '<circle cx="10.5" cy="10.5" r="6.5"/><line x1="15.5" y1="15.5" x2="20.5" y2="20.5"/>',
+    'filter': '<polygon points="3,4 21,4 14,13 14,20 10,21.5 10,13"/>',
+    'trending-up': '<polyline points="3,17 9.5,10.5 13.5,14.5 21,6.5"/><polyline points="15,6.5 21,6.5 21,12.5"/>',
+    'trending-down': '<polyline points="3,7 9.5,13.5 13.5,9.5 21,17.5"/><polyline points="15,17.5 21,17.5 21,11.5"/>',
+    'award': '<circle cx="12" cy="9" r="6"/><polyline points="8.5,14 7,21.5 12,18.5 17,21.5 15.5,14"/>',
+    'briefcase': '<rect x="3" y="7.5" width="18" height="13" rx="2"/><path d="M8.5,7.5 L8.5,5 A1.5,1.5 0 0,1 10,3.5 L14,3.5 A1.5,1.5 0 0,1 15.5,5 L15.5,7.5"/><line x1="3" y1="13" x2="21" y2="13"/>',
+    'globe': '<circle cx="12" cy="12" r="8.5"/><line x1="3.5" y1="12" x2="20.5" y2="12"/><path d="M12,3.5 C15,6.5 15,17.5 12,20.5 C9,17.5 9,6.5 12,3.5"/>',
+    'info': '<circle cx="12" cy="12" r="8.5"/><line x1="12" y1="11" x2="12" y2="16.5"/><line x1="12" y1="7.5" x2="12" y2="7.51"/>',
+    'alert': '<path d="M12,3.5 L21.5,20 L2.5,20 Z"/><line x1="12" y1="9.5" x2="12" y2="14.5"/><line x1="12" y1="17" x2="12" y2="17.51"/>',
+    'mic': '<rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5,11.5 C5.5,15 8.5,17 12,17 C15.5,17 18.5,15 18.5,11.5"/><line x1="12" y1="17" x2="12" y2="20.5"/>',
+    'camera': '<rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5,7 L10,4.5 L14,4.5 L15.5,7"/><circle cx="12" cy="13.5" r="3.5"/>',
+    'file': '<path d="M6,2.5 L14.5,2.5 L20,8 L20,21.5 L6,21.5 Z"/><polyline points="14.5,2.5 14.5,8 20,8"/>',
+    'folder': '<path d="M3,6 A1.5,1.5 0 0,1 4.5,4.5 L9,4.5 L11.5,7 L19.5,7 A1.5,1.5 0 0,1 21,8.5 L21,18 A1.5,1.5 0 0,1 19.5,19.5 L4.5,19.5 A1.5,1.5 0 0,1 3,18 Z"/>',
+    'lock': '<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8,10.5 L8,7.5 A4,4 0 0,1 16,7.5 L16,10.5"/>',
+    'bell': '<path d="M18,16 L18,10.5 C18,6.8 15.5,4.5 12,4.5 C8.5,4.5 6,6.8 6,10.5 L6,16 L4,18.5 L20,18.5 Z"/><path d="M9.5,18.5 C9.5,20 10.5,21 12,21 C13.5,21 14.5,20 14.5,18.5"/>',
+    'map-pin': '<path d="M12,21.5 C12,21.5 5,14.5 5,9.5 A7,7 0 0,1 19,9.5 C19,14.5 12,21.5 12,21.5 Z"/><circle cx="12" cy="9.5" r="2.5"/>',
+    'home': '<path d="M3.5,11 L12,3.5 L20.5,11"/><path d="M5.5,9.5 L5.5,20.5 L18.5,20.5 L18.5,9.5"/>',
+    'rocket': '<path d="M12,2.5 C15.5,5.5 17,9.5 16.5,14 L14.5,16 L9.5,16 L7.5,14 C7,9.5 8.5,5.5 12,2.5 Z"/><circle cx="12" cy="9" r="2"/><path d="M9.5,16 L8,20.5 L11,19"/><path d="M14.5,16 L16,20.5 L13,19"/>'
+  };
+
+  function renderIcons(root) {
+    $$('[data-h4s-icon]', root || document).forEach(function (el) {
+      if (el.__icon) return;
+      var name = el.getAttribute('data-h4s-icon');
+      var body = ICONS[name];
+      el.__icon = true;
+      el.textContent = '';
+      if (!body) { el.setAttribute('data-h4s-icon-missing', name || ''); return; }
+      var svg = svgEl('svg', {
+        viewBox: '0 0 24 24', fill: 'none', stroke: 'currentColor',
+        'stroke-width': 2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round',
+        'aria-hidden': 'true', class: 'h4s-icon-svg'
+      });
+      svg.innerHTML = body;
+      el.appendChild(svg);
     });
   }
 
@@ -2114,6 +2468,8 @@
     var n = slides.length;
     /* deckId() 依赖 S.slides —— 填充以保证与舞台窗口同频道 */
     S.slides = slides; S.n = n;
+    renderCharts(); /* 演讲者窗预览也要带图 */
+    renderIcons();
 
     var ui = el('div', 'h4s-pres');
     ui.innerHTML =
@@ -2508,6 +2864,8 @@
     try { ED.snap = document.documentElement.outerHTML; } catch (err) {}
     S.slides = collectSlides();
     S.n = S.slides.length;
+    renderCharts(); /* 图表先渲染成 SVG——浏览侧栏/预览克隆才能带着图 */
+    renderIcons(); /* 图标同上（克隆复制已渲染节点） */
     if (!S.n) {
       console.info('[h4s] 未发现幻灯片结构，启用网页放映模式');
       initWebPresent();

@@ -39,7 +39,8 @@ for (const d of DECKS) {
     <span class="desc">${esc(d.desc)}</span>
     <span class="meta">${esc(d.skill)} · 在线播放 →</span><span class="alt">备用：cdn.jsdelivr.net/gh/mingqiaopeng/html4s@master/docs/decks/${d.id}.html</span></a>`);
 }
-/* 清理画廊里已下线的 deck 副本（画廊只保留当前 DECKS 集合） */
+/* 清理画廊里已下线的 deck 副本（画廊只保留当前 DECKS 集合 + 独立入口的 layouts） */
+wanted.add('layouts.html'); /* 版式图鉴独立入口（复制在其后的 main 内） */
 for (const f of fs.readdirSync(path.join(OUT, 'decks'))) {
   if (!wanted.has(f)) { fs.rmSync(path.join(OUT, 'decks', f)); console.log('清理下线副本: ' + f); }
 }

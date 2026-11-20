@@ -141,6 +141,13 @@ if (shellSize > 10 * 1024 * 1024) die('壳目录超 10MB——疑似误打包 We
 if (fs.existsSync(path.join(STAGING, 'Html4sPlayer/Html4sPlayer.exe.WebView2'))) die('WebView2 用户缓存被误打包');
 if (FAILS.length) process.exit(1);
 
+/* ---------- 4.5 演示站刷新（docs/ 根 = Pages 源；deck 副本须与本次构建的播放器一致） ---------- */
+step('4.5', '演示站刷新（gen-web）');
+run(process.execPath, [path.join(HERE, 'gen-web.mjs')], { cwd: ROOT });
+const siteDeck = path.join(ROOT, 'docs', 'decks', 'html4s-intro-fs.html');
+if (!fs.readFileSync(siteDeck, 'utf8').includes('"playerVersion": "' + VER + '"'))
+  die('演示站 deck 指纹非 ' + VER + '——gen-web 未取到新构建副本');
+
 /* ---------- 5. ISCC + zip ---------- */
 if (NO_INSTALL) { console.log('\n[--no-install] 跳过 ISCC/zip/安装'); process.exit(0); }
 step(5, 'ISCC 编译安装器 + zip 重打包');
